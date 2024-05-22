@@ -8,7 +8,7 @@ const Topbar = () => {
                     <div className="d-inline-flex align-items-center">
                         <Link className="text-dark" to="#">FAQs</Link>
                         <span className="text-muted px-2">|</span>
-                        <Link className="text-dark" to="#">Hỏi đáp</Link>
+                        <Link className="text-dark" to="/contact-us">Hỏi đáp</Link>
                         <span className="text-muted px-2">|</span>
                         <Link className="text-dark" to="#">Hỗ trợ</Link>
                     </div>
