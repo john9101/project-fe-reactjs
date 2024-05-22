@@ -1,3 +1,5 @@
+import {Link} from "react-router-dom";
+
 const Topbar = () => {
     return (
         <div className="container-fluid">
@@ -6,9 +8,9 @@ const Topbar = () => {
                     <div className="d-inline-flex align-items-center">
                         <a className="text-dark" href="">FAQs</a>
                         <span className="text-muted px-2">|</span>
-                        <a className="text-dark" href="">Help</a>
+                        <a className="text-dark" href="">Hỏi đáp</a>
                         <span className="text-muted px-2">|</span>
-                        <a className="text-dark" href="">Support</a>
+                        <a className="text-dark" href="">Hỗ trợ</a>
                     </div>
                 </div>
                 <div className="col-lg-6 text-center text-lg-right">
@@ -33,15 +35,15 @@ const Topbar = () => {
             </div>
             <div className="row align-items-center py-3 px-xl-5">
                 <div className="col-lg-3 d-none d-lg-block">
-                    <a href="" className="text-decoration-none">
+                    <Link to={"/"} className="text-decoration-none">
                         <h1 className="m-0 display-5 font-weight-semi-bold"><span
                             className="text-primary font-weight-bold border px-3 mr-1">E</span>Shopper</h1>
-                    </a>
+                    </Link>
                 </div>
                 <div className="col-lg-6 col-6 text-left">
                     <form action="">
                         <div className="input-group">
-                            <input type="text" className="form-control" placeholder="Search for products"/>
+                            <input type="text" className="form-control" placeholder="Tìm kiếm sản phẩm"/>
                             <div className="input-group-append">
                             <span className="input-group-text bg-transparent text-primary">
                                 <i className="fa fa-search"></i>
@@ -55,10 +57,10 @@ const Topbar = () => {
                         <i className="fas fa-heart text-primary"></i>
                         <span className="badge">0</span>
                     </a>
-                    <a href="" className="btn border">
+                    <Link to={"/cart"} className="btn border">
                         <i className="fas fa-shopping-cart text-primary"></i>
                         <span className="badge">0</span>
-                    </a>
+                    </Link>
                 </div>
             </div>
         </div>
