@@ -1,4 +1,7 @@
 import {Link} from "react-router-dom";
+import {faFacebookF, faInstagram, faLinkedinIn, faTwitter, faYoutube} from '@fortawesome/free-brands-svg-icons';
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faHeart, faMagnifyingGlass, faShoppingCart} from "@fortawesome/free-solid-svg-icons";
 
 const Topbar = () => {
     return (
@@ -16,19 +19,19 @@ const Topbar = () => {
                 <div className="col-lg-6 text-center text-lg-right">
                     <div className="d-inline-flex align-items-center">
                         <Link className="text-dark px-2" to="#">
-                            <i className="fab fa-facebook-f"></i>
+                            <FontAwesomeIcon icon={faFacebookF}/>
                         </Link>
                         <Link className="text-dark px-2" to="#">
-                            <i className="fab fa-twitter"></i>
+                            <FontAwesomeIcon icon={faTwitter}/>
                         </Link>
                         <Link className="text-dark px-2" to="#">
-                            <i className="fab fa-linkedin-in"></i>
+                            <FontAwesomeIcon icon={faLinkedinIn}/>
                         </Link>
                         <Link className="text-dark px-2" to="#">
-                            <i className="fab fa-instagram"></i>
+                            <FontAwesomeIcon icon={faInstagram}/>
                         </Link>
                         <Link className="text-dark pl-2" to="#">
-                            <i className="fab fa-youtube"></i>
+                            <FontAwesomeIcon icon={faYoutube}/>
                         </Link>
                     </div>
                 </div>
@@ -46,19 +49,17 @@ const Topbar = () => {
                             <input type="text" className="form-control" placeholder="Tìm kiếm sản phẩm"/>
                             <div className="input-group-append">
                             <span className="input-group-text bg-transparent text-primary">
-                                <i className="fa fa-search"></i>
-                            </span>
+                                <FontAwesomeIcon icon={faMagnifyingGlass} size="1x" color="#000"/>                            </span>
                             </div>
                         </div>
                     </form>
                 </div>
                 <div className="col-lg-3 col-6 text-right">
                     <Link to="#" className="btn border">
-                        <i className="fas fa-heart text-primary"></i>
-                        <span className="badge">0</span>
+                        <FontAwesomeIcon icon={faHeart} className="text-primary" />                        <span className="badge">0</span>
                     </Link>
                     <Link to={"/cart"} className="btn border">
-                        <i className="fas fa-shopping-cart text-primary"></i>
+                        <FontAwesomeIcon icon={faShoppingCart} className="text-primary" />
                         <span className="badge">0</span>
                     </Link>
                 </div>

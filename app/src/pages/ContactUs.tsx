@@ -4,7 +4,7 @@ function ContactUs() {
     return (
         <>
             <div className="container-fluid pt-5">
-                <div className="row px-xl-5 ">
+                <div className="row px-xl-5">
                     <div className="container text-left text-dark">
                         <div className="row justify-content-center">
                             <div className="col-md-12">
@@ -89,7 +89,6 @@ function ContactUs() {
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </>
