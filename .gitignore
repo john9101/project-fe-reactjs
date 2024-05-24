@@ -2,7 +2,7 @@
 .idea
 .idea/
 .idea/*
-
+package-lock.json
 # dependencies
 app/node_modules
 app/node_modules/
