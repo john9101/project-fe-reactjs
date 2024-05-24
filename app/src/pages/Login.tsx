@@ -112,11 +112,11 @@ const Login: React.FC = () => {
                     error={!!errors.password}
                     helperText={errors.password}
                 />
-                <Link href="#" underline="none" className='forgotPassword'>
+                <Link href="/forgot-password" underline="none" className='forgotPassword'>
                     Quên mật khẩu?
                 </Link>
                 <Button variant="contained" className='btnLogin' type="submit">Đăng nhập</Button>
-                <span className='titleToRegister'>Bạn chưa có tài khoản? <Link href="./Register.tsx" underline="none">
+                <span className='titleToRegister'>Bạn chưa có tài khoản? <Link href="/register" underline="none">
                     Tạo tài khoản mới tại đây
                 </Link></span>
 

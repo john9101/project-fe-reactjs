@@ -7,14 +7,17 @@ const Login = lazy(() => import('../pages/Login'));
 const Register = lazy(() => import('../pages/Register'));
 const ContactUs = lazy(() => import('../pages/ContactUs'));
 const CartDetail = lazy(() => import('../components/cart/CartDetail'));
+const ForgotPassword = lazy(() => import('../pages/ForgotPassword'))
 
 const App: React.FC = () => {
     return (
         <Router>
             <Suspense fallback={<CircularProgress color="success" />}>
                 <Routes>
+                    <Route index path="/" element={<Login />} />
                     <Route index path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
+                    <Route path="/forgot-password" element={<ForgotPassword />} />
                     <Route path="/contact-us" element={<ContactUs />} />
                     <Route path="/cart" element={<CartDetail />} />
                 </Routes>
