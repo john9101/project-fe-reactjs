@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import TextField from '@mui/material/TextField';
 import { Button, Alert, Snackbar, Fade } from '@mui/material';
 import Link from '@mui/material/Link';
-import '../assets/css/styleLogin.css';
+import '../assets/css/styleLogin.scss';
 
 interface Errors {
     emailOrPhone?: string;
