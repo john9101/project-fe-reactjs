@@ -1,0 +1,13 @@
+/*Payment*/
+.process {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 2rem;
+}
+
+.process-1{
+    width: 3rem;
+
+}
