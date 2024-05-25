@@ -1,4 +1,6 @@
 import React from 'react';
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faMinus, faPlus, faTrash} from "@fortawesome/free-solid-svg-icons";
 
 function CartDetail() {
     return (
@@ -26,7 +28,7 @@ function CartDetail() {
                                     <div className="input-group quantity mx-auto" style={{width: '100px'}}>
                                         <div className="input-group-btn">
                                             <button className="btn btn-sm btn-primary btn-minus">
-                                                <i className="fa fa-minus"></i>
+                                                <FontAwesomeIcon icon={faMinus} />
                                             </button>
                                         </div>
                                         <input type="text"
@@ -34,14 +36,15 @@ function CartDetail() {
                                                value="1"/>
                                         <div className="input-group-btn">
                                             <button className="btn btn-sm btn-primary btn-plus">
-                                                <i className="fa fa-plus"></i>
+                                                <FontAwesomeIcon icon={faPlus} />
                                             </button>
                                         </div>
                                     </div>
                                 </td>
                                 <td className="align-middle">$Tổng tiền </td>
                                 <td className="align-middle">
-                                    <button className="btn btn-sm btn-primary"><i className="fa-solid fa-trash"></i>
+                                    <button className="btn btn-sm btn-primary">
+                                        <FontAwesomeIcon icon={faTrash} />
                                     </button>
                                 </td>
                             </tr>
