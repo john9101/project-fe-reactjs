@@ -1,11 +1,14 @@
 {
   "dependencies": {
-    "json-server": "^1.0.0-beta.0"
+    "@types/node": "^20.12.12",
+    "json-server": "^1.0.0-beta.0",
+    "mongodb": "^6.6.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.5"
   },
   "name": "server",
   "version": "1.0.0",
   "main": "index.js",
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
