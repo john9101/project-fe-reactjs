@@ -3,10 +3,9 @@ const ColorFilter = () => {
         <div className="border-bottom mb-4 pb-4">
             <h5 className="font-weight-semi-bold mb-4">Filter by color</h5>
             <form>
-                <div
-                    className="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                <div className="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
                     <input type="checkbox" className="custom-control-input" checked id="color-all"/>
-                    <label className="custom-control-label" htmlFor="price-all">All Color</label>
+                    <label  className="custom-control-label" htmlFor="price-all">All Color</label>
                     <span className="badge border font-weight-normal">1000</span>
                 </div>
                 <div
