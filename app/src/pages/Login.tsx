@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import '../assets/css/styleLogin.scss';
 import TextField from '@mui/material/TextField';
 import { Button, Alert, Snackbar, Fade } from '@mui/material';
 import Link from '@mui/material/Link';
-import '../assets/css/styleLogin.scss';
 import Logo from '../components/common/Logo';
+
 
 interface Errors {
     emailOrPhone?: string;
@@ -67,7 +68,7 @@ const Login: React.FC = () => {
 
     return (
         <div className='tabLogin'>
-            <Link href="/" className='backToHomePage'><Logo></Logo></Link>
+            <Link href="/" className='backToHomePage' underline='none'><Logo></Logo></Link>
             <Snackbar className='showAlert'
                 open={successMessage}
                 autoHideDuration={5000}
@@ -113,11 +114,11 @@ const Login: React.FC = () => {
                     error={!!errors.password}
                     helperText={errors.password}
                 />
-                <Link href="/forgot-password" underline="none" className='forgotPassword'>
+                <Link href="/account/forgot-password" underline="none" className='forgotPassword'>
                     Quên mật khẩu?
                 </Link>
-                <Button variant="contained" className='btnLogin' type="submit">Đăng nhập</Button>
-                <span className='titleToRegister'>Bạn chưa có tài khoản? <Link href="/register" underline="none">
+                <Button className='btnLogin' type="submit" variant="contained">Đăng nhập</Button>
+                <span className='titleToRegister'>Bạn chưa có tài khoản? <Link href="/account/register" underline="none">
                     Tạo tài khoản mới tại đây
                 </Link></span>
 

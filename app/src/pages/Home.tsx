@@ -7,3 +7,4 @@ const Home = (props: Props) => {
         <div>Home</div>
     )
 }
+export default Home;

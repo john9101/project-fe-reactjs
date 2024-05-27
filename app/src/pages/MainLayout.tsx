@@ -4,6 +4,7 @@ import Footer from "../components/common/Footer";
 import React from "react";
 
 const MainLayout = () => {
+
     return (
         <>
             <Topbar/>
@@ -12,5 +13,7 @@ const MainLayout = () => {
         </>
     )
 }
+
+
 
 export default MainLayout

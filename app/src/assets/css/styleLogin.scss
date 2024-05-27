@@ -41,53 +41,53 @@
             justify-content: center;
             align-items: center;
         }
+    }
 
-        .componentLogin {
-            background-color: var(--light);
-            margin-top: 50px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            width: 40%;
-            padding: 40px;
-            box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+    .componentLogin {
+        background-color: var(--light);
+        margin-top: 50px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 40%;
+        padding: 40px;
+        box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
 
-            .titleLogin {
-                font-size: 3rem;
-                font-weight: bold;
-                color: var(--primary);
-                margin: 20px 0px;
-            }
+        .titleLogin {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin: 20px 0px;
+        }
 
-            .titleInput {
-                width: 100%;
-                text-align: start;
-                margin: 20px 0px;
-            }
+        .titleInput {
+            width: 100%;
+            text-align: start;
+            margin: 20px 0px;
+        }
 
-            .inputArea {
-                width: 100%;
-            }
+        .inputArea {
+            width: 100%;
+        }
 
-            .forgotPassword {
-                width: 100%;
-                text-align: end;
-                margin-top: 20px;
-            }
+        .forgotPassword {
+            width: 100%;
+            text-align: end;
+            margin-top: 20px;
+        }
 
-            .btnLogin {
-                font-size: 1.2rem;
-                padding-left: 30px;
-                padding-right: 30px;
-                margin-top: 30px;
-                background-color: var(--primary);
-                color: var(--dark);
-            }
+        .btnLogin {
+            font-size: 1.2rem;
+            padding-left: 30px;
+            padding-right: 30px;
+            margin-top: 30px;
+            background-color: var(--primary);
+            color: var(--dark);
+        }
 
-            .titleToRegister {
-                margin-top: 20px;
-            }
+        .titleToRegister {
+            margin-top: 20px;
         }
     }
 }
