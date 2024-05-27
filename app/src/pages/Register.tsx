@@ -4,6 +4,7 @@ import Link from '@mui/material/Link';
 import Logo from '../components/common/Logo';
 import { Alert, Button, Checkbox, Fade, FormControlLabel, Snackbar, TextField } from '@mui/material';
 import Address from '../components/common/Address';
+import ReplyIcon from '@mui/icons-material/Reply';
 
 interface Errors {
     username?: string;
@@ -99,6 +100,7 @@ const Register = () => {
                 </Alert>
             </Snackbar>
             <form onSubmit={handleSubmit} className='componentRegister'>
+                <Link className='backToLogin' href="/account/login"><ReplyIcon />Về trang đăng nhập</Link>
                 <span className='titleRegister'>Đăng ký</span>
                 <span className='titleInput'>Tên đăng nhập:</span>
                 <TextField className='inputArea'
