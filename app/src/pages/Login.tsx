@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import TextField from '@mui/material/TextField';
 import { Button, Alert, Snackbar, Fade } from '@mui/material';
 import Link from '@mui/material/Link';
-import '../assets/css/styleLogin.css';
+import '../assets/css/styleLogin.scss';
+import Logo from '../components/common/Logo';
 
 interface Errors {
     emailOrPhone?: string;
@@ -51,7 +52,6 @@ const Login: React.FC = () => {
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
         if (validate()) {
-            // Simulate login success or failure
             const loginSuccess = Math.random() > 0.5;
             if (loginSuccess) {
                 setSuccessMessage(true);
@@ -67,23 +67,24 @@ const Login: React.FC = () => {
 
     return (
         <div className='tabLogin'>
-            <Snackbar className='alertSuccess'
+            <Link href="/" className='backToHomePage'><Logo></Logo></Link>
+            <Snackbar className='showAlert'
                 open={successMessage}
                 autoHideDuration={5000}
                 TransitionComponent={Fade}
                 onClose={() => setSuccessMessage(false)}
             >
-                <Alert variant="outlined" severity="success" >
+                <Alert className='alertSuccess' variant="outlined" severity="success" >
                     Đăng nhập thành công.
                 </Alert>
             </Snackbar>
-            <Snackbar className='alertSuccess'
+            <Snackbar className='showAlert'
                 open={failureMessage}
                 autoHideDuration={5000}
                 TransitionComponent={Fade}
                 onClose={() => setFailureMessage(false)}
             >
-                <Alert variant="outlined" severity="error" >
+                <Alert className='alertFail' variant="outlined" severity="error" >
                     Đăng nhập thất bại
                 </Alert>
             </Snackbar>
@@ -93,7 +94,7 @@ const Login: React.FC = () => {
                 <TextField
                     required
                     id="outlined-required"
-                    placeholder='Vui lòng nhập email hoặc số điện thoại'
+                    placeholder='Vui lòng nhập số điện thoại của bạn'
                     className='inputArea'
                     value={emailOrPhone}
                     onChange={(e) => setEmailOrPhone(e.target.value)}
