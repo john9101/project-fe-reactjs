@@ -1,13 +1,18 @@
 import React, { lazy, Suspense } from 'react';
 import './App.css';
 import './assets/css/style.css';
+import './assets/css/styleLogin.scss'
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import MainLayout from "./pages/MainLayout";
-
 import { CircularProgress } from "@mui/material";
+import FormLayout from './pages/FormLayout';
 
+const Home = lazy(() => import('./pages/Home'));
 const ContactUs = lazy(() => import('./pages/ContactUs'));
 const CartDetail = lazy(() => import('./components/cart/CartDetail'));
+const Login = lazy(() => import('./pages/Login'));
+const Register = lazy(() => import('./pages/Register'));
+const ForgotPassword = lazy(() => import('./pages/ForgotPassword'));
 
 function App() {
     return (
@@ -16,12 +21,15 @@ function App() {
                 <Suspense fallback={<CircularProgress color="success" />}>
                     <Routes>
                         <Route path="/" element={<MainLayout />}>
-                            <Route path="/cart" element={<CartDetail />} />
-                            <Route path="/contact-us" element={<ContactUs />} />
-                            {/*Muốn trang có topbar, footer thì thêm một route vô đây*/}
+                            <Route index element={<Home />} />
+                            <Route path="cart" element={<CartDetail />} />
+                            <Route path="contact-us" element={<ContactUs />} />
                         </Route>
-
-                        {/*<Route path="/any-router" element={<AnyComponent/>}> Muốn trang không có topbar, footer thì khai báo một route mới */}
+                        <Route path="account" element={<FormLayout />}>
+                            <Route path="login" element={<Login />} />
+                            <Route path="register" element={<Register />} />
+                            <Route path='forgot-password' element={<ForgotPassword />} />
+                        </Route>
                     </Routes>
                 </Suspense>
             </div>
