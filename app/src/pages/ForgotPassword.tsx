@@ -4,7 +4,9 @@ type Props = {}
 
 const ForgotPassword = (props: Props) => {
     return (
-        <div>ForgotPassword</div>
+        <div>
+
+        </div>
     )
 }
 export default ForgotPassword;
