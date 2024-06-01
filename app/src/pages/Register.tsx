@@ -120,7 +120,7 @@ const Register = () => {
         }
 
         if (!emailRegex.test(value)) {
-            return 'Email của bạn có vấn đề';
+            return 'Email không hợp lệ!';
         }
 
         return '';
