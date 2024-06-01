@@ -104,13 +104,20 @@ const Register = () => {
         return '';
     };
     const validatePhone = (value: string) => {
-        const phoneRegex = /^\d{10,15}$/;
-        if (phoneRegex.test(value)) {
-            return '';
+        const phoneRegex = /^\d+$/;
+
+        // Kiểm tra nếu số điện thoại là rỗng
+        if (value.trim() === '') {
+            return 'Vui lòng nhập số điện thoại';
         }
-        else if (value === '') {
-            return 'Vui lòng nhập số điện thoại công ty hoặc số điện thoại của bạn'
+
+        // Kiểm tra định dạng số điện thoại chỉ chứa chữ số
+        if (!phoneRegex.test(value)) {
+            return 'Số điện thoại không hợp lệ. Số điện thoại chỉ có thể chứa các chữ số.';
         }
+
+        // Số điện thoại hợp lệ
+        return '';
     };
     const validateEmail = (value: string) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
