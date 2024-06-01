@@ -114,12 +114,16 @@ const Register = () => {
     };
     const validateEmail = (value: string) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (value.trim() === '') {
+            return 'Vui lòng nhập email công ty hoặc email của bạn';
+        }
+
         if (!emailRegex.test(value)) {
             return 'Email của bạn có vấn đề';
         }
-        else if (value === '') {
-            return 'Vui lòng nhập email công ty hoặc email của bạn'
-        }
+
+        return '';
     };
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {

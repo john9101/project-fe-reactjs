@@ -31,37 +31,11 @@ const Login: React.FC = () => {
     const validate = () => {
         let tempErrors: Errors = {};
         tempErrors.username = username ? '' : 'Vui lòng nhập tên đănng nhập của bạn';
-        tempErrors.password = passwordValidator(password)
+        tempErrors.password = password ? '' : 'Vui lòng mật khẩu của bạn';
         setErrors(tempErrors);
         return Object.values(tempErrors).every(x => x === '');
     };
-    const passwordValidator = (password: string) => {
-        // Password length should be at least 8 characters
-        if (password.length < 8) {
-            if (password.length === 0) {
-                return 'Vui lòng nhập mật khẩu của bạn';
-            }
-            return 'Mật khẩu phải nhiều hơn 8 kí tự';
-        }
-        // Password should contain at least one uppercase letter
-        if (!/[A-Z]/.test(password)) {
-            return 'Mật khẩu phải có ít nhất một kí tự in hoa';
-        }
-        // Password should contain at least one lowercase letter
-        if (!/[a-z]/.test(password)) {
-            return 'Mật khẩu phải có ít nhất 1 kí tự là chữ';
-        }
-        // Password should contain at least one number
-        if (!/[0-9]/.test(password)) {
-            return 'Mật khẩu phải có ít nhất một kí tự là số';
-        }
-        // Password should contain at least one special character
-        if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
-            return 'Mật khẩu phải có ít một kí tự đặt biệt';
-        }
-        return '';
-    };
-
+    
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         if (validate()) {
