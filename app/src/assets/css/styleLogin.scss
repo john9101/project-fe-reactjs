@@ -55,11 +55,15 @@
         width: 100%;
     }
 
-    .forgotPassword {
+    .forgotPassArea {
+        display: flex;
         width: 100%;
-        text-align: end;
         margin-top: 20px;
+        justify-content: end;
+        align-items: center;
+
     }
+
 
     .btnLogin {
         font-size: 1.2rem;
@@ -67,7 +71,12 @@
         padding-right: 30px;
         margin-top: 30px;
         background-color: var(--primary);
-        color: var(--dark);
+        color: var(--light);
+    }
+
+    .btnLogin:hover {
+        background-color: var(--indigo);
+        color: var(--light);
     }
 
     .titleToRegister {

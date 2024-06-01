@@ -35,7 +35,7 @@ const Login: React.FC = () => {
         setErrors(tempErrors);
         return Object.values(tempErrors).every(x => x === '');
     };
-    
+
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         if (validate()) {
@@ -92,9 +92,11 @@ const Login: React.FC = () => {
                     error={!!errors.password}
                     helperText={errors.password}
                 />
-                <Link href="/account/forgot-password" underline="none" className='forgotPassword'>
-                    Quên mật khẩu?
-                </Link>
+                <div className="forgotPassArea">
+                    <Link href="/account/forgot-password" underline="none" className='forgotPassword'>
+                        Quên mật khẩu?
+                    </Link>
+                </div>
                 <Button className='btnLogin' type="submit" variant="contained">Đăng nhập</Button>
                 <span className='titleToRegister'>Bạn chưa có tài khoản? <Link href="/account/register" underline="none">
                     Tạo tài khoản mới tại đây
