@@ -104,19 +104,18 @@ const Register = () => {
         return '';
     };
     const validatePhone = (value: string) => {
-        const phoneRegex = /^\d+$/;
+        const phoneRegex = /^\d{10}$/;
 
-        // Kiểm tra nếu số điện thoại là rỗng
+
         if (value.trim() === '') {
             return 'Vui lòng nhập số điện thoại';
         }
 
-        // Kiểm tra định dạng số điện thoại chỉ chứa chữ số
+
         if (!phoneRegex.test(value)) {
-            return 'Số điện thoại không hợp lệ. Số điện thoại chỉ có thể chứa các chữ số.';
+            return 'Số điện thoại không hợp lệ.';
         }
 
-        // Số điện thoại hợp lệ
         return '';
     };
     const validateEmail = (value: string) => {
