@@ -8,14 +8,11 @@ import ReplyIcon from '@mui/icons-material/Reply';
 interface Errors {
     username?: string;
     password?: string;
+    rePassword?: string;
     representative?: string;
-    birthdate?: string;
-    cccd?: string;
-    companyName?: string;
     companyPhone?: string;
     companyEmail?: string;
-    termsAccepted1?: string;
-    termsAccepted2?: string;
+    termsAccepted?: string;
     province?: string;
     district?: string;
     ward?: string;
@@ -32,14 +29,11 @@ interface AddressData {
 const Register = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [rePassword, setRePassword] = useState('');
     const [representative, setRepresentative] = useState('');
-    const [birthdate, setBirthdate] = useState('');
-    const [cccd, setCccd] = useState('');
-    const [companyName, setCompanyName] = useState('');
     const [companyPhone, setCompanyPhone] = useState('');
     const [companyEmail, setCompanyEmail] = useState('');
-    const [termsAccepted1, setTermsAccepted1] = useState(false);
-    const [termsAccepted2, setTermsAccepted2] = useState(false);
+    const [termsAccepted, settermsAccepted] = useState(false);
     const [errors, setErrors] = useState<Errors>({});
     const [addressData, setAddressData] = useState<AddressData>({
         province: null,
@@ -63,23 +57,52 @@ const Register = () => {
     const validate = () => {
         let tempErrors: Errors = {};
         tempErrors.username = validateEmailOrPhone(username)
-        // tempErrors.username = username ? '' : 'Vui lòng nhập email hoặc số điện thoại';
-        tempErrors.password = password ? '' : 'Vui lòng nhập mật khẩu';
+        tempErrors.username = username ? '' : 'Vui lòng nhập tên đănng nhập của bạn';
+        tempErrors.password = passwordValidator(password)
+        tempErrors.rePassword = comparePasword(password, rePassword);
         tempErrors.representative = representative ? '' : 'Vui lòng nhập họ và tên';
-        tempErrors.birthdate = birthdate ? '' : 'Vui lòng chọn ngày sinh';
-        tempErrors.cccd = cccd ? '' : 'Vui lòng nhập số căn cước công dân của bạn';
-        tempErrors.companyName = companyName ? '' : 'Vui lòng nhập tên công ty của bạn';
         tempErrors.companyPhone = companyPhone ? '' : 'Vui lòng nhập số điện thoại của công ty của bạn';
         tempErrors.companyEmail = companyEmail ? '' : 'Vui lòng nhập email của công ty của bạn';
-        tempErrors.termsAccepted1 = termsAccepted1 ? '' : 'Bạn phải đảm bảo thông tin cung cấp là đúng';
-        tempErrors.termsAccepted2 = termsAccepted2 ? '' : 'Bạn phải đồng ý với điều khoản của chúng tôi';
+        tempErrors.termsAccepted = termsAccepted ? '' : 'Bạn phải đồng ý với điều khoản của chúng tôi';
         tempErrors.province = addressData.province ? '' : 'Vui lòng chọn Tỉnh/Thành Phố';
         tempErrors.district = addressData.district ? '' : 'Vui lòng chọn Quận/Huyện';
         tempErrors.ward = addressData.ward ? '' : 'Vui lòng chọn Phường/Xã';
         tempErrors.specificAddress = addressData.specificAddress ? '' : 'Vui lòng nhập địa chỉ cụ thể';
-
         setErrors(tempErrors);
         return Object.values(tempErrors).every(x => x === '');
+    };
+    const comparePasword = (password: string, rePassword: string) => {
+        passwordValidator(rePassword)
+        if (password !== rePassword) {
+            return 'Mật khẩu không khớp';
+        }
+        return '';
+    }
+    const passwordValidator = (password: string) => {
+        // Password length should be at least 8 characters
+        if (password.length < 8) {
+            if (password.length === 0) {
+                return 'Vui lòng nhập mật khẩu của bạn';
+            }
+            return 'Mật khẩu phải nhiều hơn 8 kí tự';
+        }
+        // Password should contain at least one uppercase letter
+        if (!/[A-Z]/.test(password)) {
+            return 'Mật khẩu phải có ít nhất một kí tự in hoa';
+        }
+        // Password should contain at least one lowercase letter
+        if (!/[a-z]/.test(password)) {
+            return 'Mật khẩu phải có ít nhất 1 kí tự là chữ';
+        }
+        // Password should contain at least one number
+        if (!/[0-9]/.test(password)) {
+            return 'Mật khẩu phải có ít nhất một kí tự là số';
+        }
+        // Password should contain at least one special character
+        if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+            return 'Mật khẩu phải có ít một kí tự đặt biệt';
+        }
+        return '';
     };
     const validateEmailOrPhone = (value: string) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -96,7 +119,6 @@ const Register = () => {
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         if (validate()) {
-            // Handle successful validation and submission logic here
             setSuccessMessage(true);
             setFailureMessage(false);
         } else {
@@ -135,7 +157,7 @@ const Register = () => {
                 <span className='titleInput'>Tên đăng nhập:</span>
                 <TextField
                     className='inputArea'
-                    placeholder='Vui lòng nhập số điện thoại của bạn'
+                    placeholder='Vui lòng nhập tên đăng nhập của bạn'
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                     error={!!errors.username}
@@ -151,7 +173,17 @@ const Register = () => {
                     error={!!errors.password}
                     helperText={errors.password}
                 />
-                <span className='titleInput'>Người đại diện:</span>
+                <span className='titleInput'>Nhập lại mật khẩu: </span>
+                <TextField
+                    className='inputArea'
+                    type='password'
+                    placeholder='Vui lòng nhập lại mật khẩu'
+                    value={rePassword}
+                    onChange={(e) => setRePassword(e.target.value)}
+                    error={!!errors.rePassword}
+                    helperText={errors.rePassword}
+                />
+                <span className='titleInput'>Họ và tên người đại diện:</span>
                 <TextField
                     className='inputArea'
                     placeholder='Vui lòng nhập họ và tên'
@@ -164,48 +196,31 @@ const Register = () => {
                 <TextField
                     className='inputArea'
                     type='date'
-                    value={birthdate}
-                    onChange={(e) => setBirthdate(e.target.value)}
-                    error={!!errors.birthdate}
-                    helperText={errors.birthdate}
-                />
-                <span className='titleInput'>Số CCCD:</span>
-                <TextField
-                    className='inputArea'
-                    placeholder='Vui lòng nhập số căn cước công dân của bạn'
-                    value={cccd}
-                    onChange={(e) => setCccd(e.target.value)}
-                    error={!!errors.cccd}
-                    helperText={errors.cccd}
                 />
                 <span className='titleInput'>Tên công ty:</span>
                 <TextField
                     className='inputArea'
                     placeholder='Vui lòng nhập tên công ty của bạn'
-                    value={companyName}
-                    onChange={(e) => setCompanyName(e.target.value)}
-                    error={!!errors.companyName}
-                    helperText={errors.companyName}
                 />
-                <span className='titleInput'>Số điện thoại công ty:</span>
+                <span className='titleInput'>Số điện thoại:</span>
                 <TextField
                     className='inputArea'
-                    placeholder='Vui lòng nhập số điện thoại của công ty của bạn'
+                    placeholder='Vui lòng nhập số điện thoại của công ty hoặc số điện thoại cá nhân'
                     value={companyPhone}
                     onChange={(e) => setCompanyPhone(e.target.value)}
                     error={!!errors.companyPhone}
                     helperText={errors.companyPhone}
                 />
-                <span className='titleInput'>Email công ty:</span>
+                <span className='titleInput'>Email:</span>
                 <TextField
                     className='inputArea'
-                    placeholder='Vui lòng nhập email của công ty của bạn'
+                    placeholder='Vui lòng nhập email của công ty hoặc email cá nhân'
                     value={companyEmail}
                     onChange={(e) => setCompanyEmail(e.target.value)}
                     error={!!errors.companyEmail}
                     helperText={errors.companyEmail}
                 />
-                <span className='titleInput'>Địa chỉ công ty:</span>
+                <span className='titleInput'>Địa chỉ:</span>
                 <Address
                     errors={errors}
                     setAddressData={setAddressData}
@@ -213,17 +228,10 @@ const Register = () => {
                 />
                 <div className='checkboxAgree'>
                     <FormControlLabel
-                        control={<Checkbox checked={termsAccepted1} onChange={(e) => setTermsAccepted1(e.target.checked)} />}
-                        label="Tôi cam kết thông tin là đúng sự thật."
-                        style={{ color: errors.termsAccepted1 ? 'red' : 'inherit' }}
-                    />
-                    {errors.termsAccepted1 && <p className="error">{errors.termsAccepted1}</p>}
-                    <FormControlLabel
-                        control={<Checkbox checked={termsAccepted2} onChange={(e) => setTermsAccepted2(e.target.checked)} />}
+                        control={<Checkbox checked={termsAccepted} onChange={(e) => settermsAccepted(e.target.checked)} />}
                         label="Tôi đồng ý với điều khoản sử dụng của dịch vụ."
-                        style={{ color: errors.termsAccepted2 ? 'red' : 'inherit' }}
+                        style={{ color: errors.termsAccepted ? 'red' : 'inherit' }}
                     />
-                    {errors.termsAccepted2 && <p className="error">{errors.termsAccepted2}</p>}
                 </div>
                 <Button className='btnRegister' type='submit' variant='contained'>
                     Đăng ký
