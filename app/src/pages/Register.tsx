@@ -9,9 +9,9 @@ interface Errors {
     username?: string;
     password?: string;
     rePassword?: string;
-    representative?: string;
-    companyPhone?: string;
-    companyEmail?: string;
+    fullName?: string;
+    phone?: string;
+    email?: string;
     termsAccepted?: string;
     province?: string;
     district?: string;
@@ -30,9 +30,9 @@ const Register = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [rePassword, setRePassword] = useState('');
-    const [representative, setRepresentative] = useState('');
-    const [companyPhone, setCompanyPhone] = useState('');
-    const [companyEmail, setCompanyEmail] = useState('');
+    const [fullName, setfullName] = useState('');
+    const [phone, setphone] = useState('');
+    const [email, setemail] = useState('');
     const [termsAccepted, settermsAccepted] = useState(false);
     const [errors, setErrors] = useState<Errors>({});
     const [addressData, setAddressData] = useState<AddressData>({
@@ -59,9 +59,9 @@ const Register = () => {
         tempErrors.username = username ? '' : 'Vui lòng nhập tên đănng nhập của bạn';
         tempErrors.password = passwordValidator(password)
         tempErrors.rePassword = comparePasword(password, rePassword);
-        tempErrors.representative = representative ? '' : 'Vui lòng nhập họ và tên';
-        tempErrors.companyPhone = validatePhone(companyPhone)
-        tempErrors.companyEmail = validateEmail(companyEmail)
+        tempErrors.fullName = fullName ? '' : 'Vui lòng nhập họ và tên';
+        tempErrors.phone = validatePhone(phone)
+        tempErrors.email = validateEmail(email)
         tempErrors.termsAccepted = termsAccepted ? '' : 'Bạn phải đồng ý với điều khoản của chúng tôi';
         tempErrors.province = addressData.province ? '' : 'Vui lòng chọn Tỉnh/Thành Phố';
         tempErrors.district = addressData.district ? '' : 'Vui lòng chọn Quận/Huyện';
@@ -104,8 +104,7 @@ const Register = () => {
         return '';
     };
     const validatePhone = (value: string) => {
-        const phoneRegex = /^\d{10}$/;
-
+        const phoneRegex = /^0\d{9}$/;
 
         if (value.trim() === '') {
             return 'Vui lòng nhập số điện thoại';
@@ -113,7 +112,7 @@ const Register = () => {
 
 
         if (!phoneRegex.test(value)) {
-            return 'Số điện thoại không hợp lệ.';
+            return 'Số điện thoại phải gồm 10 chữ số bắt đầu từ số 0';
         }
 
         return '';
@@ -203,10 +202,10 @@ const Register = () => {
                 <TextField
                     className='inputArea'
                     placeholder='Nhập họ và tên'
-                    value={representative}
-                    onChange={(e) => setRepresentative(e.target.value)}
-                    error={!!errors.representative}
-                    helperText={errors.representative}
+                    value={fullName}
+                    onChange={(e) => setfullName(e.target.value)}
+                    error={!!errors.fullName}
+                    helperText={errors.fullName}
                 />
                 <span className='titleInput'>Ngày sinh:</span>
                 <TextField
@@ -222,19 +221,19 @@ const Register = () => {
                 <TextField
                     className='inputArea'
                     placeholder='Nhập số điện thoại của công ty hoặc số điện thoại cá nhân'
-                    value={companyPhone}
-                    onChange={(e) => setCompanyPhone(e.target.value)}
-                    error={!!errors.companyPhone}
-                    helperText={errors.companyPhone}
+                    value={phone}
+                    onChange={(e) => setphone(e.target.value)}
+                    error={!!errors.phone}
+                    helperText={errors.phone}
                 />
                 <span className='titleInput'>Email:</span>
                 <TextField
                     className='inputArea'
-                    placeholder='Nhập email của công ty hoặc email cá nhân'
-                    value={companyEmail}
-                    onChange={(e) => setCompanyEmail(e.target.value)}
-                    error={!!errors.companyEmail}
-                    helperText={errors.companyEmail}
+                    placeholder='Ví dụ: example@gmail.com'
+                    value={email}
+                    onChange={(e) => setemail(e.target.value)}
+                    error={!!errors.email}
+                    helperText={errors.email}
                 />
                 <span className='titleInput'>Địa chỉ:</span>
                 <Address
