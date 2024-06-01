@@ -1,19 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import '../assets/css/styleLogin.scss';
 import TextField from '@mui/material/TextField';
 import { Button, Alert, Snackbar, Fade } from '@mui/material';
 import Link from '@mui/material/Link';
-import Logo from '../components/common/Logo';
+import '../assets/css/styleLogin.scss';
 
 
 interface Errors {
-    emailOrPhone?: string;
+    username?: string;
     password?: string;
 }
 
 const Login: React.FC = () => {
-    const [emailOrPhone, setEmailOrPhone] = useState<string>('');
-    const [password, setPassword] = useState<string>('');
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
     const [errors, setErrors] = useState<Errors>({});
     const [successMessage, setSuccessMessage] = useState<boolean>(false);
     const [failureMessage, setFailureMessage] = useState<boolean>(false);
@@ -28,64 +27,73 @@ const Login: React.FC = () => {
         }
     }, [successMessage, failureMessage]);
 
-    const validateEmailOrPhone = (value: string) => {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        const phoneRegex = /^\d{10,15}$/; // Simple phone regex (10-15 digits)
-        if (emailRegex.test(value) || phoneRegex.test(value)) {
-            return '';
-        }
-        return 'Vui lòng nhập email hoặc số điện thoại hợp lệ.';
-    };
 
     const validate = () => {
         let tempErrors: Errors = {};
-        tempErrors.emailOrPhone = validateEmailOrPhone(emailOrPhone);
-        if (!emailOrPhone) {
-            tempErrors.emailOrPhone = 'Tên đăng nhập là bắt buộc.';
-        }
-        if (!password) {
-            tempErrors.password = 'Mật khẩu là bắt buộc.';
-        }
+        tempErrors.username = username ? '' : 'Vui lòng nhập tên đănng nhập của bạn';
+        tempErrors.password = passwordValidator(password)
         setErrors(tempErrors);
-        return Object.keys(tempErrors).filter(key => tempErrors[key as keyof Errors]).length === 0;
+        return Object.values(tempErrors).every(x => x === '');
+    };
+    const passwordValidator = (password: string) => {
+        // Password length should be at least 8 characters
+        if (password.length < 8) {
+            if (password.length === 0) {
+                return 'Vui lòng nhập mật khẩu của bạn';
+            }
+            return 'Mật khẩu phải nhiều hơn 8 kí tự';
+        }
+        // Password should contain at least one uppercase letter
+        if (!/[A-Z]/.test(password)) {
+            return 'Mật khẩu phải có ít nhất một kí tự in hoa';
+        }
+        // Password should contain at least one lowercase letter
+        if (!/[a-z]/.test(password)) {
+            return 'Mật khẩu phải có ít nhất 1 kí tự là chữ';
+        }
+        // Password should contain at least one number
+        if (!/[0-9]/.test(password)) {
+            return 'Mật khẩu phải có ít nhất một kí tự là số';
+        }
+        // Password should contain at least one special character
+        if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+            return 'Mật khẩu phải có ít một kí tự đặt biệt';
+        }
+        return '';
     };
 
-    const handleSubmit = (event: React.FormEvent) => {
+    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         if (validate()) {
-            const loginSuccess = Math.random() > 0.5;
-            if (loginSuccess) {
-                setSuccessMessage(true);
-                setFailureMessage(false);
-            } else {
-                setSuccessMessage(false);
-                setFailureMessage(true);
-            }
+            setSuccessMessage(true);
+            setFailureMessage(false);
         } else {
+            setSuccessMessage(false);
             setFailureMessage(true);
         }
     };
 
     return (
-        <div className='tabLogin'>
-            <Link href="/" className='backToHomePage' underline='none'><Logo></Logo></Link>
-            <Snackbar className='showAlert'
+        <div>
+            <Snackbar
+                className='showAlert'
                 open={successMessage}
                 autoHideDuration={5000}
                 TransitionComponent={Fade}
                 onClose={() => setSuccessMessage(false)}
             >
-                <Alert className='alertSuccess' variant="outlined" severity="success" >
+                <Alert className='alertSuccess' variant="outlined" severity="success">
                     Đăng nhập thành công.
                 </Alert>
             </Snackbar>
-            <Snackbar className='showAlert'
+            <Snackbar
+                className='showAlert'
                 open={failureMessage}
                 autoHideDuration={5000}
                 TransitionComponent={Fade}
                 onClose={() => setFailureMessage(false)}
             >
-                <Alert className='alertFail' variant="outlined" severity="error" >
+                <Alert className='alertFail' variant="outlined" severity="error">
                     Đăng nhập thất bại
                 </Alert>
             </Snackbar>
@@ -93,22 +101,18 @@ const Login: React.FC = () => {
                 <span className='titleLogin'>Đăng nhập</span>
                 <span className='titleInput'>Tên đăng nhập:</span>
                 <TextField
-                    required
-                    id="outlined-required"
-                    placeholder='Vui lòng nhập số điện thoại của bạn'
                     className='inputArea'
-                    value={emailOrPhone}
-                    onChange={(e) => setEmailOrPhone(e.target.value)}
-                    error={!!errors.emailOrPhone}
-                    helperText={errors.emailOrPhone}
+                    placeholder='Nhập tên đăng nhập của bạn'
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    error={!!errors.username}
+                    helperText={errors.username}
                 />
                 <span className='titleInput'>Mật khẩu:</span>
                 <TextField
-                    id="outlined-password-input"
-                    type="password"
-                    placeholder='Vui lòng nhập mật khẩu'
-                    autoComplete="current-password"
                     className='inputArea'
+                    type='password'
+                    placeholder='Nhập mật khẩu'
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     error={!!errors.password}

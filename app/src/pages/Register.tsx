@@ -56,13 +56,12 @@ const Register = () => {
 
     const validate = () => {
         let tempErrors: Errors = {};
-        tempErrors.username = validateEmailOrPhone(username)
         tempErrors.username = username ? '' : 'Vui lòng nhập tên đănng nhập của bạn';
         tempErrors.password = passwordValidator(password)
         tempErrors.rePassword = comparePasword(password, rePassword);
         tempErrors.representative = representative ? '' : 'Vui lòng nhập họ và tên';
-        tempErrors.companyPhone = companyPhone ? '' : 'Vui lòng nhập số điện thoại của công ty của bạn';
-        tempErrors.companyEmail = companyEmail ? '' : 'Vui lòng nhập email của công ty của bạn';
+        tempErrors.companyPhone = validatePhone(companyPhone)
+        tempErrors.companyEmail = validateEmail(companyEmail)
         tempErrors.termsAccepted = termsAccepted ? '' : 'Bạn phải đồng ý với điều khoản của chúng tôi';
         tempErrors.province = addressData.province ? '' : 'Vui lòng chọn Tỉnh/Thành Phố';
         tempErrors.district = addressData.district ? '' : 'Vui lòng chọn Quận/Huyện';
@@ -104,16 +103,23 @@ const Register = () => {
         }
         return '';
     };
-    const validateEmailOrPhone = (value: string) => {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        const phoneRegex = /^\d{10,15}$/; // Simple phone regex (10-15 digits)
-        if (emailRegex.test(value) || phoneRegex.test(value)) {
+    const validatePhone = (value: string) => {
+        const phoneRegex = /^\d{10,15}$/;
+        if (phoneRegex.test(value)) {
             return '';
         }
         else if (value === '') {
-            return 'Vui lòng nhập email hoặc số điện thoại'
+            return 'Vui lòng nhập số điện thoại công ty hoặc số điện thoại của bạn'
         }
-        return 'Vui lòng nhập email hoặc số điện thoại hợp lệ.';
+    };
+    const validateEmail = (value: string) => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(value)) {
+            return 'Email của bạn có vấn đề';
+        }
+        else if (value === '') {
+            return 'Vui lòng nhập email công ty hoặc email của bạn'
+        }
     };
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -157,7 +163,7 @@ const Register = () => {
                 <span className='titleInput'>Tên đăng nhập:</span>
                 <TextField
                     className='inputArea'
-                    placeholder='Vui lòng nhập tên đăng nhập của bạn'
+                    placeholder='Nhập tên đăng nhập của bạn'
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                     error={!!errors.username}
@@ -167,7 +173,7 @@ const Register = () => {
                 <TextField
                     className='inputArea'
                     type='password'
-                    placeholder='Vui lòng nhập mật khẩu'
+                    placeholder='Nhập mật khẩu'
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     error={!!errors.password}
@@ -177,7 +183,7 @@ const Register = () => {
                 <TextField
                     className='inputArea'
                     type='password'
-                    placeholder='Vui lòng nhập lại mật khẩu'
+                    placeholder='Nhập lại mật khẩu'
                     value={rePassword}
                     onChange={(e) => setRePassword(e.target.value)}
                     error={!!errors.rePassword}
@@ -186,7 +192,7 @@ const Register = () => {
                 <span className='titleInput'>Họ và tên người đại diện:</span>
                 <TextField
                     className='inputArea'
-                    placeholder='Vui lòng nhập họ và tên'
+                    placeholder='Nhập họ và tên'
                     value={representative}
                     onChange={(e) => setRepresentative(e.target.value)}
                     error={!!errors.representative}
@@ -200,12 +206,12 @@ const Register = () => {
                 <span className='titleInput'>Tên công ty:</span>
                 <TextField
                     className='inputArea'
-                    placeholder='Vui lòng nhập tên công ty của bạn'
+                    placeholder='Nhập tên công ty của bạn'
                 />
                 <span className='titleInput'>Số điện thoại:</span>
                 <TextField
                     className='inputArea'
-                    placeholder='Vui lòng nhập số điện thoại của công ty hoặc số điện thoại cá nhân'
+                    placeholder='Nhập số điện thoại của công ty hoặc số điện thoại cá nhân'
                     value={companyPhone}
                     onChange={(e) => setCompanyPhone(e.target.value)}
                     error={!!errors.companyPhone}
@@ -214,7 +220,7 @@ const Register = () => {
                 <span className='titleInput'>Email:</span>
                 <TextField
                     className='inputArea'
-                    placeholder='Vui lòng nhập email của công ty hoặc email cá nhân'
+                    placeholder='Nhập email của công ty hoặc email cá nhân'
                     value={companyEmail}
                     onChange={(e) => setCompanyEmail(e.target.value)}
                     error={!!errors.companyEmail}
