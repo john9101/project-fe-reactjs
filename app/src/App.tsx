@@ -5,7 +5,7 @@ import './assets/css/styleLogin.scss'
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import MainLayout from "./pages/MainLayout";
 import { CircularProgress } from "@mui/material";
-import FormLayout from './pages/FormLayout';
+import FormLayout from './layout/FormLayout';
 
 const Home = lazy(() => import('./pages/Home'));
 const ContactUs = lazy(() => import('./pages/ContactUs'));
