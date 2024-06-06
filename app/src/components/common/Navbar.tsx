@@ -1,3 +1,7 @@
+import React from "react";
+import {faAngleDown} from "@fortawesome/free-solid-svg-icons";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+
 const Navbar = () => {
     return (
         <div className="container-fluid mb-5">
@@ -7,7 +11,7 @@ const Navbar = () => {
                        data-toggle="collapse" href="#navbar-vertical"
                        style={{ height: "65px", marginTop: "-1px", padding: "0 30px"}}>
                         <h6 className="m-0">Categories</h6>
-                        <i className="fa fa-angle-down text-dark"></i>
+                        <FontAwesomeIcon icon={faAngleDown} className="text-dark" />
                     </a>
                     <nav
                         className="collapse show navbar navbar-vertical navbar-light align-items-start p-0 border border-top-0 border-bottom-0"

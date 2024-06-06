@@ -70,14 +70,12 @@ const Footer = () => {
                 </div>
             </div>
             <div className="row border-top border-light mx-xl-5 py-4 align-items-center">
-                {/*<div className="col-md-6 px-xl-0">*/}
                     <p className="mb-md-0 text-center text-md-left text-dark">
                         &copy; <a className="text-dark font-weight-semi-bold" href="#">Đồng Phục Việt</a>. All Rights
                         Reserved. Designed
                         by
                         <a className="text-dark font-weight-semi-bold" href="https://htmlcodex.com">ReactJS</a><br/>
                     </p>
-                {/*</div>*/}
             </div>
         </div>
     )
