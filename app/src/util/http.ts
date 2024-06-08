@@ -1,9 +1,14 @@
-import React from 'react';
+import axios, {AxiosInstance} from "axios";
 
-function Sample() {
-    return (
-        <div></div>
-    );
+class Http {
+    instance: AxiosInstance;
+    constructor() {
+        this.instance = axios.create({
+            baseURL: "http://localhost:4000/api/",
+            timeout: 10000,
+        })
+    }
 }
 
-export default Sample;
+const http = new Http().instance
+export default http;
