@@ -1,8 +1,20 @@
 import React from 'react';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faMinus, faPlus, faTrash} from "@fortawesome/free-solid-svg-icons";
+import DeleteIcon from '@mui/icons-material/Delete';
+import {useState} from "react";
 
 function CartDetail() {
+    const [quantity, setQuantity] = useState<number>(1);
+    const handleMinusClick = () => {
+        if (quantity > 1) {
+            setQuantity(preQuantity => preQuantity - 1);
+        }
+    };
+
+    const handlePlusClick = () => {
+        setQuantity(preQuantity => preQuantity + 1);
+    };
     return (
         <>
             <div className="container-fluid pt-5">
@@ -23,28 +35,30 @@ function CartDetail() {
                                 <td className="align-middle"><img src="img/product-1.jpg" alt=""
                                                                   style={{width: '50px'}}/> Tên sản phẩm
                                 </td>
-                                <td className="align-middle">$Giá </td>
+                                <td className="align-middle">$Giá</td>
                                 <td className="align-middle">
                                     <div className="input-group quantity mx-auto" style={{width: '100px'}}>
                                         <div className="input-group-btn">
-                                            <button className="btn btn-sm btn-primary btn-minus">
-                                                <FontAwesomeIcon icon={faMinus} />
+                                            <button className="btn btn-sm btn-primary btn-minus"
+                                                    onClick={handleMinusClick}>
+                                                <FontAwesomeIcon icon={faMinus}/>
                                             </button>
                                         </div>
                                         <input type="text"
                                                className="form-control form-control-sm bg-secondary text-center"
-                                               value="1"/>
+                                               value={quantity} readOnly/>
                                         <div className="input-group-btn">
-                                            <button className="btn btn-sm btn-primary btn-plus">
-                                                <FontAwesomeIcon icon={faPlus} />
+                                            <button className="btn btn-sm btn-primary btn-plus"
+                                                    onClick={handlePlusClick}>
+                                                <FontAwesomeIcon icon={faPlus}/>
                                             </button>
                                         </div>
                                     </div>
                                 </td>
-                                <td className="align-middle">$Tổng tiền </td>
+                                <td className="align-middle">$Tổng tiền</td>
                                 <td className="align-middle">
-                                    <button className="btn btn-sm btn-primary">
-                                        <FontAwesomeIcon icon={faTrash} />
+                                    <button className="btn btn-sm">
+                                        <FontAwesomeIcon icon={faTrash} style={{color: "#D19C97"}}/>
                                     </button>
                                 </td>
                             </tr>
@@ -69,8 +83,12 @@ function CartDetail() {
                                     <h6 className="font-weight-medium">Giá</h6>
                                     <h6 className="font-weight-medium">$150</h6>
                                 </div>
+                                <div className="d-flex justify-content-between mb-3 pt-1">
+                                    <h6 className="font-weight-medium">Giảm</h6>
+                                    <h6 className="font-weight-medium">$10</h6>
+                                </div>
                                 <div className="d-flex justify-content-between">
-                                    <h6 className="font-weight-medium">Vận chuyển</h6>
+                                    <h6 className="font-weight-medium">Phí giao hàng    </h6>
                                     <h6 className="font-weight-medium">$10</h6>
                                 </div>
                             </div>
@@ -79,7 +97,7 @@ function CartDetail() {
                                     <h5 className="font-weight-bold">Tổng tiền</h5>
                                     <h5 className="font-weight-bold">$160</h5>
                                 </div>
-                                <button className="btn btn-block btn-primary my-3 py-3">Thanh toán</button>
+                                <button className="btn btn-block btn-primary my-3 py-3">Đặt hàng</button>
                             </div>
                         </div>
                     </div>
