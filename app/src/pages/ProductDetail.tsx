@@ -1,11 +1,40 @@
 import {useParams} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {AppDispatch, RootState} from "../store/store";
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import {fetchProductDetail, setSelectedOptionName, setSelectedSize} from "../store/product.slice";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faPlus,faMinus,faTag, faStar} from "@fortawesome/free-solid-svg-icons";
 import {faFacebookF, faXTwitter, faLinkedinIn, faPinterest} from "@fortawesome/free-brands-svg-icons"
+import {Box, Tab, Tabs} from "@mui/material";
+
+interface TabPanelProps{
+    children?: React.ReactNode
+    index: number
+    value: number
+}
+
+const ProductDetailTabPanel = (props: TabPanelProps)=>{
+    const {children, value, index, ...other} = props;
+    return (
+        <div
+            role='tabpanel'
+            hidden={value !== index}
+            id={`simple-tabpanel-${index}`}
+            aria-labelledby={`simple-tabpanel-${index}`}
+            {...other}
+        >
+            {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+        </div>
+    )
+}
+
+const allyProps = (index: number)=>{
+    return {
+        id: `simple-tab-${index}`,
+        'aria-controls': `simple-tabpanel-${index}`,
+    }
+}
 
 const ProductDetail = ()=> {
     const {productId} = useParams()
@@ -14,6 +43,8 @@ const ProductDetail = ()=> {
     const product = productDetail.product;
     const quantityInStock = productDetail.quantityInStock;
     const priceWithUnit = productDetail.priceWithUnit
+
+    const [tabDisplay, setTabDisplay] = useState<number>(0);
 
     useEffect(() => {
         const promise = dispatch(fetchProductDetail(productId as string));
@@ -31,6 +62,10 @@ const ProductDetail = ()=> {
 
     const handleSetSelectedSize = (e: React.ChangeEvent<HTMLInputElement>) => {
         dispatch(setSelectedSize(e.target.value))
+    }
+
+    const handleChangeTabDisplay = (event: React.SyntheticEvent, newTabDisplay: number) => {
+        setTabDisplay(newTabDisplay);
     }
 
     return (
@@ -139,75 +174,76 @@ const ProductDetail = ()=> {
         </div>
             <div className="row px-xl-5">
                 <div className="col">
-                    <div className="nav nav-tabs justify-content-center border-secondary mb-4">
-                        <a className="nav-item nav-link active" data-toggle="tab" href="#tab-pane-1">Mô tả chi tiết</a>
-                        <a className="nav-item nav-link" data-toggle="tab" href="#tab-pane-3">Nhận xét & đánh giá
-                            (0)</a>
-                    </div>
-                    <div className="tab-content">
-                        <div className="tab-pane fade show active" id="tab-pane-1">
-                        <h4 className="mb-3">Mô tả chi tiết về sản phẩm</h4>
-                        <p>{product?.longDescription}</p>
-                    </div>
-                    <div className="tab-pane fade" id="tab-pane-3">
-                        <div className="row">
-                            <div className="col-md-6">
-                                <h4 className="mb-4">1 review for "Colorful Stylish Shirt"</h4>
-                                <div className="media mb-4">
-                                    <img src="img/user.jpg" alt="Image" className="img-fluid mr-3 mt-1"
-                                         style={{width: "45px"}}/>
-                                    <div className="media-body">
-                                        <h6>John Doe<small> - <i>01 Jan 2045</i></small></h6>
-                                        <div className="text-primary mb-2">
-                                            <i className="fas fa-star"></i>
-                                            <i className="fas fa-star"></i>
-                                            <i className="fas fa-star"></i>
-                                            <i className="fas fa-star-half-alt"></i>
+                    <Box sx={{borderBottom: 1, borderColor: 'divider'}}>
+                        <Tabs
+                            value={tabDisplay}
+                            onChange={handleChangeTabDisplay}
+                            aria-label={'product detail tabs'}
+                        >
+                            <Tab label="Mô tả chi tiết" {...allyProps(0)}/>
+                            <Tab label="Đánh giá & nhận xét" {...allyProps(1)}/>
+                        </Tabs>
+                    </Box>
+                    <ProductDetailTabPanel index={0} value={tabDisplay}>
+                        {product?.longDescription}
+                    </ProductDetailTabPanel>
+                    <ProductDetailTabPanel index={1} value={tabDisplay}>
+                        <div className="tab-pane fade active show" id="tab-pane-3">
+                            <div className="row">
+                                <div className="col-md-6">
+                                    <h4 className="mb-4">1 review for "{product?.name}"</h4>
+                                    <div className="media mb-4">
+                                        <img src="img/user.jpg" alt="Image" className="img-fluid mr-3 mt-1" style={{width: "45px"}}/>
+                                        <div className="media-body">
+                                            <h6>John Doe<small> - <i>01 Jan 2045</i></small></h6>
+                                            <div className="text-primary mb-2">
+                                                <i className="fas fa-star"></i>
+                                                <i className="fas fa-star"></i>
+                                                <i className="fas fa-star"></i>
+                                                <i className="fas fa-star-half-alt"></i>
+                                                <i className="far fa-star"></i>
+                                            </div>
+                                            <p>Diam amet duo labore stet elitr ea clita ipsum, tempor labore accusam ipsum et no at. Kasd diam tempor rebum magna dolores sed sed eirmod ipsum.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="col-md-6">
+                                    <h4 className="mb-4">Để lại đánh giá và nhận xét của bạn</h4>
+                                    <small>Địa chỉ email của bạn sẽ không được công khai. Các trường bắt buộc được đánh dấu *</small>
+                                    <div className="d-flex my-3">
+                                        <p className="mb-0 mr-2">Đánh giá của bạn * :</p>
+                                        <div className="text-primary">
+                                            <i className="far fa-star"></i>
+                                            <i className="far fa-star"></i>
+                                            <i className="far fa-star"></i>
+                                            <i className="far fa-star"></i>
                                             <i className="far fa-star"></i>
                                         </div>
-                                        <p>Diam amet duo labore stet elitr ea clita ipsum, tempor labore accusam ipsum
-                                            et no at. Kasd diam tempor rebum magna dolores sed sed eirmod ipsum.</p>
                                     </div>
+                                    <form>
+                                        <div className="form-group">
+                                            <label htmlFor="message">Nhận xét của bạn *</label>
+                                            <textarea id="message" cols={30} rows={5} className="form-control"></textarea>
+                                        </div>
+                                        <div className="form-group">
+                                            <label htmlFor="name">Họ và tên của bạn *</label>
+                                            <input type="text" className="form-control" id="name"/>
+                                        </div>
+                                        <div className="form-group">
+                                            <label htmlFor="email">Địa chỉ email của bạn *</label>
+                                            <input type="email" className="form-control" id="email"/>
+                                        </div>
+                                        <div className="form-group mb-0">
+                                            <input type="submit" value="Để lại đánh giá & nhận xét" className="btn btn-primary px-3"/>
+                                        </div>
+                                    </form>
                                 </div>
-                            </div>
-                            <div className="col-md-6">
-                                <h4 className="mb-4">Leave a review</h4>
-                                <small>Your email address will not be published. Required fields are marked *</small>
-                                <div className="d-flex my-3">
-                                    <p className="mb-0 mr-2">Your Rating * :</p>
-                                    <div className="text-primary">
-                                        <i className="far fa-star"></i>
-                                        <i className="far fa-star"></i>
-                                        <i className="far fa-star"></i>
-                                        <i className="far fa-star"></i>
-                                        <i className="far fa-star"></i>
-                                    </div>
-                                </div>
-                                <form>
-                                    <div className="form-group">
-                                        <label htmlFor="message">Your Review *</label>
-                                        <textarea id="message" cols={30} rows={5} className="form-control"></textarea>
-                                    </div>
-                                    <div className="form-group">
-                                        <label htmlFor="name">Your Name *</label>
-                                        <input type="text" className="form-control" id="name"/>
-                                    </div>
-                                    <div className="form-group">
-                                        <label htmlFor="email">Your Email *</label>
-                                        <input type="email" className="form-control" id="email"/>
-                                    </div>
-                                    <div className="form-group mb-0">
-                                        <input type="submit" value="Leave Your Review"
-                                               className="btn btn-primary px-3"/>
-                                    </div>
-                                </form>
                             </div>
                         </div>
-                    </div>
+                    </ProductDetailTabPanel>
                 </div>
             </div>
         </div>
-    </div>
     )
 }
 
