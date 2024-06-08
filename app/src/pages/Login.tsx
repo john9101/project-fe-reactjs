@@ -2,16 +2,17 @@ import React, { useState, useEffect } from 'react';
 import TextField from '@mui/material/TextField';
 import { Button, Alert, Snackbar, Fade } from '@mui/material';
 import Link from '@mui/material/Link';
-import '../assets/css/styleLogin.css';
+import '../assets/css/styleLogin.scss';
+
 
 interface Errors {
-    emailOrPhone?: string;
+    username?: string;
     password?: string;
 }
 
 const Login: React.FC = () => {
-    const [emailOrPhone, setEmailOrPhone] = useState<string>('');
-    const [password, setPassword] = useState<string>('');
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
     const [errors, setErrors] = useState<Errors>({});
     const [successMessage, setSuccessMessage] = useState<boolean>(false);
     const [failureMessage, setFailureMessage] = useState<boolean>(false);
@@ -26,64 +27,47 @@ const Login: React.FC = () => {
         }
     }, [successMessage, failureMessage]);
 
-    const validateEmailOrPhone = (value: string) => {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        const phoneRegex = /^\d{10,15}$/; // Simple phone regex (10-15 digits)
-        if (emailRegex.test(value) || phoneRegex.test(value)) {
-            return '';
-        }
-        return 'Vui lòng nhập email hoặc số điện thoại hợp lệ.';
-    };
 
     const validate = () => {
         let tempErrors: Errors = {};
-        tempErrors.emailOrPhone = validateEmailOrPhone(emailOrPhone);
-        if (!emailOrPhone) {
-            tempErrors.emailOrPhone = 'Tên đăng nhập là bắt buộc.';
-        }
-        if (!password) {
-            tempErrors.password = 'Mật khẩu là bắt buộc.';
-        }
+        tempErrors.username = username ? '' : 'Vui lòng nhập tên đănng nhập của bạn';
+        tempErrors.password = password ? '' : 'Vui lòng mật khẩu của bạn';
         setErrors(tempErrors);
-        return Object.keys(tempErrors).filter(key => tempErrors[key as keyof Errors]).length === 0;
+        return Object.values(tempErrors).every(x => x === '');
     };
 
-    const handleSubmit = (event: React.FormEvent) => {
+    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         if (validate()) {
-            // Simulate login success or failure
-            const loginSuccess = Math.random() > 0.5;
-            if (loginSuccess) {
-                setSuccessMessage(true);
-                setFailureMessage(false);
-            } else {
-                setSuccessMessage(false);
-                setFailureMessage(true);
-            }
+            setSuccessMessage(true);
+            setFailureMessage(false);
         } else {
+            setSuccessMessage(false);
             setFailureMessage(true);
         }
     };
 
     return (
-        <div className='tabLogin'>
-            <Snackbar className='alertSuccess'
+        <div>
+            <Snackbar
+                className='showAlert'
                 open={successMessage}
                 autoHideDuration={5000}
                 TransitionComponent={Fade}
                 onClose={() => setSuccessMessage(false)}
             >
-                <Alert variant="outlined" severity="success" >
+                <Alert className='alertSuccess' variant="outlined" severity="success">
                     Đăng nhập thành công.
                 </Alert>
             </Snackbar>
-            <Snackbar className='alertSuccess'
+            <Snackbar
+                className='showAlert'
                 open={failureMessage}
                 autoHideDuration={5000}
                 TransitionComponent={Fade}
                 onClose={() => setFailureMessage(false)}
             >
-                <Alert variant="outlined" severity="error" >
+                <Alert className='alertFail' variant="outlined" severity="error">
                     Đăng nhập thất bại
                 </Alert>
             </Snackbar>
@@ -91,32 +75,30 @@ const Login: React.FC = () => {
                 <span className='titleLogin'>Đăng nhập</span>
                 <span className='titleInput'>Tên đăng nhập:</span>
                 <TextField
-                    required
-                    id="outlined-required"
-                    placeholder='Vui lòng nhập email hoặc số điện thoại'
                     className='inputArea'
-                    value={emailOrPhone}
-                    onChange={(e) => setEmailOrPhone(e.target.value)}
-                    error={!!errors.emailOrPhone}
-                    helperText={errors.emailOrPhone}
+                    placeholder='Nhập tên đăng nhập của bạn'
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    error={!!errors.username}
+                    helperText={errors.username}
                 />
                 <span className='titleInput'>Mật khẩu:</span>
                 <TextField
-                    id="outlined-password-input"
-                    type="password"
-                    placeholder='Vui lòng nhập mật khẩu'
-                    autoComplete="current-password"
                     className='inputArea'
+                    type='password'
+                    placeholder='Nhập mật khẩu'
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     error={!!errors.password}
                     helperText={errors.password}
                 />
-                <Link href="/forgot-password" underline="none" className='forgotPassword'>
-                    Quên mật khẩu?
-                </Link>
-                <Button variant="contained" className='btnLogin' type="submit">Đăng nhập</Button>
-                <span className='titleToRegister'>Bạn chưa có tài khoản? <Link href="/register" underline="none">
+                <div className="forgotPassArea">
+                    <Link href="/account/forgot-password" underline="none" className='forgotPassword'>
+                        Quên mật khẩu?
+                    </Link>
+                </div>
+                <Button className='btnLogin' type="submit" variant="contained">Đăng nhập</Button>
+                <span className='titleToRegister'>Bạn chưa có tài khoản? <Link href="/account/register" underline="none">
                     Tạo tài khoản mới tại đây
                 </Link></span>
 

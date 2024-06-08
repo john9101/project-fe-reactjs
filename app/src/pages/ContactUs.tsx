@@ -1,5 +1,5 @@
 import React from 'react';
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 function ContactUs() {
     return (
         <>
@@ -19,37 +19,37 @@ function ContactUs() {
                                                             <div className="form-group">
                                                                 <label className="label" htmlFor="name">Họ và tên</label>
                                                                 <input type="text" className="form-control" name="name"
-                                                                       id="name" placeholder="Họ và tên"/>
+                                                                    id="name" placeholder="Họ và tên" />
                                                             </div>
                                                         </div>
                                                         <div className="col-md-6">
                                                             <div className="form-group">
                                                                 <label className="label" htmlFor="email">Email</label>
                                                                 <input type="email" className="form-control"
-                                                                       name="email" id="email" placeholder="Email"/>
+                                                                    name="email" id="email" placeholder="Email" />
                                                             </div>
                                                         </div>
                                                         <div className="col-md-12">
                                                             <div className="form-group">
                                                                 <label className="label"
-                                                                       htmlFor="subject">Chủ đề</label>
+                                                                    htmlFor="subject">Chủ đề</label>
                                                                 <input type="text" className="form-control"
-                                                                       name="subject" id="subject"
-                                                                       placeholder="Chủ đề"/>
+                                                                    name="subject" id="subject"
+                                                                    placeholder="Chủ đề" />
                                                             </div>
                                                         </div>
                                                         <div className="col-md-12">
                                                             <div className="form-group">
                                                                 <label className="label" htmlFor="#">Nội dung</label>
                                                                 <textarea name="message" className="form-control"
-                                                                          id="message" cols={3} rows={4}
-                                                                          placeholder="Nhập nội dung cần gửi..."></textarea>
+                                                                    id="message" cols={3} rows={4}
+                                                                    placeholder="Nhập nội dung cần gửi..."></textarea>
                                                             </div>
                                                         </div>
                                                         <div className="col-md-12">
                                                             <div className="form-group fa-pull-right">
                                                                 <input type="submit" value="Gửi"
-                                                                       className="btn btn-primary"/>
+                                                                    className="btn btn-primary" />
                                                                 <div className="submitting"></div>
                                                             </div>
                                                         </div>
