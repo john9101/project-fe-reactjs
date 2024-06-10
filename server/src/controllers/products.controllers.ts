@@ -1,4 +1,4 @@
-import { Request, Response, query } from "express";
+import { Request, Response } from "express";
 import productsService from "../services/products.services";
 import * as _ from "lodash";
 

@@ -9,6 +9,7 @@ import bodyParser from 'body-parser'
 import cors from "cors"
 // @ts-ignore
 import morgan from 'morgan'
+import categoriesRouter from './src/routes/catogories.routes'
 
 config()
 const app = express()
@@ -19,6 +20,7 @@ app.use(cors())
 app.use(morgan("common"))
 
 app.use('/api/products', productsRouter)
+app.use('/api/catgories', categoriesRouter)
 
 const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.CLUSTER_NAME}.nlnlbxk.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`
 

@@ -6,7 +6,8 @@ import {fetchProductDetail, setSelectedOptionName, setSelectedSize} from "../sto
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faPlus,faMinus,faTag, faStar} from "@fortawesome/free-solid-svg-icons";
 import {faFacebookF, faXTwitter, faLinkedinIn, faPinterest} from "@fortawesome/free-brands-svg-icons"
-import {Box, Tab, Tabs} from "@mui/material";
+import {Box, Rating, Tab, Tabs} from "@mui/material";
+import {useForm} from "react-hook-form";
 
 interface TabPanelProps{
     children?: React.ReactNode
@@ -213,11 +214,7 @@ const ProductDetail = ()=> {
                                     <div className="d-flex my-3">
                                         <p className="mb-0 mr-2">Đánh giá của bạn * :</p>
                                         <div className="text-primary">
-                                            <i className="far fa-star"></i>
-                                            <i className="far fa-star"></i>
-                                            <i className="far fa-star"></i>
-                                            <i className="far fa-star"></i>
-                                            <i className="far fa-star"></i>
+                                            <Rating name="no-value" value={null} />
                                         </div>
                                     </div>
                                     <form>
