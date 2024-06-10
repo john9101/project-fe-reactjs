@@ -6,6 +6,8 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import MainLayout from "./pages/MainLayout";
 import { CircularProgress } from "@mui/material";
 import FormLayout from './layout/FormLayout';
+import { ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 const Home = lazy(() => import('./pages/Home'));
 const ContactUs = lazy(() => import('./pages/ContactUs'));
@@ -19,6 +21,7 @@ const ProductDetail = lazy(() => import('./pages/ProductDetail'));
 function App() {
     return (
         <BrowserRouter>
+            <ToastContainer/>
             <div className="App">
                 <Suspense fallback={<CircularProgress color="success" />}>
                     <Routes>

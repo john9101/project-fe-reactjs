@@ -6,6 +6,7 @@ import {useState} from "react";
 
 function CartDetail() {
     const [quantity, setQuantity] = useState<number>(1);
+
     const handleMinusClick = () => {
         if (quantity > 1) {
             setQuantity(preQuantity => preQuantity - 1);

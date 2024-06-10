@@ -1,11 +1,15 @@
 import {useParams} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {AppDispatch, RootState} from "../store/store";
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import {fetchProductDetail, setSelectedOptionName, setSelectedSize} from "../store/product.slice";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faPlus,faMinus,faTag, faStar} from "@fortawesome/free-solid-svg-icons";
 import {faFacebookF, faXTwitter, faLinkedinIn, faPinterest} from "@fortawesome/free-brands-svg-icons"
+import {addtoCart} from "../store/cartSlice";
+import {Product} from "../types/product.type";
+import {toast} from "react-toastify";
+import {CartItem} from "../types/cartItem.type";
 
 const ProductDetail = ()=> {
     const {productId} = useParams()
@@ -14,6 +18,8 @@ const ProductDetail = ()=> {
     const product = productDetail.product;
     const quantityInStock = productDetail.quantityInStock;
     const priceWithUnit = productDetail.priceWithUnit
+    const selectedOptionName = productDetail.selectedOptionName;
+    const selectedSize = productDetail.selectedSize;
 
     useEffect(() => {
         const promise = dispatch(fetchProductDetail(productId as string));
@@ -27,12 +33,53 @@ const ProductDetail = ()=> {
 
     const handleSetSelectedOptionName = (e: React.ChangeEvent<HTMLInputElement>) => {
         dispatch(setSelectedOptionName(e.target.value))
+        setCartItem({...cartItem, optionName: e.target.value})
     }
 
     const handleSetSelectedSize = (e: React.ChangeEvent<HTMLInputElement>) => {
         dispatch(setSelectedSize(e.target.value))
+        setCartItem({...cartItem, size: e.target.value})
     }
 
+    const [cartItem, setCartItem] = useState<CartItem>({})
+
+    const handleAddToCart = (cartItem: CartItem) => {
+        if (quantityInStock === 0) {
+            toast.error("Sản phẩm đã hết hàng", {
+                position: "bottom-left",
+                autoClose: 2000
+            });
+            return;
+        }
+        if (selectedOptionName === null || selectedSize === null) {
+            toast.error("Vui lòng chọn kích cỡ và mẫu đồng phục", {
+                position: "bottom-left",
+                autoClose: 1000
+            });
+            return;
+        }
+        dispatch(addtoCart(cartItem));
+        toast.success("Đã thêm vào giỏ hàng", {
+            position: "bottom-left",
+            autoClose: 1000
+        });
+    }
+    var [quantity, setQuantity] = useState<number>(1);
+
+    const handleSetValue = (e: React.ChangeEvent<HTMLInputElement>) => {
+    }
+
+    const handleMinusClick = () => {
+        if (quantity > 1) {
+            setQuantity(quantity - 1);
+            setCartItem({...cartItem, quantity: quantity - 1})
+        }
+    };
+
+    const handlePlusClick = () => {
+        setQuantity(quantity + 1);
+        setCartItem({...cartItem, quantity: quantity + 1})
+    };
     return (
         <div className="container-fluid py-5">
         <div className="row px-xl-5">
@@ -103,18 +150,29 @@ const ProductDetail = ()=> {
                 <div className="d-flex align-items-center mb-4 pt-2">
                     <div className="input-group quantity mr-3" style={{width: "130px"}}>
                         <div className="input-group-btn">
-                            <button className="btn btn-primary btn-minus">
+                            <button className="btn btn-primary btn-minus" onClick={handleMinusClick}>
                                 <FontAwesomeIcon icon={faMinus}/>
                             </button>
                         </div>
-                        <input type="text" className="form-control bg-secondary text-center" value="1"/>
+                        <input type="number" className="form-control bg-secondary text-center" value={quantity}
+                               onBlur={event => {
+                                   console.log("event value "+Number.parseInt(event.target.value))
+                                      if (event.target.value === "" || Number.parseInt(event.target.value) <= 0){
+                                          console.log("Quantity must be greater than 0")
+                                        setQuantity(1)
+                                      }
+
+                               }}
+                               onChange={event => {
+                                   setQuantity(Number.parseInt(event.target.value))
+                               }}/>
                         <div className="input-group-btn">
-                            <button className="btn btn-primary btn-plus">
+                            <button className="btn btn-primary btn-plus" onClick={handlePlusClick}>
                                 <FontAwesomeIcon icon={faPlus}/>
                             </button>
                         </div>
                     </div>
-                    <button className="btn btn-primary px-3"><i className="fa fa-shopping-cart mr-1"></i> Thêm vào giỏ
+                    <button className="btn btn-primary px-3" onClick={()=>handleAddToCart(cartItem)}><i className="fa fa-shopping-cart mr-1"></i> Thêm vào giỏ
                         hàng
                     </button>
                 </div>
