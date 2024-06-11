@@ -36,7 +36,7 @@ const AboutUs = (props: Props) => {
                             <ul className='listContent' >
                                 <li>
                                     <Typography variant="h6" color="text.secondary" className='content feedbackContent'>
-                                        Lựa chọn mẫu đồng phục phù hợp với doanh nghiệp là một quyết định không dễ đối với doanh nghiệp chưa từng Bán Đồng Phục. Đồng Phục E-Shopper là Nhà cung cấp và sản xuất trực tiếp đa dạng đồng phục rất hân hạnh được tư vấn đến Quý doanh nghiệp những lời khuyên tốt nhất cho bộ đồng phục của mình, nhằm giảm được chi phí Bán Đồng Phục, mà lại hài lòng về sản phẩm.
+                                        Lựa chọn mẫu đồng phục phù hợp với doanh nghiệp là một quyết định không dễ đối với doanh nghiệp chưa từng Bán Đồng Phục. Đồng Phục E-Shopper là Nhà cung cấp và sản xuất trực tiếp đa dạng đồng phục rất hân hạnh được tư vấn đến Quý doanh nghiệp những lời khuyên tốt nhất cho bộ đồng phục của mình, nhằm giảm được chi phí mua Đồng Phục, mà lại hài lòng về sản phẩm.
                                     </Typography>
                                 </li>
                                 <li>
@@ -72,10 +72,10 @@ const AboutUs = (props: Props) => {
                             </Typography>
                             <ul className="listContent">
                                 <li><Typography gutterBottom variant="h6" component="div" className='content feedbackContent'>
-                                    Công Ty TNHH Bán Đồng Phục E-Shopper với kinh nghiệm trong ngành sản xuất đồng phục trên 10 năm, đã dần khẳng định mình là đơn vị chuyên sản xuất trực tiếp các loại đồng phục đa dạng mẫu mã như: đồng phục áo thun, đồng phục công ty, áo bảo hộ lao động, đồng phục áo lớp, đồng phục công sở, đồng phục văn phòng, đồng phục teambuilding…
+                                    Công Ty TNHH Đồng Phục E-Shopper với kinh nghiệm trong ngành đồng phục trên 10 năm, đã dần khẳng định mình là đơn vị chuyên sản xuất trực tiếp các loại đồng phục đa dạng mẫu mã như: đồng phục áo thun, đồng phục công ty, áo bảo hộ lao động, đồng phục áo lớp, đồng phục công sở, đồng phục văn phòng, đồng phục teambuilding…
                                 </Typography></li>
                                 <li><Typography gutterBottom variant="h6" component="div" className='content feedbackContent'>
-                                    Bán Đồng Phục E-Shopper cam kết sản phẩm đồng phục làm ra đạt chất lượng cao và giá cả phải chăng và đã đem đến sự tín nhiệm của hơn 5.000 khách hàng trên toàn quốc.
+                                    Đồng Phục E-Shopper cam kết sản phẩm đồng phục làm ra đạt chất lượng cao và giá cả phải chăng và đã đem đến sự tín nhiệm của khách hàng trên toàn quốc.
                                 </Typography></li>
                             </ul>
                         </CardContent>
@@ -91,10 +91,10 @@ const AboutUs = (props: Props) => {
                         />
                         <CardContent className='CardContent'>
                             <Typography gutterBottom variant="h4" component="div" className='content TitleContent'>
-                                Lợi ích khi Bán Đồng Phục tại E-Shopper
+                                Lợi ích khi mua Đồng Phục tại E-Shopper
                             </Typography>
                             <Typography variant="h6" color="text.secondary" className='content feedbackContent'>
-                                Đến với Bán Đồng Phục E-Shopper chúng tôi, bạn sẽ nhận được:
+                                Đến với Đồng Phục E-Shopper, bạn sẽ nhận được:
                             </Typography>
                             <ul className='listContent' >
                                 <li>
@@ -119,7 +119,7 @@ const AboutUs = (props: Props) => {
                                 </li>
                                 <li>
                                     <Typography variant="h6" color="text.secondary" className='content feedbackContent'>
-                                        Đối với đơn hàng đồng phục từ 100 cái trở lên, dongphuc.vn hỗ trợ may miễn phí áo đồng phục mẫu
+                                        Đối với đơn hàng đồng phục từ 100 cái trở lên, E-shopper hỗ trợ may miễn phí áo đồng phục mẫu
                                     </Typography>
                                 </li>
                                 <li>
@@ -151,7 +151,7 @@ const AboutUs = (props: Props) => {
                             <ul className='listContent' >
                                 <li>
                                     <Typography variant="h6" color="text.secondary" className='content feedbackContent'>
-                                        Tiền thân là 1 xưởng may gia đình hoạt động trong lĩnh vực may mặc và thiết kế đồng phục, xưởng Bán Đồng Phục E-Shopper với nhiều năm kinh nghiệm trong việc tư vấn, thiết kế, đã cho ra đời những bộ đồng phục hoàn hảo từ mẫu mã đến chất liệu. Được biết đến là một địa chỉ Bán Đồng Phục uy tín, giá rẻ, Đồng phục E-Shopper – dongphuc.vn đã cung cấp đa dạng các mặt hàng đồng phục cho mọi ngành nghề trên toàn quốc như: đồng phục áo thun, đồng phục bảo hộ lao động cho công nhân, đồng phục tạp dề, đồng phục văn phòng, đồng phục nhà hàng, đồng phục khách sạn, mũ nón đồng phục, túi vải tote bag….
+                                        Tiền thân là 1 xưởng may gia đình hoạt động trong lĩnh vực may mặc và thiết kế đồng phục, Đồng Phục E-Shopper với nhiều năm kinh nghiệm trong việc tư vấn, thiết kế, đã cho ra đời những bộ đồng phục hoàn hảo từ mẫu mã đến chất liệu. Được biết đến là một địa chỉ Bán Đồng Phục uy tín, giá rẻ, Đồng phục E-Shopper đã cung cấp đa dạng các mặt hàng đồng phục cho mọi ngành nghề trên toàn quốc như: đồng phục áo thun, đồng phục bảo hộ lao động cho công nhân, đồng phục tạp dề, đồng phục văn phòng, đồng phục nhà hàng, đồng phục khách sạn, mũ nón đồng phục, túi vải tote bag….
                                     </Typography>
                                 </li>
                                 <li>
