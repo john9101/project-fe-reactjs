@@ -1,0 +1,84 @@
+@import 'style.module.scss';
+
+.aboutPage {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    row-gap: 40px;
+
+    .imageContent {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: var(--cyan);
+    }
+
+    .feedbackArea {
+        width: 80%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        row-gap: 30px;
+
+
+        .CardArea {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            column-gap: 30px;
+
+            .MediaConent {
+                border-radius: 10px;
+            }
+
+            .CardContent {
+                .content {
+                    text-align: justify;
+                    letter-spacing: -0.5px;
+                }
+
+                .TitleContent {
+                    font-weight: bold;
+                    text-align: start;
+                }
+
+                .feedbackContent {
+                    font-size: 1rem;
+                    color: var(--gray-dark);
+                }
+
+                .listContent {
+                    padding: 30px;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: start;
+                    text-align: justify;
+                    row-gap: 10px;
+                }
+            }
+        }
+    }
+
+    .Card:nth-child(odd) .CardArea {
+        flex-direction: row-reverse;
+    }
+
+    .FooterCard {
+        display: flex;
+        flex-direction: column;
+
+        .FooterCardArea {
+            display: flex;
+            flex-direction: column;
+        }
+    }
+}
+
+* {
+    font-family: var(--font-family-sans-serif) !important;
+}
