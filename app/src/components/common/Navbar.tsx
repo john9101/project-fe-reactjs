@@ -61,7 +61,7 @@ const Navbar = () => {
                             </div>
                         </div>
                     </nav>
-                    {location.pathname !== '/about-us' && <HomeCarosel />}
+                    {location.pathname === '/' && <HomeCarosel />}
                 </div>
             </div>
         </div>
