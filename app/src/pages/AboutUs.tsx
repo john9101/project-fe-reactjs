@@ -1,6 +1,4 @@
 import React from 'react'
-import Topbar from '../components/common/Topbar';
-import Footer from '../components/common/Footer';
 import image from '../assets/img/caroselAbout.jpg'
 import '../assets/css/styleAbout.scss'
 import Card from '@mui/material/Card';
