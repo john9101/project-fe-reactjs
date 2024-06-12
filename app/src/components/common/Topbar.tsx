@@ -1,13 +1,10 @@
-import {Link} from "react-router-dom";
-import {faFacebookF, faInstagram, faLinkedinIn, faTwitter, faYoutube} from '@fortawesome/free-brands-svg-icons';
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faHeart, faMagnifyingGlass, faShoppingCart} from "@fortawesome/free-solid-svg-icons";
-import {useSelector} from "react-redux";
-import {RootState} from "../../store/store";
+import { Link } from "react-router-dom";
+import { faFacebookF, faInstagram, faLinkedinIn, faTwitter, faYoutube } from '@fortawesome/free-brands-svg-icons';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHeart, faMagnifyingGlass, faShoppingCart } from "@fortawesome/free-solid-svg-icons";
+import Logo from "./Logo";
 
 const Topbar = () => {
-    const totalItems = useSelector((state: RootState) => state.cart.totalItem);
-
     return (
         <div className="container-fluid">
             <div className="row bg-secondary py-2 px-xl-5">
@@ -23,19 +20,19 @@ const Topbar = () => {
                 <div className="col-lg-6 text-center text-lg-right">
                     <div className="d-inline-flex align-items-center">
                         <Link className="text-dark px-2" to="#">
-                            <FontAwesomeIcon icon={faFacebookF}/>
+                            <FontAwesomeIcon icon={faFacebookF} />
                         </Link>
                         <Link className="text-dark px-2" to="#">
-                            <FontAwesomeIcon icon={faTwitter}/>
+                            <FontAwesomeIcon icon={faTwitter} />
                         </Link>
                         <Link className="text-dark px-2" to="#">
-                            <FontAwesomeIcon icon={faLinkedinIn}/>
+                            <FontAwesomeIcon icon={faLinkedinIn} />
                         </Link>
                         <Link className="text-dark px-2" to="#">
-                            <FontAwesomeIcon icon={faInstagram}/>
+                            <FontAwesomeIcon icon={faInstagram} />
                         </Link>
                         <Link className="text-dark pl-2" to="#">
-                            <FontAwesomeIcon icon={faYoutube}/>
+                            <FontAwesomeIcon icon={faYoutube} />
                         </Link>
                     </div>
                 </div>
@@ -43,17 +40,16 @@ const Topbar = () => {
             <div className="row align-items-center py-3 px-xl-5 border-bottom">
                 <div className="col-lg-3 d-none d-lg-block">
                     <Link to={"/"} className="text-decoration-none">
-                        <h1 className="m-0 display-5 font-weight-semi-bold"><span
-                            className="text-primary font-weight-bold border px-3 mr-1">E</span>Shopper</h1>
+                        <Logo />
                     </Link>
                 </div>
                 <div className="col-lg-6 col-6 text-left">
                     <form action="">
                         <div className="input-group">
-                            <input type="text" className="form-control" placeholder="Tìm kiếm sản phẩm"/>
+                            <input type="text" className="form-control" placeholder="Tìm kiếm sản phẩm" />
                             <div className="input-group-append">
-                            <span className="input-group-text bg-transparent text-primary">
-                                <FontAwesomeIcon icon={faMagnifyingGlass} size="1x" color="#000"/>                            </span>
+                                <span className="input-group-text bg-transparent text-primary">
+                                    <FontAwesomeIcon icon={faMagnifyingGlass} size="1x" color="#000" />                            </span>
                             </div>
                         </div>
                     </form>
@@ -64,7 +60,7 @@ const Topbar = () => {
                     </Link>
                     <Link to={"/cart"} className="btn border">
                         <FontAwesomeIcon icon={faShoppingCart} className="text-primary" />
-                        <span className="badge">{totalItems}</span>
+                        <span className="badge">0</span>
                     </Link>
                 </div>
             </div>
