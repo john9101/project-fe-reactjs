@@ -3,8 +3,11 @@ import { faFacebookF, faInstagram, faLinkedinIn, faTwitter, faYoutube } from '@f
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart, faMagnifyingGlass, faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import Logo from "./Logo";
+import {useSelector} from "react-redux";
+import {RootState} from "../../store/store";
 
 const Topbar = () => {
+    const totalItems = useSelector((state: RootState) => state.cart.totalItem);
     return (
         <div className="container-fluid">
             <div className="row bg-secondary py-2 px-xl-5">
@@ -60,7 +63,7 @@ const Topbar = () => {
                     </Link>
                     <Link to={"/cart"} className="btn border">
                         <FontAwesomeIcon icon={faShoppingCart} className="text-primary" />
-                        <span className="badge">0</span>
+                        <span className="badge">{totalItems}</span>
                     </Link>
                 </div>
             </div>
