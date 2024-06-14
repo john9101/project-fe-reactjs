@@ -1,5 +1,6 @@
 import React from 'react'
 import image from '../assets/img/caroselAbout.jpg'
+import '../assets/css/style.module.scss'
 import '../assets/css/styleAbout.scss'
 import Card from '@mui/material/Card';
 import CardActionArea from '@mui/material/CardActionArea';
@@ -10,11 +11,8 @@ import imageContent1 from '../assets/img/imageContentAbout1.jpg'
 import imageContent2 from '../assets/img/imageContentAbout2.jpg'
 import imageContent3 from '../assets/img/imageContentAbout3.jpeg'
 import imageContent4 from '../assets/img/imageContentAbout4.jpg'
-// import Navbar from '../components/common/Navbar';
 
-type Props = {}
-
-const AboutUs = (props: Props) => {
+const AboutUs = () => {
     return (
         <div className='aboutPage'>
             <div className='imageContent'><img src={image} alt="404" /></div>
