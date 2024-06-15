@@ -1,13 +1,13 @@
 import {useParams} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {AppDispatch, RootState} from "../store/store";
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {fetchProductDetail, setSelectedOptionName, setSelectedSize} from "../store/product.slice";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faPlus,faMinus,faTag, faStar} from "@fortawesome/free-solid-svg-icons";
+import {faPlus,faMinus,faTag, faStar, faCircleChevronLeft, faCircleChevronRight} from "@fortawesome/free-solid-svg-icons";
 import {faFacebookF, faXTwitter, faLinkedinIn, faPinterest} from "@fortawesome/free-brands-svg-icons"
 import {Box, Rating, Tab, Tabs} from "@mui/material";
-import {useForm} from "react-hook-form";
+// import Slider, { Settings } from "react-slick";
 
 interface TabPanelProps{
     children?: React.ReactNode
@@ -15,7 +15,28 @@ interface TabPanelProps{
     value: number
 }
 
-const ProductDetailTabPanel = (props: TabPanelProps)=>{
+interface QuestionAnswerProps{
+    question: string
+    questionDate?: string
+    username?: string
+    avatar?: string
+}
+
+interface ReviewProps{
+    comment: string,
+    rating: number,
+    reviewDate?: string
+    username?: string
+    avatar?: string
+}
+
+interface ZoomStyle {
+    transform: string;
+    transformOrigin?: string;
+    transition: string;
+}
+
+const ProductDetailTabPanel = (props: TabPanelProps) =>{
     const {children, value, index, ...other} = props;
     return (
         <div
@@ -30,13 +51,6 @@ const ProductDetailTabPanel = (props: TabPanelProps)=>{
     )
 }
 
-const allyProps = (index: number)=>{
-    return {
-        id: `simple-tab-${index}`,
-        'aria-controls': `simple-tabpanel-${index}`,
-    }
-}
-
 const ProductDetail = ()=> {
     const {productId} = useParams()
     const dispatch = useDispatch<AppDispatch>();
@@ -45,7 +59,20 @@ const ProductDetail = ()=> {
     const quantityInStock = productDetail.quantityInStock;
     const priceWithUnit = productDetail.priceWithUnit
 
-    const [tabDisplay, setTabDisplay] = useState<number>(0);
+    // const sliderRef = useRef<Slider>(null);
+    // const [zoomStyle, setZoomStyle] = useState<ZoomStyle>({
+    //     transform: 'scale(1)',
+    //     transition: 'transform 0.5s ease'
+    // });
+    // const imageRefs = useRef<(HTMLImageElement | null)[]>([]);
+    const [tabDisplayIndex, setTabDisplayIndex] = useState<number>(0);
+    const [QAFormData, setQAFormData] = useState<QuestionAnswerProps>({
+        question: ''
+    })
+    const [reviewFormData, setReviewFormData] = useState<ReviewProps>({
+        comment: '',
+        rating: 0,
+    })
 
     useEffect(() => {
         const promise = dispatch(fetchProductDetail(productId as string));
@@ -65,9 +92,82 @@ const ProductDetail = ()=> {
         dispatch(setSelectedSize(e.target.value))
     }
 
-    const handleChangeTabDisplay = (event: React.SyntheticEvent, newTabDisplay: number) => {
-        setTabDisplay(newTabDisplay);
+    const handleChangeTabDisplay = (event: React.SyntheticEvent, newTabDisplayIndex: number) => {
+        setTabDisplayIndex(newTabDisplayIndex);
     }
+
+    // const NextArrowCustom = () =>{
+    //     return (
+    //         <div className="carousel-control-prev" onClick={handlePreviousSlide}>
+    //             <FontAwesomeIcon icon={faCircleChevronLeft} className="custom-arrow-icon" />
+    //         </div>
+    //     )
+    // }
+    //
+    // const PreviousArrowCustom = () =>{
+    //     return (
+    //         <div className="carousel-control-next" onClick={handleNextSlide}>
+    //             <FontAwesomeIcon icon={faCircleChevronRight} className="custom-arrow-icon"/>
+    //         </div>
+    //     )
+    // }
+    //
+    // const handleNextSlide = () => {
+    //     if (sliderRef.current) {
+    //       sliderRef.current.slickNext();
+    //     }
+    // };
+    //
+    // const handlePreviousSlide = () => {
+    //     if (sliderRef.current) {
+    //       sliderRef.current.slickPrev();
+    //     }
+    // };
+    //
+    // const sliderSettings: Settings = {
+    //     slidesToShow: 1,
+    //     slidesToScroll: 1,
+    //     infinite: true,
+    //     dots: false,
+    //     speed: 500,
+    //     autoplaySpeed: 3000,
+    //     autoplay: true,
+    //     nextArrow: <NextArrowCustom/>,
+    //     prevArrow: <PreviousArrowCustom/>,
+    //     pauseOnHover: true,
+    //     pauseOnFocus: true,
+    //     fade: true
+    // }
+    //
+    // const handleMouseEnterImage = () => {
+    //     setZoomStyle((prevState) => ({
+    //         ... prevState,
+    //         transform: 'scale(2)'
+    //     }));
+    // };
+    //
+    // const handleMouseMoveAroundImage = (event: React.MouseEvent<HTMLImageElement>, index: number) => {
+    //     const imageElement = imageRefs.current[index];
+    //     if (imageElement) {
+    //         const { offsetX, offsetY } = event.nativeEvent;
+    //         const { offsetWidth, offsetHeight } = imageElement;
+    //
+    //         const x = (offsetX / offsetWidth) * 100;
+    //         const y = (offsetY / offsetHeight) * 100;
+    //
+    //         setZoomStyle((prevState) => ({
+    //             ... prevState,
+    //             transformOrigin: `${x}% ${y}%`
+    //         }));
+    //     }
+    // };
+    //
+    // const handleMouseLeaveImage = () => {
+    //     setZoomStyle({
+    //       transform: 'scale(1)',
+    //       transition: 'transform 0.5s ease'
+    //     });
+    // };
 
     return (
         <div className="container-fluid py-5">
@@ -75,18 +175,23 @@ const ProductDetail = ()=> {
             <div className="col-lg-5 pb-5">
                 <div id="product-carousel" className="carousel slide" data-ride="carousel">
                     <div className="carousel-inner border">
-                        {product?.images.map(image => (
-                            <div className="carousel-item active">
-                                <img className="w-100 h-100" src={image} alt="Image"/>
-                            </div>
-                        ))}
+                        {/*<Slider ref={sliderRef} {... sliderSettings}>*/}
+                        {/*    {product?.images.map((image, index) => (*/}
+                        {/*        <div key={index} className="carousel-item active overflow-hidden" >*/}
+                        {/*            <img */}
+                        {/*                className="w-100 h-100" */}
+                        {/*                src={image} */}
+                        {/*                alt="Image"*/}
+                        {/*                onMouseEnter={handleMouseEnterImage}*/}
+                        {/*                onMouseMove={event => handleMouseMoveAroundImage(event, index)}*/}
+                        {/*                onMouseLeave={handleMouseLeaveImage}*/}
+                        {/*                style={zoomStyle}*/}
+                        {/*                ref={el => imageRefs.current[index] = el}*/}
+                        {/*            />*/}
+                        {/*        </div>*/}
+                        {/*    ))}*/}
+                        {/*</Slider>*/}
                     </div>
-                    <a className="carousel-control-prev" href="#product-carousel" data-slide="prev">
-                        <i className="fa fa-2x fa-angle-left text-dark"></i>
-                    </a>
-                    <a className="carousel-control-next" href="#product-carousel" data-slide="next">
-                        <i className="fa fa-2x fa-angle-right text-dark"></i>
-                    </a>
                 </div>
             </div>
 
@@ -177,22 +282,66 @@ const ProductDetail = ()=> {
                 <div className="col">
                     <Box sx={{borderBottom: 1, borderColor: 'divider'}}>
                         <Tabs
-                            value={tabDisplay}
+                            value={tabDisplayIndex}
                             onChange={handleChangeTabDisplay}
                             aria-label={'product detail tabs'}
                         >
-                            <Tab label="Mô tả chi tiết" {...allyProps(0)}/>
-                            <Tab label="Đánh giá & nhận xét" {...allyProps(1)}/>
+                            <Tab label="Mô tả chi tiết"/>
+                            <Tab label="Đánh giá & nhận xét"/>
+                            <Tab label="Hỏi & đáp"/>
                         </Tabs>
                     </Box>
-                    <ProductDetailTabPanel index={0} value={tabDisplay}>
+                    <ProductDetailTabPanel index={0} value={tabDisplayIndex}>
                         {product?.longDescription}
                     </ProductDetailTabPanel>
-                    <ProductDetailTabPanel index={1} value={tabDisplay}>
+                    <ProductDetailTabPanel index={1} value={tabDisplayIndex}>
                         <div className="tab-pane fade active show" id="tab-pane-3">
                             <div className="row">
                                 <div className="col-md-6">
-                                    <h4 className="mb-4">1 review for "{product?.name}"</h4>
+                                    <h4 className="mb-4">1 lượt đánh giá & nhận xét cho "{product?.name}"</h4>
+                                    <div className="media mb-4">
+                                        <img src="img/user.jpg" alt="Image" className="img-fluid mr-3 mt-1" style={{width: "45px"}}/>
+                                        <div className="media-body">
+                                            <h6>John Doe<small> - <i>01 Jan 2045</i></small></h6>
+                                            <div className="text-primary mb-2">
+                                                
+                                            </div>
+                                            <p>Diam amet duo labore stet elitr ea clita ipsum, tempor labore accusam ipsum et no at. Kasd diam tempor rebum magna dolores sed sed eirmod ipsum.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="col-md-6">
+                                    <h4 className="mb-4">Để lại đánh giá và nhận xét của bạn</h4>
+                                    <small>Các trường bắt buộc được đánh dấu *</small>
+                                    <div className="d-flex my-3">
+                                        <p className="mb-0 mr-2">Đánh giá của bạn * :</p>
+                                        <div className="text-primary">
+                                            <Rating
+                                                value={reviewFormData.rating}
+                                                onChange={(event, newRatingValue)=>{
+                                                    setReviewFormData({... reviewFormData, rating: newRatingValue as number})
+                                                }}
+                                            />
+                                        </div>
+                                    </div>
+                                    <form>
+                                        <div className="form-group">
+                                            <label htmlFor="message">Nhận xét của bạn *</label>
+                                            <textarea id="message" cols={30} rows={5} className="form-control"></textarea>
+                                        </div>
+                                        <div className="form-group mb-0">
+                                            <input type="submit" value="Gửi đánh giá & nhận xét" className="btn btn-primary px-3"/>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </ProductDetailTabPanel>
+                    <ProductDetailTabPanel index={2} value={tabDisplayIndex}>
+                        <div className="tab-pane fade active show" id="tab-pane-3">
+                            <div className="row">
+                                <div className="col-md-6">
+                                    <h4 className="mb-4">1 câu hỏi cho "{product?.name}"</h4>
                                     <div className="media mb-4">
                                         <img src="img/user.jpg" alt="Image" className="img-fluid mr-3 mt-1" style={{width: "45px"}}/>
                                         <div className="media-body">
@@ -209,29 +358,15 @@ const ProductDetail = ()=> {
                                     </div>
                                 </div>
                                 <div className="col-md-6">
-                                    <h4 className="mb-4">Để lại đánh giá và nhận xét của bạn</h4>
-                                    <small>Địa chỉ email của bạn sẽ không được công khai. Các trường bắt buộc được đánh dấu *</small>
-                                    <div className="d-flex my-3">
-                                        <p className="mb-0 mr-2">Đánh giá của bạn * :</p>
-                                        <div className="text-primary">
-                                            <Rating name="no-value" value={null} />
-                                        </div>
-                                    </div>
-                                    <form>
+                                    <h4 className="mb-4">Để lại câu hỏi của bạn</h4>
+                                    <small>Các trường bắt buộc được đánh dấu *</small>
+                                    <form className="my-3">
                                         <div className="form-group">
-                                            <label htmlFor="message">Nhận xét của bạn *</label>
-                                            <textarea id="message" cols={30} rows={5} className="form-control"></textarea>
-                                        </div>
-                                        <div className="form-group">
-                                            <label htmlFor="name">Họ và tên của bạn *</label>
-                                            <input type="text" className="form-control" id="name"/>
-                                        </div>
-                                        <div className="form-group">
-                                            <label htmlFor="email">Địa chỉ email của bạn *</label>
-                                            <input type="email" className="form-control" id="email"/>
+                                            <label htmlFor="message">Câu hỏi của bạn *</label>
+                                            <textarea id="message" cols={30} rows={5} className="form-control" value={QAFormData.question} onChange={event => setQAFormData({...QAFormData, question: event.target.value})}></textarea>
                                         </div>
                                         <div className="form-group mb-0">
-                                            <input type="submit" value="Để lại đánh giá & nhận xét" className="btn btn-primary px-3"/>
+                                            <input type="submit" value="Gửi câu hỏi" className="btn btn-primary px-3"/>
                                         </div>
                                     </form>
                                 </div>
@@ -245,3 +380,5 @@ const ProductDetail = ()=> {
 }
 
 export default ProductDetail;
+
+
