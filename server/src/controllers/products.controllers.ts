@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import productsService from "../services/products.services";
 import * as _ from "lodash";
 
-export const pagingProductsController = async (req: Request, res: Response)=>{
+export const getPagingProductsController = async (req: Request, res: Response)=>{
     try{
         const page = parseInt(req.query.page as string) || 1;
         const limit = 9
@@ -47,7 +47,7 @@ export const pagingProductsController = async (req: Request, res: Response)=>{
     }
 }
 
-export const productDetailController = async (req: Request, res: Response)=>{
+export const getProductDetailController = async (req: Request, res: Response)=>{
     try{
         const product = await productsService.getProductById(req.params.id);
         res.status(200).json(product)
