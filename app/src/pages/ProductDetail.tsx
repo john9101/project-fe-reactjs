@@ -7,7 +7,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faPlus,faMinus,faTag, faStar, faCircleChevronLeft, faCircleChevronRight} from "@fortawesome/free-solid-svg-icons";
 import {faFacebookF, faXTwitter, faLinkedinIn, faPinterest} from "@fortawesome/free-brands-svg-icons"
 import {Box, Rating, Tab, Tabs} from "@mui/material";
-// import Slider, { Settings } from "react-slick";
+import Slider, { Settings } from "react-slick";
 
 interface TabPanelProps{
     children?: React.ReactNode
@@ -59,12 +59,13 @@ const ProductDetail = ()=> {
     const quantityInStock = productDetail.quantityInStock;
     const priceWithUnit = productDetail.priceWithUnit
 
-    // const sliderRef = useRef<Slider>(null);
-    // const [zoomStyle, setZoomStyle] = useState<ZoomStyle>({
-    //     transform: 'scale(1)',
-    //     transition: 'transform 0.5s ease'
-    // });
-    // const imageRefs = useRef<(HTMLImageElement | null)[]>([]);
+    const sliderRef = useRef<Slider>(null);
+    const [zoomStyle, setZoomStyle] = useState<ZoomStyle>({
+        transform: 'scale(1)',
+        transition: 'transform 0.5s ease'
+    });
+
+    const imageRefs = useRef<(HTMLImageElement | null)[]>([]);
     const [tabDisplayIndex, setTabDisplayIndex] = useState<number>(0);
     const [QAFormData, setQAFormData] = useState<QuestionAnswerProps>({
         question: ''
@@ -96,78 +97,78 @@ const ProductDetail = ()=> {
         setTabDisplayIndex(newTabDisplayIndex);
     }
 
-    // const NextArrowCustom = () =>{
-    //     return (
-    //         <div className="carousel-control-prev" onClick={handlePreviousSlide}>
-    //             <FontAwesomeIcon icon={faCircleChevronLeft} className="custom-arrow-icon" />
-    //         </div>
-    //     )
-    // }
-    //
-    // const PreviousArrowCustom = () =>{
-    //     return (
-    //         <div className="carousel-control-next" onClick={handleNextSlide}>
-    //             <FontAwesomeIcon icon={faCircleChevronRight} className="custom-arrow-icon"/>
-    //         </div>
-    //     )
-    // }
-    //
-    // const handleNextSlide = () => {
-    //     if (sliderRef.current) {
-    //       sliderRef.current.slickNext();
-    //     }
-    // };
-    //
-    // const handlePreviousSlide = () => {
-    //     if (sliderRef.current) {
-    //       sliderRef.current.slickPrev();
-    //     }
-    // };
-    //
-    // const sliderSettings: Settings = {
-    //     slidesToShow: 1,
-    //     slidesToScroll: 1,
-    //     infinite: true,
-    //     dots: false,
-    //     speed: 500,
-    //     autoplaySpeed: 3000,
-    //     autoplay: true,
-    //     nextArrow: <NextArrowCustom/>,
-    //     prevArrow: <PreviousArrowCustom/>,
-    //     pauseOnHover: true,
-    //     pauseOnFocus: true,
-    //     fade: true
-    // }
-    //
-    // const handleMouseEnterImage = () => {
-    //     setZoomStyle((prevState) => ({
-    //         ... prevState,
-    //         transform: 'scale(2)'
-    //     }));
-    // };
-    //
-    // const handleMouseMoveAroundImage = (event: React.MouseEvent<HTMLImageElement>, index: number) => {
-    //     const imageElement = imageRefs.current[index];
-    //     if (imageElement) {
-    //         const { offsetX, offsetY } = event.nativeEvent;
-    //         const { offsetWidth, offsetHeight } = imageElement;
-    //
-    //         const x = (offsetX / offsetWidth) * 100;
-    //         const y = (offsetY / offsetHeight) * 100;
-    //
-    //         setZoomStyle((prevState) => ({
-    //             ... prevState,
-    //             transformOrigin: `${x}% ${y}%`
-    //         }));
-    //     }
-    // };
-    //
-    // const handleMouseLeaveImage = () => {
-    //     setZoomStyle({
-    //       transform: 'scale(1)',
-    //       transition: 'transform 0.5s ease'
-    //     });
-    // };
+    const NextArrowCustom = () =>{
+        return (
+            <div className="carousel-control-prev" onClick={handlePreviousSlide}>
+                <FontAwesomeIcon icon={faCircleChevronLeft} className="custom-arrow-icon" />
+            </div>
+        )
+    }
+
+    const PreviousArrowCustom = () =>{
+        return (
+            <div className="carousel-control-next" onClick={handleNextSlide}>
+                <FontAwesomeIcon icon={faCircleChevronRight} className="custom-arrow-icon"/>
+            </div>
+        )
+    }
+
+    const handleNextSlide = () => {
+        if (sliderRef.current) {
+          sliderRef.current.slickNext();
+        }
+    };
+
+    const handlePreviousSlide = () => {
+        if (sliderRef.current) {
+          sliderRef.current.slickPrev();
+        }
+    };
+
+    const sliderSettings: Settings = {
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        infinite: true,
+        dots: false,
+        speed: 500,
+        autoplaySpeed: 3000,
+        autoplay: true,
+        nextArrow: <NextArrowCustom/>,
+        prevArrow: <PreviousArrowCustom/>,
+        pauseOnHover: true,
+        pauseOnFocus: true,
+        fade: true
+    }
+
+    const handleMouseEnterImage = () => {
+        setZoomStyle((prevState) => ({
+            ... prevState,
+            transform: 'scale(2)'
+        }));
+    };
+
+    const handleMouseMoveAroundImage = (event: React.MouseEvent<HTMLImageElement>, index: number) => {
+        const imageElement = imageRefs.current[index];
+        if (imageElement) {
+            const { offsetX, offsetY } = event.nativeEvent;
+            const { offsetWidth, offsetHeight } = imageElement;
+
+            const x = (offsetX / offsetWidth) * 100;
+            const y = (offsetY / offsetHeight) * 100;
+
+            setZoomStyle((prevState) => ({
+                ... prevState,
+                transformOrigin: `${x}% ${y}%`
+            }));
+        }
+    };
+
+    const handleMouseLeaveImage = () => {
+        setZoomStyle({
+          transform: 'scale(1)',
+          transition: 'transform 0.5s ease'
+        });
+    };
 
     return (
         <div className="container-fluid py-5">
@@ -175,22 +176,22 @@ const ProductDetail = ()=> {
             <div className="col-lg-5 pb-5">
                 <div id="product-carousel" className="carousel slide" data-ride="carousel">
                     <div className="carousel-inner border">
-                        {/*<Slider ref={sliderRef} {... sliderSettings}>*/}
-                        {/*    {product?.images.map((image, index) => (*/}
-                        {/*        <div key={index} className="carousel-item active overflow-hidden" >*/}
-                        {/*            <img */}
-                        {/*                className="w-100 h-100" */}
-                        {/*                src={image} */}
-                        {/*                alt="Image"*/}
-                        {/*                onMouseEnter={handleMouseEnterImage}*/}
-                        {/*                onMouseMove={event => handleMouseMoveAroundImage(event, index)}*/}
-                        {/*                onMouseLeave={handleMouseLeaveImage}*/}
-                        {/*                style={zoomStyle}*/}
-                        {/*                ref={el => imageRefs.current[index] = el}*/}
-                        {/*            />*/}
-                        {/*        </div>*/}
-                        {/*    ))}*/}
-                        {/*</Slider>*/}
+                        <Slider ref={sliderRef} {... sliderSettings}>
+                            {product?.images.map((image, index) => (
+                                <div key={index} className="carousel-item active overflow-hidden" >
+                                    <img
+                                        className="w-100 h-100"
+                                        src={image}
+                                        alt="Image"
+                                        onMouseEnter={handleMouseEnterImage}
+                                        onMouseMove={event => handleMouseMoveAroundImage(event, index)}
+                                        onMouseLeave={handleMouseLeaveImage}
+                                        style={zoomStyle}
+                                        ref={el => imageRefs.current[index] = el}
+                                    />
+                                </div>
+                            ))}
+                        </Slider>
                     </div>
                 </div>
             </div>
