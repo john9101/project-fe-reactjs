@@ -6,7 +6,7 @@ class CategoryService{
     }
 
     async getAllProductsByCategoryName(categoryName: string){
-        return await
+        // return await
     }
 }
 
