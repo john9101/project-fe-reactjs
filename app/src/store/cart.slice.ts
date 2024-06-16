@@ -40,4 +40,4 @@ const cartSlide = createSlice({
     }
 });
 export const {addToCart, removeFromCart} = cartSlide.actions;
-export const cartProducer = cartSlide.reducer;
+export const            cartProducer = cartSlide.reducer;
