@@ -4,7 +4,7 @@ import {AppDispatch, RootState} from "../store/store";
 import React, {useEffect, useRef, useState} from "react";
 import {fetchProductDetail, setSelectedOptionName, setSelectedSize} from "../store/product.slice";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faPlus,faMinus,faTag, faStar, faCircleChevronLeft, faCircleChevronRight} from "@fortawesome/free-solid-svg-icons";
+import {faPlus,faMinus,faTag, faStar, faCircleChevronLeft, faCircleChevronRight, faCircleUser} from "@fortawesome/free-solid-svg-icons";
 import {faFacebookF, faXTwitter, faLinkedinIn, faPinterest} from "@fortawesome/free-brands-svg-icons"
 import {Box, Rating, Tab, Tabs} from "@mui/material";
 import Slider, { Settings } from "react-slick";
@@ -13,21 +13,6 @@ interface TabPanelProps{
     children?: React.ReactNode
     index: number
     value: number
-}
-
-interface QuestionAnswerProps{
-    question: string
-    questionDate?: string
-    username?: string
-    avatar?: string
-}
-
-interface ReviewProps{
-    comment: string,
-    rating: number,
-    reviewDate?: string
-    username?: string
-    avatar?: string
 }
 
 interface ZoomStyle {
@@ -67,20 +52,14 @@ const ProductDetail = ()=> {
 
     const imageRefs = useRef<(HTMLImageElement | null)[]>([]);
     const [tabDisplayIndex, setTabDisplayIndex] = useState<number>(0);
-    const [QAFormData, setQAFormData] = useState<QuestionAnswerProps>({
-        question: ''
-    })
-    const [reviewFormData, setReviewFormData] = useState<ReviewProps>({
-        comment: '',
-        rating: 0,
-    })
 
     useEffect(() => {
-        const promise = dispatch(fetchProductDetail(productId as string));
+        const productDetailPromise = dispatch(fetchProductDetail(productId as string));
         return () => {
-            promise.abort()
+            productDetailPromise.abort()
         }
-    }, [dispatch,productId])
+    }, [dispatch, productId]);
+
 
     const sizes = product?.options.flatMap(option => option.stocks).map(stock => stock.size);
     const uniqueSizes = Array.from(new Set(sizes));
@@ -96,6 +75,7 @@ const ProductDetail = ()=> {
     const handleChangeTabDisplay = (event: React.SyntheticEvent, newTabDisplayIndex: number) => {
         setTabDisplayIndex(newTabDisplayIndex);
     }
+
 
     const NextArrowCustom = () =>{
         return (
@@ -295,56 +275,14 @@ const ProductDetail = ()=> {
                     <ProductDetailTabPanel index={0} value={tabDisplayIndex}>
                         {product?.longDescription}
                     </ProductDetailTabPanel>
-                    <ProductDetailTabPanel index={1} value={tabDisplayIndex}>
+                    <ProductDetailTabPanel index={1} value={tabDisplayIndex} >
                         <div className="tab-pane fade active show" id="tab-pane-3">
                             <div className="row">
                                 <div className="col-md-6">
                                     <h4 className="mb-4">1 lượt đánh giá & nhận xét cho "{product?.name}"</h4>
                                     <div className="media mb-4">
-                                        <img src="img/user.jpg" alt="Image" className="img-fluid mr-3 mt-1" style={{width: "45px"}}/>
-                                        <div className="media-body">
-                                            <h6>John Doe<small> - <i>01 Jan 2045</i></small></h6>
-                                            <div className="text-primary mb-2">
-                                                
-                                            </div>
-                                            <p>Diam amet duo labore stet elitr ea clita ipsum, tempor labore accusam ipsum et no at. Kasd diam tempor rebum magna dolores sed sed eirmod ipsum.</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="col-md-6">
-                                    <h4 className="mb-4">Để lại đánh giá và nhận xét của bạn</h4>
-                                    <small>Các trường bắt buộc được đánh dấu *</small>
-                                    <div className="d-flex my-3">
-                                        <p className="mb-0 mr-2">Đánh giá của bạn * :</p>
-                                        <div className="text-primary">
-                                            <Rating
-                                                value={reviewFormData.rating}
-                                                onChange={(event, newRatingValue)=>{
-                                                    setReviewFormData({... reviewFormData, rating: newRatingValue as number})
-                                                }}
-                                            />
-                                        </div>
-                                    </div>
-                                    <form>
-                                        <div className="form-group">
-                                            <label htmlFor="message">Nhận xét của bạn *</label>
-                                            <textarea id="message" cols={30} rows={5} className="form-control"></textarea>
-                                        </div>
-                                        <div className="form-group mb-0">
-                                            <input type="submit" value="Gửi đánh giá & nhận xét" className="btn btn-primary px-3"/>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </ProductDetailTabPanel>
-                    <ProductDetailTabPanel index={2} value={tabDisplayIndex}>
-                        <div className="tab-pane fade active show" id="tab-pane-3">
-                            <div className="row">
-                                <div className="col-md-6">
-                                    <h4 className="mb-4">1 câu hỏi cho "{product?.name}"</h4>
-                                    <div className="media mb-4">
-                                        <img src="img/user.jpg" alt="Image" className="img-fluid mr-3 mt-1" style={{width: "45px"}}/>
+                                        <img src="img/user.jpg" alt="Image" className="img-fluid mr-3 mt-1"
+                                             style={{width: "45px"}}/>
                                         <div className="media-body">
                                             <h6>John Doe<small> - <i>01 Jan 2045</i></small></h6>
                                             <div className="text-primary mb-2">
@@ -354,20 +292,28 @@ const ProductDetail = ()=> {
                                                 <i className="fas fa-star-half-alt"></i>
                                                 <i className="far fa-star"></i>
                                             </div>
-                                            <p>Diam amet duo labore stet elitr ea clita ipsum, tempor labore accusam ipsum et no at. Kasd diam tempor rebum magna dolores sed sed eirmod ipsum.</p>
+                                            <p>Diam amet duo labore stet elitr ea clita ipsum, tempor labore accusam
+                                                ipsum et no at. Kasd diam tempor rebum magna dolores sed sed eirmod
+                                                ipsum.</p>
                                         </div>
                                     </div>
                                 </div>
                                 <div className="col-md-6">
-                                    <h4 className="mb-4">Để lại câu hỏi của bạn</h4>
+                                    <h4 className="mb-4">Để lại đánh giá và nhận xét của bạn</h4>
                                     <small>Các trường bắt buộc được đánh dấu *</small>
-                                    <form className="my-3">
+                                    <div className="d-flex my-3">
+                                        <p className="mb-0 mr-2">Đánh giá của bạn * :</p>
+                                        <div className="text-primary">
+
+                                        </div>
+                                    </div>
+                                    <form>
                                         <div className="form-group">
-                                            <label htmlFor="message">Câu hỏi của bạn *</label>
-                                            <textarea id="message" cols={30} rows={5} className="form-control" value={QAFormData.question} onChange={event => setQAFormData({...QAFormData, question: event.target.value})}></textarea>
+                                        <label htmlFor="message">Nhận xét của bạn *</label>
+                                            <textarea id="message" cols={30} rows={5} className="form-control"></textarea>
                                         </div>
                                         <div className="form-group mb-0">
-                                            <input type="submit" value="Gửi câu hỏi" className="btn btn-primary px-3"/>
+                                            <input type="submit" value="Gửi đánh giá & nhận xét" className="btn btn-primary px-3"/>
                                         </div>
                                     </form>
                                 </div>
