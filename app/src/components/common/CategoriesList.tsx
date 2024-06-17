@@ -4,22 +4,23 @@ import MenuItem from '@mui/material/MenuItem';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import { Button } from '@mui/material';
 import '../../assets/css/style.module.scss'
-import axios from 'axios';
 import { useEffect, useState } from 'react';
+import http from '../../util/http';
+import { Category } from '../../types/category.type';
 const MenuPopupState: React.FC = () => {
-    const [categories, setCategories] = useState<any[]>([]);
+    const [categories, setCategories] = useState<string[]>([]);
 
     useEffect(() => {
-        const fetchProducts = async () => {
+        const fetchData = async () => {
             try {
-                const response = await axios.get('http://localhost:4000/api/categories'); // URL API của backend
-                setCategories(response.data);
+                const response = await http.get<Category>(`categories`)
+                setCategories(response.data.map((category) => category.name));
             } catch (error) {
-                console.error(error);
+                console.error('Error fetching categories:', error);
             }
         };
 
-        fetchProducts();
+        fetchData();
     }, []);
     const styleCategoriesList = {
         top: '5px',
@@ -53,8 +54,13 @@ const MenuPopupState: React.FC = () => {
                     </Button>
                     <Menu {...bindMenu(popupState)} className="MenuCategories" sx={{ ...styleMenuCategories }}>
                         {categories.map((category, index) => (
-                            <MenuItem key={index} onClick={popupState.close} className="MenuCategoriesItem" sx={{ maxWidth: 360, ...styleMenuCategoriesItem }}>
-                                {category.name}
+                            <MenuItem
+                                key={index}
+                                onClick={popupState.close}
+                                className="MenuCategoriesItem"
+                                sx={{ maxWidth: 360, ...styleMenuCategoriesItem }}
+                            >
+                                {category}
                             </MenuItem>
                         ))}
                     </Menu>
