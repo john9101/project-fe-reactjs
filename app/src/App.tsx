@@ -8,6 +8,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import MainLayout from "./layout/MainLayout";
 import { CircularProgress } from "@mui/material";
 import FormLayout from './layout/FormLayout';
+import Shop from "./pages/Shop";
 
 const Home = lazy(() => import('./pages/Home'));
 const ContactUs = lazy(() => import('./pages/ContactUs'));
@@ -30,7 +31,7 @@ function App() {
                             <Route path="contact-us" element={<ContactUs />} />
                             <Route path="products/:productId" element={<ProductDetail />} />
                             <Route path="about-us" element={<AboutUs />} />
-                            
+                            <Route path="shop" element={<Shop/>}/>
                         </Route>
                         <Route path="account" element={<FormLayout />}>
                             <Route path="login" element={<Login />} />
