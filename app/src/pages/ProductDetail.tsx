@@ -4,13 +4,12 @@ import {AppDispatch, RootState} from "../store/store";
 import React, {useEffect, useState} from "react";
 import {fetchProductDetail, setSelectedOptionName, setSelectedSize} from "../store/product.slice";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faPlus, faMinus, faTag, faStar} from "@fortawesome/free-solid-svg-icons";
-import {faFacebookF, faXTwitter, faLinkedinIn, faPinterest} from "@fortawesome/free-brands-svg-icons"
+import {faMinus, faPlus, faStar, faTag} from "@fortawesome/free-solid-svg-icons";
+import {faFacebookF, faLinkedinIn, faPinterest, faXTwitter} from "@fortawesome/free-brands-svg-icons"
 import {addToCart} from "../store/cart.slice";
-import {Product} from "../types/product.type";
 import {toast} from "react-toastify";
-import {CartItem} from "../types/cartItem.type";
 import {nanoid} from "@reduxjs/toolkit";
+import ButtonQuantity from "../components/common/ButtonQuantity";
 
 const ProductDetail = () => {
     const {productId} = useParams()
@@ -22,6 +21,7 @@ const ProductDetail = () => {
     const sizes = product?.options.flatMap(option => option.stocks).map(stock => stock.size);
     const uniqueSizes = Array.from(new Set(sizes));
     const [quantity, setQuantity] = useState<number>(1);
+
 
     useEffect(() => {
         const promise = dispatch(fetchProductDetail(productId as string));
@@ -38,7 +38,7 @@ const ProductDetail = () => {
         dispatch(setSelectedSize(e.target.value))
     }
 
-    const handleAddToCart = ( ) => {
+    const handleAddToCart = () => {
         const selectedOptionName = productDetail.selectedOptionName;
         const selectedSize = productDetail.selectedSize;
         if (quantityInStock === 0) {
@@ -56,7 +56,7 @@ const ProductDetail = () => {
             return;
         }
         console.log(product);
-        (product && selectedOptionName && selectedSize  && dispatch(addToCart({
+        (product && selectedOptionName && selectedSize && dispatch(addToCart({
             id: nanoid(),
             product: product,
             quantity: quantity,
@@ -70,15 +70,7 @@ const ProductDetail = () => {
         });
     }
 
-    const handleMinusClick = () => {
-        if (quantity > 1) {
-            setQuantity(quantity - 1);
-        }
-    };
 
-    const handlePlusClick = () => {
-        setQuantity(quantity + 1);
-    }
     return (
         <div className="container-fluid py-5">
             <div className="row px-xl-5">
@@ -148,30 +140,7 @@ const ProductDetail = () => {
                     </div>
                     <p className="mb-4">Số lượng mẫu trong kho: {quantityInStock}</p>
                     <div className="d-flex align-items-center mb-4 pt-2">
-                        <div className="input-group quantity mr-3" style={{width: "130px"}}>
-                            <div className="input-group-btn">
-                                <button className="btn btn-primary btn-minus" onClick={handleMinusClick}>
-                                    <FontAwesomeIcon icon={faMinus}/>
-                                </button>
-                            </div>
-                            <input type="number" className="form-control bg-secondary text-center" value={quantity}
-                                   onBlur={event => {
-                                       console.log("event value " + Number.parseInt(event.target.value))
-                                       if (event.target.value === "" || Number.parseInt(event.target.value) <= 0) {
-                                           console.log("Quantity must be greater than 0")
-                                           setQuantity(1)
-                                       }
-
-                                   }}
-                                   onChange={event => {
-                                       setQuantity(Number.parseInt(event.target.value))
-                                   }}/>
-                            <div className="input-group-btn">
-                                <button className="btn btn-primary btn-plus" onClick={handlePlusClick}>
-                                    <FontAwesomeIcon icon={faPlus}/>
-                                </button>
-                            </div>
-                        </div>
+                        <ButtonQuantity quantity={quantity} setQuantity={setQuantity}/>
                         <button className="btn btn-primary px-3" onClick={handleAddToCart}><i
                             className="fa fa-shopping-cart mr-1"></i> Thêm vào giỏ
                             hàng

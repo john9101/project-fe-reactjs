@@ -1,12 +1,14 @@
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faMinus, faPlus, faTrash} from "@fortawesome/free-solid-svg-icons";
-import {formatCurrency} from "../../util/formatCurrency";
-import React, {useState} from "react";
-import {useDispatch, useSelector} from "react-redux";
-import {AppDispatch, RootState} from "../../store/store";
+// components/ListCartItem.tsx
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faMinus, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { formatCurrency } from "../../util/formatCurrency";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../store/store";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
-import {removeFromCart} from "../../store/cart.slice";
+import convertStringPriceToNumber, {removeFromCart, updateCartItemQuantity } from "../../store/cart.slice";
+import ButtonQuantity from "../common/ButtonQuantity";
 
 export default function ListCartItem() {
     const cart = useSelector((state: RootState) => state.cart);
@@ -23,22 +25,20 @@ export default function ListCartItem() {
         setShow(true)
     };
 
-    function convertStringPriceToNumber(stringPrice: string): number {
-        let temp: string = stringPrice.replace(/[^0-9]/g, '');
-        let numberPrice: number = parseFloat(temp);
-        return numberPrice;
-    }
-
-    const handleRemoveProduct = () => {
-        dispatch(removeFromCart(idProductDelete));
-        handleClose()
-    }
-
     function calculateTotalPrice(priceString: string, quantity: number): number {
         let price: number = convertStringPriceToNumber(priceString);
         let totalPrice: number = price * quantity;
         return totalPrice;
     }
+
+    const handleRemoveProduct = () => {
+        dispatch(removeFromCart(idProductDelete));
+        handleClose();
+    };
+
+    const handleQuantityChange = (id: string, newQuantity: number) => {
+        dispatch(updateCartItemQuantity({ id, newQuantity }));
+    };
 
     return (
         <>
@@ -56,11 +56,11 @@ export default function ListCartItem() {
                     </tr>
                     </thead>
                     {cart.cartItems?.map((cartItem) => (
-                        <tbody className="align-middle">
+                        <tbody className="align-middle" key={cartItem.id}>
                         <tr>
                             <td className="align-middle">
                                 <img src={cartItem.product.images[0]} alt=""
-                                     style={{width: '50px'}}/> {cartItem.product.name}
+                                     style={{ width: '50px' }} /> {cartItem.product.name}
                             </td>
                             <td className={"align-middle"}>{cartItem.selectedOption}</td>
                             <td className="align-middle">{cartItem.price}</td>
@@ -68,21 +68,11 @@ export default function ListCartItem() {
                                 {cartItem.selectedSize}
                             </td>
                             <td className="align-middle">
-                                <div className="input-group quantity mx-auto" style={{width: '100px'}}>
-                                    <div className="input-group-btn">
-                                        <button className="btn btn-sm btn-primary btn-minus">
-                                            <FontAwesomeIcon icon={faMinus}/>
-                                        </button>
-                                    </div>
-                                    <input type="text"
-                                           className="form-control form-control-sm bg-secondary text-center"
-                                           value={cartItem.quantity}
-                                           readOnly/>
-                                    <div className="input-group-btn">
-                                        <button className="btn btn-sm btn-primary btn-plus">
-                                            <FontAwesomeIcon icon={faPlus}/>
-                                        </button>
-                                    </div>
+                                <div className="input-group quantity mx-auto" style={{ width: '100%' }}>
+                                    <ButtonQuantity
+                                        quantity={cartItem.quantity}
+                                        setQuantity={(quantity) => handleQuantityChange(cartItem.id, quantity)}
+                                    />
                                 </div>
                             </td>
                             <td className="align-middle">
@@ -90,7 +80,7 @@ export default function ListCartItem() {
                             </td>
                             <td className="align-middle">
                                 <button className="btn btn-sm" onClick={() => handleShow(cartItem.id)}>
-                                    <FontAwesomeIcon icon={faTrash} style={{color: "#D19C97"}}/>
+                                    <FontAwesomeIcon icon={faTrash} style={{ color: "#D19C97" }} />
                                 </button>
                             </td>
                         </tr>
@@ -100,8 +90,11 @@ export default function ListCartItem() {
             </div>
 
             <Modal show={show} onHide={handleClose}>
-                <Modal.Header closeButton>
+                <Modal.Header>
                     <Modal.Title>Xóa sản phẩm</Modal.Title>
+                    <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={handleClose}>
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </Modal.Header>
                 <Modal.Body>Bạn có chắc muốn xóa sản phẩm này không?</Modal.Body>
                 <Modal.Footer>

@@ -5,6 +5,7 @@ import { faHeart, faMagnifyingGlass, faShoppingCart } from "@fortawesome/free-so
 import Logo from "./Logo";
 import {useSelector} from "react-redux";
 import {RootState} from "../../store/store";
+import {useEffect} from "react";
 
 const Topbar = () => {
     const totalItems = useSelector((state: RootState) => state.cart.totalItem);
