@@ -1,9 +1,9 @@
-import { Categories } from '../models/model';
+import { Category } from '../models/model';
 
-class CategoriesService {
+class CategoryService {
     async getAllCategories() {
     try {
-      const categories = await Categories.find(); 
+      const categories = await Category.find(); 
         return categories;
     } catch (error:any) {
       throw new Error(`Error fetching categories: ${error.message}`);
@@ -12,5 +12,5 @@ class CategoriesService {
 
 }
 
-const categoryService = new CategoriesService();
+const categoryService = new CategoryService();
 export default categoryService;

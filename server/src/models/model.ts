@@ -34,7 +34,7 @@ const optionSchema: Schema = new Schema({
     }
 })
 
-const categoriesSchema: Schema = new Schema({
+const categorySchema: Schema = new Schema({
     name: {
         type: String,
         require: true
@@ -46,9 +46,9 @@ const productSchema: Schema = new Schema({
         type: String, 
         require: true
     },
-    categories: {
+    category: {
         type: Schema.Types.ObjectId,
-        ref: 'Categories',
+        ref: 'Category',
         require: true
     },
     shortDescription: {
@@ -78,7 +78,7 @@ const productSchema: Schema = new Schema({
     ]
 })
 
-export const Categories = mongoose.model('Categories', categoriesSchema)
+export const Category = mongoose.model('Category', categorySchema)
 export const Option = mongoose.model('Option', optionSchema)
 export const Product = mongoose.model('Product', productSchema)
 
