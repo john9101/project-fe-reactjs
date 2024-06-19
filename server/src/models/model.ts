@@ -24,7 +24,7 @@ export interface IUser{
 }
 
 const optionSchema: Schema = new Schema({
-    option_name: {
+    optionName: {
         type: String,
         require: true
     },
@@ -40,9 +40,13 @@ const optionSchema: Schema = new Schema({
             }
         }
     ],
-    price: {
-        type: Number,
-        require: true
+    image: {
+        type: String,
+        required: true
+    },
+    product: {
+        type: Schema.Types.ObjectId,
+        required: true
     }
 })
 
@@ -69,19 +73,14 @@ const productSchema: Schema = new Schema({
     longDescription: {
         type: String
     },
-    salePrice: {
-        type: Number
-    },
     originalPrice: {
         type: Number, 
         require: true
     },
-    images: [
-        {
-            type: String, 
-            require: true
-        }
-    ],
+    discountPercent: {
+        type: Number,
+        require: true
+    },
     options: [
         {
             type: Schema.Types.ObjectId,

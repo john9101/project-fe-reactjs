@@ -8,6 +8,7 @@ import {faPlus,faMinus,faTag, faStar, faCircleChevronLeft, faCircleChevronRight,
 import {faFacebookF, faXTwitter, faLinkedinIn, faPinterest} from "@fortawesome/free-brands-svg-icons"
 import {Box, Rating, Tab, Tabs} from "@mui/material";
 import Slider, { Settings } from "react-slick";
+import {formatCurrency} from "../util/formatCurrency";
 
 interface TabPanelProps{
     children?: React.ReactNode
@@ -42,7 +43,10 @@ const ProductDetail = ()=> {
     const productDetail = useSelector((state: RootState) => state.products.productDetail!);
     const product = productDetail.product;
     const quantityInStock = productDetail.quantityInStock;
-    const priceWithUnit = productDetail.priceWithUnit
+    const options = product?.options;
+    const images = options?.map(option => option.image)
+    const sizes = options?.flatMap(option => option.stocks).map(stock => stock.size);
+    const uniqueSizes = Array.from(new Set(sizes));
 
     const sliderRef = useRef<Slider>(null);
     const [zoomStyle, setZoomStyle] = useState<ZoomStyle>({
@@ -52,6 +56,8 @@ const ProductDetail = ()=> {
 
     const imageRefs = useRef<(HTMLImageElement | null)[]>([]);
     const [tabDisplayIndex, setTabDisplayIndex] = useState<number>(0);
+    const [,setSlideIndex] = useState<number>(0);
+    const [autoplay, setAutoplay] = useState<boolean>(true);
 
     useEffect(() => {
         const productDetailPromise = dispatch(fetchProductDetail(productId as string));
@@ -61,10 +67,17 @@ const ProductDetail = ()=> {
     }, [dispatch, productId]);
 
 
-    const sizes = product?.options.flatMap(option => option.stocks).map(stock => stock.size);
-    const uniqueSizes = Array.from(new Set(sizes));
+
 
     const handleSetSelectedOptionName = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const optionIndex = options?.findIndex(option => option.optionName === e.target.value);
+        if(optionIndex !== undefined && optionIndex >= 0){
+            setSlideIndex(optionIndex!)
+            if(sliderRef.current) {
+                sliderRef.current.slickGoTo(optionIndex!)
+                setAutoplay(false)
+            }
+        }
         dispatch(setSelectedOptionName(e.target.value))
     }
 
@@ -112,12 +125,13 @@ const ProductDetail = ()=> {
         dots: false,
         speed: 500,
         autoplaySpeed: 3000,
-        autoplay: true,
+        autoplay: autoplay,
         nextArrow: <NextArrowCustom/>,
         prevArrow: <PreviousArrowCustom/>,
         pauseOnHover: true,
         pauseOnFocus: true,
-        fade: true
+        fade: true,
+        beforeChange: (currentSlide: number, nextSlide: number) => setSlideIndex(nextSlide)
     }
 
     const handleMouseEnterImage = () => {
@@ -157,7 +171,7 @@ const ProductDetail = ()=> {
                 <div id="product-carousel" className="carousel slide" data-ride="carousel">
                     <div className="carousel-inner border">
                         <Slider ref={sliderRef} {... sliderSettings}>
-                            {product?.images.map((image, index) => (
+                            {images?.map((image, index) => (
                                 <div key={index} className="carousel-item active overflow-hidden" >
                                     <img
                                         className="w-100 h-100"
@@ -190,7 +204,15 @@ const ProductDetail = ()=> {
                     </div>
                     <small className="pt-1"><strong>Phân loại:</strong> {product?.category.name}</small>
                 </div>
-                <h3 className="font-weight-medium mb-4">{priceWithUnit}</h3>
+                <h3 className="font-weight-medium mb-4">
+                    {formatCurrency((1 - product?.discountPercent!) * product?.originalPrice!)}
+                    {
+                        product?.discountPercent !== 0 &&
+                        <s className={"ml-2"} style={{fontSize: "1rem", color: "var(--gray)", fontWeight: 400}}>
+                            {formatCurrency(product?.originalPrice!)}
+                        </s>
+                    }
+                </h3>
                 <p className="mb-4">{product?.shortDescription}</p>
                 <div className="d-flex mb-3">
                     <p className="text-dark font-weight-medium mb-0 mr-3">Kích cỡ:</p>
@@ -207,15 +229,15 @@ const ProductDetail = ()=> {
                     </form>
                 </div>
                 <div className="d-flex mb-4">
-                    <p className="text-dark font-weight-medium mb-0 mr-3">Mẫu đồng phục:</p>
+                    <p className="text-dark font-weight-medium mb-0 mr-3">Mẫu:</p>
                     <form>
                         {
-                            product?.options.map(option => (
+                            options?.map(option => (
                                 <div key={option._id} className="custom-control custom-radio custom-control-inline">
-                                    <input type="radio" className="custom-control-input" value={option.option_name}
+                                    <input type="radio" className="custom-control-input" value={option.optionName}
                                            id={option._id} name="option" onChange={handleSetSelectedOptionName}/>
                                     <label className="custom-control-label"
-                                           htmlFor={option._id}>{option.option_name}</label>
+                                           htmlFor={option._id}>{option.optionName}</label>
                                 </div>
                             ))
                         }
