@@ -13,8 +13,8 @@ const MenuPopupState: React.FC = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await http.get<Category>(`categories`)
-                setCategories(response.data.map((category) => category.name));
+                const response = await http.get<Category[]>(`categories`)
+                setCategories(response.data.map(category => category.name))
             } catch (error) {
                 console.error('Error fetching categories:', error);
             }
@@ -22,6 +22,7 @@ const MenuPopupState: React.FC = () => {
 
         fetchData();
     }, []);
+
     const styleCategoriesList = {
         top: '5px',
         width: '360px',
