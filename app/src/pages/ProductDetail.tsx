@@ -4,11 +4,15 @@ import {AppDispatch, RootState} from "../store/store";
 import React, {useEffect, useRef, useState} from "react";
 import {fetchProductDetail, setSelectedOptionName, setSelectedSize} from "../store/product.slice";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faPlus,faMinus,faTag, faStar, faCircleChevronLeft, faCircleChevronRight, faCircleUser} from "@fortawesome/free-solid-svg-icons";
+import {faPlus,faMinus, faCircleChevronLeft, faCircleChevronRight, faCircleUser, faCartShopping, faHeart, faClipboard} from "@fortawesome/free-solid-svg-icons";
 import {faFacebookF, faXTwitter, faLinkedinIn, faPinterest} from "@fortawesome/free-brands-svg-icons"
 import {Box, Rating, Tab, Tabs} from "@mui/material";
+import StyleIcon from '@mui/icons-material/Style';
+import StarIcon from '@mui/icons-material/Star';
 import Slider, { Settings } from "react-slick";
 import {formatCurrency} from "../util/formatCurrency";
+import GridRadioButtons from "../components/common/GridRadioButtons";
+import {Badge} from "react-bootstrap";
 
 interface TabPanelProps{
     children?: React.ReactNode
@@ -45,6 +49,7 @@ const ProductDetail = ()=> {
     const quantityInStock = productDetail.quantityInStock;
     const options = product?.options;
     const images = options?.map(option => option.image)
+    const optionNames = options?.map(option => option.optionName)
     const sizes = options?.flatMap(option => option.stocks).map(stock => stock.size);
     const uniqueSizes = Array.from(new Set(sizes));
 
@@ -57,7 +62,6 @@ const ProductDetail = ()=> {
     const imageRefs = useRef<(HTMLImageElement | null)[]>([]);
     const [tabDisplayIndex, setTabDisplayIndex] = useState<number>(0);
     const [,setSlideIndex] = useState<number>(0);
-    const [autoplay, setAutoplay] = useState<boolean>(true);
 
     useEffect(() => {
         const productDetailPromise = dispatch(fetchProductDetail(productId as string));
@@ -67,22 +71,42 @@ const ProductDetail = ()=> {
     }, [dispatch, productId]);
 
 
+    // const handleSetSelectedOptionName = (e: React.ChangeEvent<HTMLInputElement>) => {
+    //     const optionIndex = options?.findIndex(option => option.optionName === e.target.value);
+    //     if(optionIndex !== undefined && optionIndex >= 0){
+    //         setSlideIndex(optionIndex!)
+    //         if(sliderRef.current) {
+    //             sliderRef.current.slickGoTo(optionIndex!)
+    //             setAutoplay(false)
+    //         }
+    //     }
+    //     dispatch(setSelectedOptionName(e.target.value))
+    // }
 
-
-    const handleSetSelectedOptionName = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const optionIndex = options?.findIndex(option => option.optionName === e.target.value);
-        if(optionIndex !== undefined && optionIndex >= 0){
-            setSlideIndex(optionIndex!)
-            if(sliderRef.current) {
-                sliderRef.current.slickGoTo(optionIndex!)
-                setAutoplay(false)
+    const handleSetSelectedOptionName = (optionName: string | null) => {
+        if (!optionName) {
+            if(sliderRef.current){
+                sliderRef.current.slickPlay()
+            }
+        } else {
+            const optionIndex = options?.findIndex(option => option.optionName === optionName);
+            if(optionIndex !== undefined && optionIndex >= 0){
+                setSlideIndex(optionIndex!)
+                if(sliderRef.current) {
+                    sliderRef.current.slickGoTo(optionIndex!)
+                    sliderRef.current.slickPause()
+                }
             }
         }
-        dispatch(setSelectedOptionName(e.target.value))
+        dispatch(setSelectedOptionName(optionName))
     }
 
-    const handleSetSelectedSize = (e: React.ChangeEvent<HTMLInputElement>) => {
-        dispatch(setSelectedSize(e.target.value))
+    // const handleSetSelectedSize = (e: React.ChangeEvent<HTMLInputElement>) => {
+    //     dispatch(setSelectedSize(e.target.value))
+    // }
+
+    const handleSetSelectedSize = (size: string | null) => {
+        dispatch(setSelectedSize(size))
     }
 
     const handleChangeTabDisplay = (event: React.SyntheticEvent, newTabDisplayIndex: number) => {
@@ -125,7 +149,7 @@ const ProductDetail = ()=> {
         dots: false,
         speed: 500,
         autoplaySpeed: 3000,
-        autoplay: autoplay,
+        autoplay: true,
         nextArrow: <NextArrowCustom/>,
         prevArrow: <PreviousArrowCustom/>,
         pauseOnHover: true,
@@ -191,61 +215,70 @@ const ProductDetail = ()=> {
             </div>
 
             <div className="col-lg-7 pb-5">
-                <h3 className="font-weight-semi-bold">{product?.name}</h3>
-                <div className="d-flex mb-2">
+                <h3 className="font-weight-medium">{product?.name}</h3>
+                <div className="d-flex align-items-center mb-1 mt-3">
                     <div className="text-primary mr-2">
-                        <FontAwesomeIcon icon={faStar}/>
+                        <StarIcon/>
                     </div>
-                    <small className="pt-1"><strong>Đánh giá:</strong> {product?.rating}</small>
+                    <p className={'mb-0'}><span className={'font-weight-semi-bold'}>Đánh giá:</span> {product?.rating}</p>
                 </div>
-                <div className="d-flex mb-2">
+                <div className="d-flex align-items-center mb-4">
                     <div className="text-primary mr-2">
-                        <FontAwesomeIcon icon={faTag}/>
+                        <StyleIcon/>
                     </div>
-                    <small className="pt-1"><strong>Phân loại:</strong> {product?.category.name}</small>
+                    <p className={'mb-0 display-6'}><span className={'font-weight-semi-bold'}>Danh mục:</span> {product?.category.name}</p>
                 </div>
-                <h3 className="font-weight-medium mb-4">
+                <h3 className="font-weight-bold mb-3 d-inline-flex align-items-baseline">
                     {formatCurrency((1 - product?.discountPercent!) * product?.originalPrice!)}
                     {
                         product?.discountPercent !== 0 &&
-                        <s className={"ml-2"} style={{fontSize: "1rem", color: "var(--gray)", fontWeight: 400}}>
-                            {formatCurrency(product?.originalPrice!)}
-                        </s>
+                        <>
+                            <Badge style={{color: 'white'}} className={'mr-2 order-first align-self-center rounded'}>
+                                {-(product?.discountPercent as number * 100)}%
+                            </Badge>
+                            <s className={"font-weight-medium ml-2"} style={{fontSize: "1rem", color: "var(--gray)"}}>
+                                {formatCurrency(product?.originalPrice!)}
+                            </s>
+                        </>
                     }
                 </h3>
-                <p className="mb-4">{product?.shortDescription}</p>
-                <div className="d-flex mb-3">
-                    <p className="text-dark font-weight-medium mb-0 mr-3">Kích cỡ:</p>
+                <p className="mb-3">{product?.shortDescription}</p>
+                <div className="d-flex flex-column mb-4">
+                <p className="text-dark font-weight-medium mb-3">Kích cỡ: {productDetail.selectedSize && <span className={'text-primary'}>{productDetail.selectedSize}</span>}</p>
                     <form>
-                        {
-                            uniqueSizes.map(size => (
-                                <div className="custom-control custom-radio custom-control-inline">
-                                    <input type="radio" className="custom-control-input" value={size} id={size}
-                                           name="size" onChange={handleSetSelectedSize}/>
-                                    <label className="custom-control-label" htmlFor={size}>{size}</label>
-                                </div>
-                            ))
-                        }
+                        {/*{*/}
+                        {/*    uniqueSizes.map(size => (*/}
+                        {/*        <div className="custom-control custom-radio custom-control-inline">*/}
+                        {/*            <input type="radio" className="custom-control-input" value={size} id={size}*/}
+                        {/*                   name="size" onChange={handleSetSelectedSize}/>*/}
+                        {/*            <label className="custom-control-label" htmlFor={size}>{size}</label>*/}
+                        {/*        </div>*/}
+                        {/*    ))*/}
+                        {/*}*/}
+
+                        {uniqueSizes && <GridRadioButtons arrayValue={uniqueSizes} onSetSelectedSize={handleSetSelectedSize}/>}
                     </form>
                 </div>
-                <div className="d-flex mb-4">
-                    <p className="text-dark font-weight-medium mb-0 mr-3">Mẫu:</p>
+                <div className="d-flex flex-column mb-4">
+                    <p className="text-dark font-weight-medium mb-3">Mẫu: {productDetail.selectedOptionName && <span className={'text-primary'}>{productDetail.selectedOptionName}</span>}</p>
                     <form>
-                        {
-                            options?.map(option => (
-                                <div key={option._id} className="custom-control custom-radio custom-control-inline">
-                                    <input type="radio" className="custom-control-input" value={option.optionName}
-                                           id={option._id} name="option" onChange={handleSetSelectedOptionName}/>
-                                    <label className="custom-control-label"
-                                           htmlFor={option._id}>{option.optionName}</label>
-                                </div>
-                            ))
-                        }
+                        {/*{*/}
+                        {/*    options?.map(option => (*/}
+                        {/*        <div key={option._id} className="custom-control custom-radio custom-control-inline">*/}
+                        {/*            <input type="radio" className="custom-control-input" value={option.optionName}*/}
+                        {/*                   id={option._id} name="option" onChange={handleSetSelectedOptionName}/>*/}
+                        {/*            <label className="custom-control-label"*/}
+                        {/*                   htmlFor={option._id}>{option.optionName}</label>*/}
+                        {/*        </div>*/}
+                        {/*    ))*/}
+                        {/*}*/}
+
+                        {optionNames && <GridRadioButtons arrayValue={optionNames!} onSetSelectedOptionName={handleSetSelectedOptionName}/>}
                     </form>
                 </div>
-                <p className="mb-4">Số lượng mẫu trong kho: {quantityInStock}</p>
-                <div className="d-flex align-items-center mb-4 pt-2">
-                    <div className="input-group quantity mr-3" style={{width: "130px"}}>
+                <p className="text-dark font-weight-medium mb-3">Số lượng mẫu trong kho: <span className={'text-primary'}>{quantityInStock}</span></p>
+                <div className="d-flex flex-wrap align-items-center mb-4 pt-2" style={{gap: '0.8rem'}}>
+                    <div className="input-group quantity" style={{width: "130px"}}>
                         <div className="input-group-btn">
                             <button className="btn btn-primary btn-minus">
                                 <FontAwesomeIcon icon={faMinus}/>
@@ -258,8 +291,13 @@ const ProductDetail = ()=> {
                             </button>
                         </div>
                     </div>
-                    <button className="btn btn-primary px-3"><i className="fa fa-shopping-cart mr-1"></i> Thêm vào giỏ
-                        hàng
+                    <button className="btn btn-primary px-3"><FontAwesomeIcon className={'mr-1'} icon={faCartShopping}/>Thêm
+                        vào giỏ hàng
+                    </button>
+                    <button className="btn btn-primary px-3"><FontAwesomeIcon className={'mr-1'} icon={faHeart}/> Thêm
+                        vào mục yêu thích
+                    </button>
+                    <button className="btn btn-primary px-3"><FontAwesomeIcon className={'mr-1'} icon={faClipboard}/> Yêu cầu thiết kế & kích cỡ khác
                     </button>
                 </div>
                 <div className="d-flex pt-2">
@@ -291,7 +329,6 @@ const ProductDetail = ()=> {
                         >
                             <Tab label="Mô tả chi tiết"/>
                             <Tab label="Đánh giá & nhận xét"/>
-                            <Tab label="Hỏi & đáp"/>
                         </Tabs>
                     </Box>
                     <ProductDetailTabPanel index={0} value={tabDisplayIndex}>
