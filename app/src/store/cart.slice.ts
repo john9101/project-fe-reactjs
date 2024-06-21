@@ -11,13 +11,9 @@ const initialState: CartState = {
     cartItems: localStorage.getItem("cartItem") ? JSON.parse(localStorage.getItem("cartItem")!) : [],
     totalPrice: localStorage.getItem("totalPrice") ? Number(localStorage.getItem("totalPrice")) : 0,
     totalItem: localStorage.getItem("totalItem") ? Number(localStorage.getItem("totalItem")) : 0
+
 };
 
-export  default function convertStringPriceToNumber(stringPrice: string): number {
-    let temp: string = stringPrice.replace(/[^0-9]/g, '');
-    let numberPrice: number = parseFloat(temp);
-    return numberPrice;
-}
 const cartSlide = createSlice({
     name: "cart",
     initialState,
@@ -33,7 +29,7 @@ const cartSlide = createSlice({
                 targetCartItem!.quantity += cartItem.quantity;
                 state.totalItem = state.cartItems.length;
             }
-            state.totalPrice = state.cartItems.reduce((total, item) => total + item.quantity * convertStringPriceToNumber(item.price!), 0);
+            state.totalPrice = state.cartItems.reduce((total, item) => total + item.quantity * cartItem.product.originalPrice, 0);
             localStorage.setItem("cartItem", JSON.stringify(state.cartItems));
             localStorage.setItem("totalPrice", state.totalPrice.toString());
             localStorage.setItem("totalItem", state.totalItem.toString());
@@ -42,18 +38,18 @@ const cartSlide = createSlice({
             const id = action.payload;
             state.totalItem = state.cartItems.length - 1;
             state.cartItems = state.cartItems.filter(item => item.id !== id);
-            state.totalPrice = state.cartItems.reduce((total, item) => total + item.quantity * convertStringPriceToNumber(item.price!), 0);
+            state.totalPrice = state.cartItems.reduce((total, item) => total + item.quantity * item.product.originalPrice, 0);
             localStorage.setItem("cartItem", JSON.stringify(state.cartItems));
             localStorage.setItem("totalPrice", state.totalPrice.toString());
             localStorage.setItem("totalItem", state.totalItem.toString());
         },
         updateCartItemQuantity(state, action: PayloadAction<{ id: string, newQuantity: number }>) {
-            const { id, newQuantity } = action.payload;
+            const {id, newQuantity} = action.payload;
             const item = state.cartItems.find(item => item.id === id);
             if (item) {
                 item.quantity = newQuantity;
             }
-            state.totalPrice = state.cartItems.reduce((total, item) => total + item.quantity * convertStringPriceToNumber(item.price!), 0);
+            state.totalPrice = state.cartItems.reduce((total, item) => total + item.quantity * item.product.originalPrice, 0);
             localStorage.setItem("cartItem", JSON.stringify(state.cartItems));
             localStorage.setItem("totalPrice", state.totalPrice.toString());
 

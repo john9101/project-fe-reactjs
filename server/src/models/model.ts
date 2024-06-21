@@ -11,8 +11,20 @@ export interface IOption{
     option_name: string
 }
 
+export interface IUser{
+    username: string,
+    password: string,
+    fullName: string,
+    gender: string,
+    email: string,
+    phone: string,
+    address: string,
+    companyName: string,
+    avatar: string,
+}
+
 const optionSchema: Schema = new Schema({
-    option_name: {
+    optionName: {
         type: String,
         require: true
     },
@@ -28,9 +40,13 @@ const optionSchema: Schema = new Schema({
             }
         }
     ],
-    price: {
-        type: Number,
-        require: true
+    image: {
+        type: String,
+        required: true
+    },
+    product: {
+        type: Schema.Types.ObjectId,
+        required: true
     }
 })
 
@@ -43,7 +59,7 @@ const categorySchema: Schema = new Schema({
 
 const productSchema: Schema = new Schema({
     name: {
-        type: String, 
+        type: String,
         require: true
     },
     category: {
@@ -57,19 +73,14 @@ const productSchema: Schema = new Schema({
     longDescription: {
         type: String
     },
-    salePrice: {
-        type: Number
-    },
     originalPrice: {
-        type: Number, 
+        type: Number,
         require: true
     },
-    images: [
-        {
-            type: String, 
-            require: true
-        }
-    ],
+    discountPercent: {
+        type: Number,
+        require: true
+    },
     options: [
         {
             type: Schema.Types.ObjectId,
@@ -78,7 +89,42 @@ const productSchema: Schema = new Schema({
     ]
 })
 
-export const Category = mongoose.model('Category', categorySchema)
-export const Option = mongoose.model('Option', optionSchema)
-export const Product = mongoose.model('Product', productSchema)
+const userSchema: Schema = new Schema({
+    username: {
+        type: String,
+        require: true
+    },
+    password: {
+        type: String,
+        require: true
+    },
+    fullName: {
+        type: String,
+        require: true
+    },
+    gender: {
+        type: String,
+    },
+    phone: {
+        type: String,
+    },
+    email: {
+        type: String,
+        require: true
+    },
+    address: {
+        type: String,
+        require: true
+    },
+    companyName: {
+        type: String
+    },
+    avatar: {
+        type: String
+    }
+})
 
+export const Category = mongoose.model('Category', categorySchema, 'categories')
+export const Option = mongoose.model('Option', optionSchema, 'options')
+export const Product = mongoose.model('Product', productSchema, 'products')
+export const User = mongoose.model('User', userSchema, 'users')
