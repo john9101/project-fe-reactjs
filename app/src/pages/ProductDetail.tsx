@@ -13,6 +13,27 @@ import Slider, { Settings } from "react-slick";
 import {formatCurrency} from "../util/formatCurrency";
 import GridRadioButtons from "../components/common/GridRadioButtons";
 import {Badge} from "react-bootstrap";
+import {Controller, useForm} from "react-hook-form";
+import * as Yup from 'yup'
+import {yupResolver} from "@hookform/resolvers/yup";
+
+const validationSchema = Yup.object().shape({
+    rating: Yup.number()
+        .required()
+        .min(1, 'Bạn phải đánh giá ít nhất là 1 sao'),
+    comment: Yup.string()
+        .required('Nhận xét của bạn không được để trống')
+        .min(10, 'Nội dung nhận xét của bạn phải tối thiểu 10 ký tự')
+        .max(1000, 'Nội dung nhận xét của bạn chỉ tối đa 1000 ký tự')
+});
+
+interface ReviewFormData{
+    rating: number
+    comment: string
+    fullName?: string
+    avatar?: string
+    sentDate?: string
+}
 
 interface TabPanelProps{
     children?: React.ReactNode
@@ -62,6 +83,10 @@ const ProductDetail = ()=> {
     const imageRefs = useRef<(HTMLImageElement | null)[]>([]);
     const [tabDisplayIndex, setTabDisplayIndex] = useState<number>(0);
     const [,setSlideIndex] = useState<number>(0);
+    // const [reviewFormData, setReviewFormData] = useState<ReviewFormData>({
+    //     rating: 0,
+    //     message: ''
+    // })
 
     useEffect(() => {
         const productDetailPromise = dispatch(fetchProductDetail(productId as string));
@@ -187,6 +212,18 @@ const ProductDetail = ()=> {
           transition: 'transform 0.5s ease'
         });
     };
+
+    const {register, handleSubmit, formState: {errors}, control} = useForm<ReviewFormData>({
+        resolver: yupResolver(validationSchema),
+        defaultValues: {
+            rating: 0,
+            comment: ''
+        },
+    })
+
+    const handleSendReview = (data: ReviewFormData)=>{
+
+    }
 
     return (
         <div className="container-fluid py-5">
@@ -358,21 +395,37 @@ const ProductDetail = ()=> {
                                     </div>
                                 </div>
                                 <div className="col-md-6">
-                                    <h4 className="mb-4">Để lại đánh giá và nhận xét của bạn</h4>
+                                    <h4 className="mb-2">Để lại đánh giá và nhận xét của bạn</h4>
                                     <small>Các trường bắt buộc được đánh dấu *</small>
-                                    <div className="d-flex my-3">
-                                        <p className="mb-0 mr-2">Đánh giá của bạn * :</p>
-                                        <div className="text-primary">
-
+                                    <form onSubmit={handleSubmit(handleSendReview)}>
+                                        <div className="d-flex my-3 align-items-baseline">
+                                            <p className="mb-0 mr-2">Đánh giá của bạn * :</p>
+                                            <div className="text-primary align-self-center">
+                                                <Controller
+                                                    name="rating"
+                                                    control={control}
+                                                    render={({field}) => (
+                                                        <Rating
+                                                            {...field}
+                                                            value={field.value}
+                                                            onChange={(event, newRating) => {
+                                                                field.onChange(newRating)
+                                                            }}
+                                                        />
+                                                    )}
+                                                />
+                                            </div>
+                                            {errors.rating && <small className={'ml-2'} style={{color: 'var(--red)'}}>({errors.rating.message})</small>}
                                         </div>
-                                    </div>
-                                    <form>
                                         <div className="form-group">
-                                        <label htmlFor="message">Nhận xét của bạn *</label>
-                                            <textarea id="message" cols={30} rows={5} className="form-control"></textarea>
+                                            <label htmlFor="message">Nhận xét của bạn *:</label>
+                                            <textarea id="message" cols={30} rows={5} className="form-control" {...register('comment')}
+                                                      placeholder="Viết nội dụng nhận xét của bạn ở đây (tối thiểu 10 ký tự và tối đa 1000 ký tự)"></textarea>
+                                            {errors.comment && <small style={{color: 'var(--red)'}}>{errors.comment.message}</small>}
                                         </div>
                                         <div className="form-group mb-0">
-                                            <input type="submit" value="Gửi đánh giá & nhận xét" className="btn btn-primary px-3"/>
+                                            <input type="submit" value="Gửi đánh giá & nhận xét"
+                                                   className="btn btn-primary px-3"/>
                                         </div>
                                     </form>
                                 </div>
