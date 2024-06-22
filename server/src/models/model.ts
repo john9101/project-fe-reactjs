@@ -77,7 +77,63 @@ const productSchema: Schema = new Schema({
         }
     ]
 })
+const addressSchema = new Schema({
+    province: {
+        type: String,
+        
+    },
+    district: {
+        type: String,
+        
+    },
+    ward: {
+        type: String,
+        
+    },
+    specific: {
+        type: String,
+        
+    }
+});
 
+const informationUserSchema = new Schema({
+    userName: {
+        type: String,
+        required: true
+    },
+    password: {
+        type: String,
+        required: true
+    },
+    fullName: {
+        type: String,
+        required: true
+    },
+    gender: {
+        type: String,
+    },
+    phone: {
+        type: String,
+        required: true
+    },
+    email: {
+        type: String,
+        required: true
+    },
+    address: {
+        type: addressSchema,
+       
+    },
+    companyName: {
+        type: String,
+        
+    },
+    avatar: {
+        type: String,
+        
+    }
+});
+export const InformationUser = mongoose.model('InformationUser', informationUserSchema)
 export const Category = mongoose.model('Category', categorySchema)
 export const Option = mongoose.model('Option', optionSchema)
 export const Product = mongoose.model('Product', productSchema)
