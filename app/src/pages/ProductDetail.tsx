@@ -12,7 +12,7 @@ import StarIcon from '@mui/icons-material/Star';
 import Slider, { Settings } from "react-slick";
 import {formatCurrency} from "../util/formatCurrency";
 import GridRadioButtons from "../components/common/GridRadioButtons";
-import {Badge} from "react-bootstrap";
+import {Badge, Modal} from "react-bootstrap";
 import {Controller, useForm} from "react-hook-form";
 import * as Yup from 'yup'
 import {yupResolver} from "@hookform/resolvers/yup";
@@ -432,6 +432,7 @@ const ProductDetail = ()=> {
                             </div>
                         </div>
                     </ProductDetailTabPanel>
+
                 </div>
             </div>
         </div>
