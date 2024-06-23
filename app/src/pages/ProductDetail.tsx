@@ -432,7 +432,6 @@ const ProductDetail = ()=> {
                             </div>
                         </div>
                     </ProductDetailTabPanel>
-
                 </div>
             </div>
         </div>
