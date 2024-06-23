@@ -5,10 +5,10 @@ import {formatCurrency} from "../../util/formatCurrency";
 import React, {useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {AppDispatch, RootState} from "../../store/store";
-import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import {removeFromCart, updateCartItemQuantity} from "../../store/cart.slice";
 import ButtonQuantity from "../common/ButtonQuantity";
+import {Modal} from 'react-bootstrap';
 
 export default function ListCartItem() {
     const cart = useSelector((state: RootState) => state.cart);
@@ -105,6 +105,7 @@ export default function ListCartItem() {
                     </Button>
                 </Modal.Footer>
             </Modal>
+
         </>
     )
 }
