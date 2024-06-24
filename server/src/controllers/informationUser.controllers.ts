@@ -4,9 +4,9 @@ import * as _ from "lodash";
 
 export const getInformationUser = async (req: Request, res: Response) => {
     try {
-        const user = await informationUserService.getInformation(req.params.id);
+        const user = await informationUserService.getInformationById(req.params.id);
         if (_.isEmpty(user)) {
-            return res.status(404).json({ message: "User not found" });
+            return res.status(200).json({ message: "User not found" });
         } else {
             return res.status(200).json(user);
         }

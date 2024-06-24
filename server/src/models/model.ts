@@ -10,6 +10,24 @@ export interface IOption{
     price: number
     option_name: string
 }
+export interface IAddress {
+    province: string;
+    district: string;
+    ward: string;
+    specific: string;
+}
+
+export interface IInformationUser{
+    userName: string;
+    password: string;
+    fullName: string;
+    gender: string;
+    phone: string;
+    email: string;
+    address: IAddress;
+    companyName: string;
+    avatar: string;
+}
 
 const optionSchema: Schema = new Schema({
     option_name: {
@@ -77,26 +95,23 @@ const productSchema: Schema = new Schema({
         }
     ]
 })
-const addressSchema = new Schema({
+const addressSchema: Schema = new Schema({
     province: {
         type: String,
         
     },
     district: {
         type: String,
-        
     },
     ward: {
         type: String,
-        
     },
     specific: {
         type: String,
-        
     }
 });
 
-const informationUserSchema = new Schema({
+const informationUserSchema: Schema = new Schema({
     userName: {
         type: String,
         required: true
@@ -111,6 +126,7 @@ const informationUserSchema = new Schema({
     },
     gender: {
         type: String,
+
     },
     phone: {
         type: String,
@@ -122,17 +138,15 @@ const informationUserSchema = new Schema({
     },
     address: {
         type: addressSchema,
-       
     },
     companyName: {
         type: String,
-        
     },
     avatar: {
         type: String,
-        
     }
 });
+
 export const InformationUser = mongoose.model('InformationUser', informationUserSchema)
 export const Category = mongoose.model('Category', categorySchema)
 export const Option = mongoose.model('Option', optionSchema)

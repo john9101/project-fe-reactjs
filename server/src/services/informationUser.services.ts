@@ -1,31 +1,33 @@
-
 import { InformationUser } from './../models/model';
-class InformationUserService{
-    async getInformation(queryInformation: any) {
+
+class InformationUserService {
+    async getInformationById(id: string) {
         try {
-            return await InformationUser.findById({ ...queryInformation });
-        }
-        catch (error) {
+            const user = await InformationUser.findById(id).populate('address');
+            return user;
+        } catch (error) {
             throw new Error('Get API User fail!');
         }
     }
+
     async createUser(dataUser: any) {
-        try { 
+        try {
             const user = new InformationUser(dataUser);
             return await user.save();
-        }
-        catch (error) {
+        } catch (error) {
             throw new Error('Create API User fail!');
-         }
-    }
-    async updateInformation(id: any, dataUpdate: any) {
-        try {
-            
         }
-        catch (error) {
+    }
+
+    async updateInformation(id: string, dataUpdate: any) {
+        try {
+            const updatedUser = await InformationUser.findByIdAndUpdate(id, dataUpdate, { new: true });
+            return updatedUser;
+        } catch (error) {
             throw new Error('Update data fail');
         }
     }
 }
-const informationUserService = new InformationUserService()
-export default informationUserService
+
+const informationUserService = new InformationUserService();
+export default informationUserService;
