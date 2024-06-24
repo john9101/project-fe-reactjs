@@ -5,7 +5,7 @@ import {removeFromCart} from "../../store/cart.slice";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import InformationCart from "../../components/cart/InformationCart";
-import ListCartItem from "../../components/cart/ListCartItem";
+import CartItemsList from "../../components/cart/CartItemsList";
 import CartEmpty from "../../components/cart/CartEmpty";
 
 function CartDetail() {
@@ -19,7 +19,7 @@ function CartDetail() {
         return (
             <div className="container-fluid pt-5">
                 <div className="row px-xl-5">
-                    <ListCartItem/>
+                    <CartItemsList/>
                     <InformationCart/>
                 </div>
             </div>

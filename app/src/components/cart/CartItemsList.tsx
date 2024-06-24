@@ -1,4 +1,4 @@
-// components/ListCartItem.tsx
+// components/CartItemsList.tsx
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faTrash} from "@fortawesome/free-solid-svg-icons";
 import {formatCurrency} from "../../util/formatCurrency";
@@ -10,7 +10,7 @@ import {removeFromCart, updateCartItemQuantity} from "../../store/cart.slice";
 import ButtonQuantity from "../common/ButtonQuantity";
 import {Modal} from 'react-bootstrap';
 
-export default function ListCartItem() {
+export default function CartItemsList() {
     const cart = useSelector((state: RootState) => state.cart);
     const [idProductDelete, setIdProductDelete] = useState<string>('');
     const dispatch = useDispatch<AppDispatch>();
