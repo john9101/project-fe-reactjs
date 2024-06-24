@@ -8,6 +8,7 @@ export interface Product {
     shortDescription?: string
     longDescription?: string
     rating: number
-    images: string[]
     options: Option[]
+    originalPrice: number
+    discountPercent: number
 }
