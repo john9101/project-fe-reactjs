@@ -29,8 +29,20 @@ export interface IInformationUser{
     avatar: string;
 }
 
+export interface IUser{
+    username: string,
+    password: string,
+    fullName: string,
+    gender: string,
+    email: string,
+    phone: string,
+    address: string,
+    companyName: string,
+    avatar: string,
+}
+
 const optionSchema: Schema = new Schema({
-    option_name: {
+    optionName: {
         type: String,
         require: true
     },
@@ -46,9 +58,13 @@ const optionSchema: Schema = new Schema({
             }
         }
     ],
-    price: {
-        type: Number,
-        require: true
+    image: {
+        type: String,
+        required: true
+    },
+    product: {
+        type: Schema.Types.ObjectId,
+        required: true
     }
 })
 
@@ -61,7 +77,7 @@ const categorySchema: Schema = new Schema({
 
 const productSchema: Schema = new Schema({
     name: {
-        type: String, 
+        type: String,
         require: true
     },
     category: {
@@ -75,19 +91,14 @@ const productSchema: Schema = new Schema({
     longDescription: {
         type: String
     },
-    salePrice: {
-        type: Number
-    },
     originalPrice: {
-        type: Number, 
+        type: Number,
         require: true
     },
-    images: [
-        {
-            type: String, 
-            require: true
-        }
-    ],
+    discountPercent: {
+        type: Number,
+        require: true
+    },
     options: [
         {
             type: Schema.Types.ObjectId,
@@ -151,4 +162,3 @@ export const InformationUser = mongoose.model('InformationUser', informationUser
 export const Category = mongoose.model('Category', categorySchema)
 export const Option = mongoose.model('Option', optionSchema)
 export const Product = mongoose.model('Product', productSchema)
-

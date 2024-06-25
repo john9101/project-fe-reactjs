@@ -1,5 +1,7 @@
 import React from 'react';
 import { Link } from "react-router-dom";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faEnvelope, faLocationDot, faPhone} from "@fortawesome/free-solid-svg-icons";
 function ContactUs() {
     return (
         <>
@@ -68,19 +70,17 @@ function ContactUs() {
                                                 </div>
                                                 <div
                                                     className="dbox w-100 d-flex align-items-start align-items-center mb-4">
-                                                    <i className="fa-solid fa-location-dot mr-3"></i>
+                                                    <FontAwesomeIcon icon={faLocationDot} className="mr-3" />
                                                     Khu phố 6, Phường Linh Trung, Quận Thủ Đức, TP.HCM
                                                 </div>
                                                 <div className="dbox w-100 d-flex align-items-center mb-4">
-                                                    <i className="fa-solid fa-phone mr-3"></i>
+                                                    <FontAwesomeIcon icon={faPhone} className="mr-3" />
                                                     +84 909 323 070
                                                 </div>
                                                 <div className="dbox w-100 d-flex align-items-center">
-                                                    <i className="fa-solid fa-envelope mr-3"></i>
-                                                    dongphucviet@gmail.com
+                                                    <FontAwesomeIcon icon={faEnvelope} className="mr-3" />                                                    dongphucviet@gmail.com
                                                 </div>
                                                 <div className="dbox w-100 d-flex align-items-center">
-
                                                 </div>
                                             </div>
                                         </div>
