@@ -9,7 +9,6 @@ import bodyParser from 'body-parser'
 import cors from "cors"
 // @ts-ignore
 import morgan from 'morgan'
-import questionsAnswersRoutes from "./src/routes/reviews.routes";
 config()
 const app = express()
 const port = process.env.PORT
@@ -19,7 +18,6 @@ app.use(cors())
 app.use(morgan("common"))
 
 app.use('/api/products', productsRouter)
-app.use('/api/qas', questionsAnswersRoutes)
 
 const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.CLUSTER_NAME}.nlnlbxk.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`
 
