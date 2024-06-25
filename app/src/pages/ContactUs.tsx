@@ -1,6 +1,6 @@
 import React from 'react';
 import {Link} from "react-router-dom";
-import InformationContact from "../components/contact/InformationContact";
+import ContactInfor from "../components/contact/ContactInfor";
 import FormContact from "../components/contact/FormContact";
 
 function ContactUs() {
@@ -11,7 +11,7 @@ function ContactUs() {
             </div>
             <div className="row px-xl-5">
                 <FormContact/>
-                <InformationContact/>
+                <ContactInfor/>
             </div>
         </div>
     );
