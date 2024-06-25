@@ -2,18 +2,22 @@ import { NavLink, useLocation } from "react-router-dom";
 import Logo from "./Logo";
 import HomeCarosel from "../carousel/HomeCarousel";
 import React from "react";
-// import '../../assets/css/styleNavbar.scss'
 import CategoryList from "./CategoriesList";
+import { useAuth } from "../../context/UserContext";
+import defaultAvatar from '../../assets/img/default-avatar.jpg'
 
-const Navbar = () => {
+const Navbar: React.FC = () => {
     const location = useLocation();
+    const { authState } = useAuth();
+    const { isAuthenticated, user } = authState;
+
     return (
         <div className="container-fluid mb-5">
             <div className="row border-top px-xl-5">
-                <CategoryList/>
+                <CategoryList />
                 <div className="col-lg-8">
                     <nav className="navbar navbar-expand-lg bg-light navbar-light py-3 py-lg-0 px-0">
-                        <NavLink to="" className="text-decoration-none d-block d-lg-none">
+                        <NavLink to="/" className="text-decoration-none d-block d-lg-none">
                             <Logo />
                         </NavLink>
                         <div className="collapse navbar-collapse justify-content-between" id="navbarCollapse">
@@ -22,11 +26,26 @@ const Navbar = () => {
                                 <NavLink to="/shop" className="nav-item nav-link">Cửa hàng</NavLink>
                                 <NavLink to="/about-us" className="nav-item nav-link">Giới thiệu</NavLink>
                                 <NavLink to="/contact-us" className="nav-item nav-link">Liên hệ</NavLink>
-
                             </div>
                             <div className="navbar-nav ml-auto py-0">
-                                <NavLink to="/account/login" className="nav-item nav-link">Đăng nhập</NavLink>
-                                <NavLink to="/account/register" className="nav-item nav-link">Đăng ký</NavLink>
+                                {isAuthenticated && user ? (
+                                    <div className="nav-item">
+                                        <NavLink to={`/personal/${user._id}`} className="nav-link">
+                                            <img
+                                                src={user.avatar || defaultAvatar}
+                                                alt="avatar"
+                                                className="rounded-circle"
+                                                style={{ width: '40px', height: '40px' }}
+                                            />
+                                        </NavLink>
+
+                                    </div>
+                                ) : (
+                                    <>
+                                        <NavLink to="/account/login" className="nav-item nav-link">Đăng nhập</NavLink>
+                                        <NavLink to="/account/register" className="nav-item nav-link">Đăng ký</NavLink>
+                                    </>
+                                )}
                             </div>
                         </div>
                     </nav>
@@ -34,7 +53,7 @@ const Navbar = () => {
                 </div>
             </div>
         </div>
-    )
+    );
 }
 
 export default Navbar;

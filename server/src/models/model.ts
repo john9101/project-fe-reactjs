@@ -18,6 +18,7 @@ export interface IAddress {
 }
 
 export interface IUsers{
+    
     username: string;
     password: string;
     fullName: string;

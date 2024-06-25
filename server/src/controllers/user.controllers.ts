@@ -44,6 +44,7 @@ export const loginUser = async (req: Request, res: Response) => {
     try {
         const { username, password } = req.body;
         const user = await userService.authenticateUser(username, password);
+        console.log(user)
         return res.status(200).json({ message: "Login successful", user });
     } catch (error) {
         return res.status(400).json({ message: "Invalid username or password" });

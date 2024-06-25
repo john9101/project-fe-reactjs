@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import TextField from '@mui/material/TextField';
 import { Button, Alert, Snackbar, Fade } from '@mui/material';
 import Link from '@mui/material/Link';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/UserContext'; // Import useAuth hook
 import '../assets/css/styleLogin.scss';
 import http from '../util/http';
-
 
 interface Errors {
     username?: string;
@@ -17,6 +18,8 @@ const Login: React.FC = () => {
     const [errors, setErrors] = useState<Errors>({});
     const [successMessage, setSuccessMessage] = useState<boolean>(false);
     const [failureMessage, setFailureMessage] = useState<boolean>(false);
+    const navigate = useNavigate();
+    const { login } = useAuth(); 
 
     useEffect(() => {
         if (successMessage || failureMessage) {
@@ -41,9 +44,11 @@ const Login: React.FC = () => {
         if (validate()) {
             try {
                 const response = await http.post('login', { username, password });
+                const user = response.data;
+                login(user); 
                 setSuccessMessage(true);
                 setFailureMessage(false);
-                console.log('Login successful:', response.data);
+                navigate('/');
             } catch (error) {
                 setSuccessMessage(false);
                 setFailureMessage(true);
