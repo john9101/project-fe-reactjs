@@ -1,6 +1,9 @@
 import React, {useState} from 'react';
 import {ContactType} from "../../types/contact.type";
 import axios from "axios";
+import {Modal} from "react-bootstrap";
+import Button from "react-bootstrap/Button";
+import {NavLink} from "react-router-dom";
 
 function FormContact() {
     const [contact, setContact] = useState<ContactType>({
@@ -9,6 +12,9 @@ function FormContact() {
         topic: "",
         message: ""
     });
+    const [show, setShow] = useState(false);
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { id, value } = e.target;
         setContact({
@@ -18,8 +24,6 @@ function FormContact() {
     };
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-
-
         try {
             const response = await axios.post('http://localhost:4000/api/contact', contact);
             console.log('Đã lưu:', response.data);
@@ -29,6 +33,7 @@ function FormContact() {
                 topic: "",
                 message: ""
             });
+            handleShow();
 
         } catch (error) {
             console.error('Lỗi khi lưu contact', error);
@@ -73,6 +78,25 @@ function FormContact() {
                     </div>
                 </form>
             </div>
+            <Modal show={show} onHide={handleClose}>
+                <Modal.Header>
+                    <Modal.Title>Thành công</Modal.Title>
+                    <button type="button" className="close" data-dismiss="modal" aria-label="Close"
+                            onClick={handleClose}>
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </Modal.Header>
+                <Modal.Body>Chúng tôi chân thành cảm ơn bạn.</Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleClose}>
+                       <NavLink to={"/"} style={{color: "black"}}> Trang chủ</NavLink>
+                    </Button>
+                    <Button variant="secondary" onClick={handleClose} style={{color: "black"}}>
+                        Tiếp tục
+                    </Button>
+
+                </Modal.Footer>
+            </Modal>
         </div>
     );
 }
