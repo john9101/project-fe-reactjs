@@ -3,6 +3,7 @@ import TextField from '@mui/material/TextField';
 import { Button, Alert, Snackbar, Fade } from '@mui/material';
 import Link from '@mui/material/Link';
 import '../assets/css/styleLogin.scss';
+import http from '../util/http';
 
 
 interface Errors {
@@ -22,25 +23,32 @@ const Login: React.FC = () => {
             const timer = setTimeout(() => {
                 setSuccessMessage(false);
                 setFailureMessage(false);
-            }, 50000);
+            }, 5000);
             return () => clearTimeout(timer);
         }
     }, [successMessage, failureMessage]);
 
-
     const validate = () => {
         let tempErrors: Errors = {};
-        tempErrors.username = username ? '' : 'Vui lòng nhập tên đănng nhập của bạn';
-        tempErrors.password = password ? '' : 'Vui lòng mật khẩu của bạn';
+        tempErrors.username = username ? '' : 'Vui lòng nhập tên đăng nhập của bạn';
+        tempErrors.password = password ? '' : 'Vui lòng nhập mật khẩu của bạn';
         setErrors(tempErrors);
         return Object.values(tempErrors).every(x => x === '');
     };
 
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         if (validate()) {
-            setSuccessMessage(true);
-            setFailureMessage(false);
+            try {
+                const response = await http.post('login', { username, password });
+                setSuccessMessage(true);
+                setFailureMessage(false);
+                console.log('Login successful:', response.data);
+            } catch (error) {
+                setSuccessMessage(false);
+                setFailureMessage(true);
+                console.error('Login failed:', error);
+            }
         } else {
             setSuccessMessage(false);
             setFailureMessage(true);
@@ -101,7 +109,6 @@ const Login: React.FC = () => {
                 <span className='titleToRegister'>Bạn chưa có tài khoản? <Link href="/account/register" underline="none">
                     Tạo tài khoản mới tại đây
                 </Link></span>
-
             </form>
         </div>
     );

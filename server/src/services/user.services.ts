@@ -1,9 +1,9 @@
-import { InformationUser } from './../models/model';
+import { User } from './../models/model';
 
 class InformationUserService {
     async getInformationById(id: string) {
         try {
-            const user = await InformationUser.findById(id).populate('address');
+            const user = await User.findById(id).populate('address');
             return user;
         } catch (error) {
             throw new Error('Get API User fail!');
@@ -12,7 +12,7 @@ class InformationUserService {
 
     async createUser(dataUser: any) {
         try {
-            const user = new InformationUser(dataUser);
+            const user = new User(dataUser);
             return await user.save();
         } catch (error) {
             throw new Error('Create API User fail!');
@@ -21,10 +21,21 @@ class InformationUserService {
 
     async updateInformation(id: string, dataUpdate: any) {
         try {
-            const updatedUser = await InformationUser.findByIdAndUpdate(id, dataUpdate, { new: true });
+            const updatedUser = await User.findByIdAndUpdate(id, dataUpdate, { new: true });
             return updatedUser;
         } catch (error) {
             throw new Error('Update data fail');
+        }
+    }
+    async authenticateUser(username: any, password: any) {
+        try {
+            const user = await User.findOne({ username, password });
+            if (!user) {
+                throw new Error('Invalid username or password');
+            }
+            return user;
+        } catch (error) {
+            throw new Error('Authentication failed');
         }
     }
 }

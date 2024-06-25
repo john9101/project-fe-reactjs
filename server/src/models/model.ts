@@ -17,8 +17,8 @@ export interface IAddress {
     specific: string;
 }
 
-export interface IInformationUser{
-    userName: string;
+export interface IUsers{
+    username: string;
     password: string;
     fullName: string;
     gender: string;
@@ -27,18 +27,6 @@ export interface IInformationUser{
     address: IAddress;
     companyName: string;
     avatar: string;
-}
-
-export interface IUser{
-    username: string,
-    password: string,
-    fullName: string,
-    gender: string,
-    email: string,
-    phone: string,
-    address: string,
-    companyName: string,
-    avatar: string,
 }
 
 const optionSchema: Schema = new Schema({
@@ -122,8 +110,8 @@ const addressSchema: Schema = new Schema({
     }
 });
 
-const informationUserSchema: Schema = new Schema({
-    userName: {
+const userSchema: Schema = new Schema({
+    username: {
         type: String,
         required: true
     },
@@ -158,7 +146,8 @@ const informationUserSchema: Schema = new Schema({
     }
 });
 
-export const InformationUser = mongoose.model('InformationUser', informationUserSchema)
+
+export const User = mongoose.model('User', userSchema)
 export const Category = mongoose.model('Category', categorySchema)
 export const Option = mongoose.model('Option', optionSchema)
 export const Product = mongoose.model('Product', productSchema)
