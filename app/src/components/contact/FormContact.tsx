@@ -40,23 +40,33 @@ function FormContact() {
                     <div className="control-group mb-3">
                         <input type="text" className="form-control" id="username" placeholder="Họ và tên"
                                {...register('username', {required: "*Vui lòng nhập họ và tên"})}/>
-                        {errors.username && <p className="help-block text-danger"  style={{ fontSize: '12px' }}>{errors.username.message}</p>}
+                        {errors.username && <p className="help-block text-danger"
+                                               style={{fontSize: '12px'}}>{errors.username.message}</p>}
 
                     </div>
                     <div className="control-group mb-3">
                         <input type="email" className="form-control" id="email" placeholder="Email"
-                               {...register('email', {required: "*Vui lòng nhập Email của bạn"})}/>
-                        {errors.email && <p className="help-block text-danger"  style={{ fontSize: '12px' }}>{errors.email.message}</p>}
+                               {...register('email', {
+                                   required: "*Vui lòng nhập Email của bạn",
+                                   pattern: {
+                                       value: /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+                                       message: "*Email không hợp lệ"
+                                   }
+                               })}/>
+                        {errors.email &&
+                            <p className="help-block text-danger" style={{fontSize: '12px'}}>{errors.email.message}</p>}
                     </div>
                     <div className="control-group mb-3">
                         <input type="text" className="form-control" id="topic" placeholder="Chủ đề"
                                {...register('topic', {required: "*Vui lòng nhập chủ đề cần liên hệ"})}/>
-                        {errors.topic && <p className="help-block text-danger"  style={{ fontSize: '12px' }}>{errors.topic.message}</p>}
+                        {errors.topic &&
+                            <p className="help-block text-danger" style={{fontSize: '12px'}}>{errors.topic.message}</p>}
                     </div>
                     <div className="control-group mb-3">
                             <textarea className="form-control" rows={6} id="message" placeholder="Nội dung"
                                       {...register('message', {required: "*Vui lòng nhập nội dung liên hệ"})}></textarea>
-                        {errors.message && <p className="help-block text-danger"  style={{ fontSize: '12px' }}>{errors.message.message}</p>}
+                        {errors.message && <p className="help-block text-danger"
+                                              style={{fontSize: '12px'}}>{errors.message.message}</p>}
                     </div>
                     <div style={{
                         display: 'flex',
