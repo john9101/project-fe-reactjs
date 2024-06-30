@@ -4,95 +4,59 @@ import axios from "axios";
 import {Modal} from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import {NavLink} from "react-router-dom";
+import {useForm} from "react-hook-form";
 
 function FormContact() {
-    const [contact, setContact] = useState<ContactType>({
+
+    const initialState: ContactType = {
         username: "",
         email: "",
         topic: "",
         message: ""
-    });
-    const [errors, setErrors] = useState({
-        username: "",
-        email: "",
-        topic: "",
-        message: ""
-    });
+    };
+
+    const {register, handleSubmit, reset, formState: {errors}} = useForm<ContactType>({defaultValues: initialState});
     const [show, setShow] = useState(false);
+
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
-    const validateFields = () => {
-        const errors = {
-            username: contact.username ? "" : "* Vui lòng nhập họ và tên",
-            email: contact.email ? "" : "* Vui lòng nhập Email của bạn",
-            topic: contact.topic ? "" : "* Vui lòng nhập chủ đề cần liên hệ",
-            message: contact.message ? "" : "* Vui lòng nhập nội dung liên hệ"
-        };
-        setErrors(errors);
-        return !Object.values(errors).some(error => error !== "");
-    };
-
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const {id, value} = e.target;
-        setContact({
-            ...contact,
-            [id]: value
-        });
-    };
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        if (!validateFields()) {
-            return;
-        }
+    const onSubmit = async (data: ContactType) => {
         try {
-            const response = await axios.post('http://localhost:4000/api/contact', contact);
+            const response = await axios.post('http://localhost:4000/api/contact', data);
             console.log('Đã lưu:', response.data);
-            setContact({
-                username: "",
-                email: "",
-                topic: "",
-                message: ""
-            });
             handleShow();
-
+            reset(initialState);
         } catch (error) {
-            console.error('Lỗi khi lưu contact', error);
+            console.error('Lỗi:', error);
         }
     };
+
     return (
         <div className="col-lg-7 mb-5">
             <div className="contact-form">
                 <div id="success"></div>
-                <form name="sentMessage" id="contactForm" noValidate={true} onSubmit={handleSubmit}>
-                    <div className="control-group">
+                <form name="sentMessage" id="contactForm" noValidate={true} onSubmit={handleSubmit(onSubmit)}>
+                    <div className="control-group mb-3">
                         <input type="text" className="form-control" id="username" placeholder="Họ và tên"
-                               required data-validation-required-message="Vui lòng nhập họ và tên"
-                               value={contact.username}
-                               onChange={handleChange}/>
-                        <p className="help-block text-danger">{errors.username}</p>
+                               {...register('username', {required: "Vui lòng nhập họ và tên"})}/>
+                        {errors.username && <p className="help-block text-danger">{errors.username.message}</p>}
+
                     </div>
-                    <div className="control-group">
+                    <div className="control-group mb-3">
                         <input type="email" className="form-control" id="email" placeholder="Email"
-                               required data-validation-required-message="Vui lòng nhập Email của bạn"
-                               value={contact.email}
-                               onChange={handleChange}/>
-                        <p className="help-block text-danger">{errors.email}</p>
+                               {...register('email', {required: "Vui lòng nhập Email của bạn"})}/>
+                        {errors.email && <p className="help-block text-danger">{errors.email.message}</p>}
                     </div>
-                    <div className="control-group">
+                    <div className="control-group mb-3">
                         <input type="text" className="form-control" id="topic" placeholder="Chủ đề"
-                               required data-validation-required-message="Vui lòng nhập chủ đề cần liên hệ"
-                               value={contact.topic}
-                               onChange={handleChange}/>
-                        <p className="help-block text-danger">{errors.topic}</p>
+                               {...register('topic', {required: "Vui lòng nhập chủ đề cần liên hệ"})}/>
+                        {errors.topic && <p className="help-block text-danger">{errors.topic.message}</p>}
                     </div>
-                    <div className="control-group">
+                    <div className="control-group mb-3">
                             <textarea className="form-control" rows={6} id="message" placeholder="Nội dung"
-                                      required
-                                      data-validation-required-message="Vui lòng nhập nội dung liên hệ"
-                                      value={contact.message}
-                                      onChange={handleChange}></textarea>
-                        <p className="help-block text-danger">{errors.message}</p>
+                                      {...register('message', {required: "Vui lòng nhập nội dung liên hệ"})}></textarea>
+                        {errors.message && <p className="help-block text-danger">{errors.message.message}</p>}
                     </div>
                     <div style={{
                         display: 'flex',
@@ -107,13 +71,14 @@ function FormContact() {
             </div>
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header>
-                    <Modal.Title>Thành công</Modal.Title>
+                    <Modal.Title>Gửi thành công</Modal.Title>
                     <button type="button" className="close" data-dismiss="modal" aria-label="Close"
                             onClick={handleClose}>
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </Modal.Header>
-                <Modal.Body>Chúng tôi cảm ơn bạn đã liên hệ, chúng tôi sẽ phản hồi sớm nhất.</Modal.Body>
+                <Modal.Body>Chúng tôi cảm ơn bạn đã liên hệ.</Modal.Body>
+
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleClose}>
                         <NavLink to={"/"} style={{color: "black"}}> Trang chủ</NavLink>
