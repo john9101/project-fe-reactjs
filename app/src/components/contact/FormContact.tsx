@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {ContactType} from "../../types/contact.type";
+import {Contact} from "../../types/contact";
 import axios from "axios";
 import {Modal} from "react-bootstrap";
 import Button from "react-bootstrap/Button";
@@ -9,21 +9,21 @@ import http from "../../util/http";
 
 function FormContact() {
 
-    const initialState: ContactType = {
+    const initialState: Contact = {
         username: "",
         email: "",
         topic: "",
         message: ""
     };
 
-    const {register, handleSubmit, reset, formState: {errors}} = useForm<ContactType>({defaultValues: initialState});
+    const {register, handleSubmit, reset, formState: {errors}} = useForm<Contact>({defaultValues: initialState});
     const [show, setShow] = useState(false);
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
 
-    const onSubmit = async (data: ContactType) => {
+    const onSubmit = async (data: Contact) => {
         try {
             // const response = await axios.post('http://localhost:4000/api/contact', data);
             const response = await http.post("contacts", data);
