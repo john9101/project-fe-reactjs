@@ -10,7 +10,7 @@ import bodyParser from 'body-parser'
 import cors from "cors"
 // @ts-ignore
 import morgan from 'morgan'
-import contactRoutes from "./src/routes/contact.routes";
+import contactsRouter from "./src/routes/contacts.routes";
 
 config()
 const app = express()
@@ -22,7 +22,7 @@ app.use(morgan("common"))
 
 app.use('/api/products', productsRouter)
 app.use('/api/categories', categoryRouter);
-app.use('/api/contact', contactRoutes)
+app.use('/api/contacts', contactsRouter)
 const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.CLUSTER_NAME}.nlnlbxk.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`
 
 mongoose.connect(uri)

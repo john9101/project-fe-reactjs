@@ -148,10 +148,10 @@ const contactSchema: Schema = new Schema({
         type: String,
         require: true
     }
-})
+},  { versionKey: false })
 
 export const Category = mongoose.model('Category', categorySchema, 'categories')
 export const Option = mongoose.model('Option', optionSchema, 'options')
 export const Product = mongoose.model('Product', productSchema, 'products')
 export const User = mongoose.model('User', userSchema, 'users')
-export const Contact = mongoose.model("Contact", contactSchema, 'contact')
+export const Contact = mongoose.model("Contact", contactSchema, 'contacts')

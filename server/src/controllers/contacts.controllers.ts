@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
-import contactService from "../services/contact.services";
-export const createContactController = async (req: Request, res: Response) => {
+import contactService from "../services/contacts.services";
+export const saveContactController = async (req: Request, res: Response) => {
     try {
         const { username, email, topic, message } = req.body;
-        const newContact = await contactService.createContact({ username, email, topic, message });
+        const newContact = await contactService.saveContact({ username, email, topic, message });
         res.status(201).json(newContact);
     } catch (error) {
         console.error(error);
