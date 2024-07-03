@@ -30,6 +30,13 @@ export interface IUsers{
     avatar: string;
 }
 
+export interface IContact {
+    username: string,
+    email: string,
+    topic: string,
+    message: string
+}
+
 const optionSchema: Schema = new Schema({
     optionName: {
         type: String,
@@ -147,8 +154,35 @@ const userSchema: Schema = new Schema({
     }
 });
 
+<<<<<<< HEAD
 
 export const User = mongoose.model('User', userSchema)
 export const Category = mongoose.model('Category', categorySchema)
 export const Option = mongoose.model('Option', optionSchema)
 export const Product = mongoose.model('Product', productSchema)
+=======
+const contactSchema: Schema = new Schema({
+    username:{
+        type: String,
+        require: true
+    },
+    email:{
+        type: String,
+        require: true
+    },
+    topic: {
+        type: String,
+        require: true
+    },
+    message:{
+        type: String,
+        require: true
+    }
+},  { versionKey: false })
+
+export const Category = mongoose.model('Category', categorySchema, 'categories')
+export const Option = mongoose.model('Option', optionSchema, 'options')
+export const Product = mongoose.model('Product', productSchema, 'products')
+export const User = mongoose.model('User', userSchema, 'users')
+export const Contact = mongoose.model("Contact", contactSchema, 'contacts')
+>>>>>>> 1ebd7a0865a7594a8a25ef3f19d1ccc045abf526
