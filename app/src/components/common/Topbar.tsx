@@ -1,14 +1,26 @@
-import { Link } from "react-router-dom";
-import { faFacebookF, faInstagram, faLinkedinIn, faTwitter, faYoutube } from '@fortawesome/free-brands-svg-icons';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart, faMagnifyingGlass, faShoppingCart } from "@fortawesome/free-solid-svg-icons";
+import {Link, NavLink} from "react-router-dom";
+import {faFacebookF, faInstagram, faLinkedinIn, faTwitter, faYoutube} from '@fortawesome/free-brands-svg-icons';
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faCartShopping, faHeart, faMagnifyingGlass, faShoppingCart} from "@fortawesome/free-solid-svg-icons";
 import Logo from "./Logo";
 import {useSelector} from "react-redux";
 import {RootState} from "../../store/store";
-import {useEffect} from "react";
+import React, {useState} from "react";
+import CartItemsMini from "../cart/CartItemsMini";
 
 const Topbar = () => {
     const totalItems = useSelector((state: RootState) => state.cart.totalItem);
+
+    const [showCartPreview, setShowCartPreview] = useState(false);
+
+    const handleMouseEnter = () => {
+        setShowCartPreview(true);
+    };
+
+    const handleMouseLeave = () => {
+        setShowCartPreview(false);
+    };
+
     return (
         <div className="container-fluid">
             <div className="row bg-secondary py-2 px-xl-5">
@@ -24,19 +36,19 @@ const Topbar = () => {
                 <div className="col-lg-6 text-center text-lg-right">
                     <div className="d-inline-flex align-items-center">
                         <Link className="text-dark px-2" to="#">
-                            <FontAwesomeIcon icon={faFacebookF} />
+                            <FontAwesomeIcon icon={faFacebookF}/>
                         </Link>
                         <Link className="text-dark px-2" to="#">
-                            <FontAwesomeIcon icon={faTwitter} />
+                            <FontAwesomeIcon icon={faTwitter}/>
                         </Link>
                         <Link className="text-dark px-2" to="#">
-                            <FontAwesomeIcon icon={faLinkedinIn} />
+                            <FontAwesomeIcon icon={faLinkedinIn}/>
                         </Link>
                         <Link className="text-dark px-2" to="#">
-                            <FontAwesomeIcon icon={faInstagram} />
+                            <FontAwesomeIcon icon={faInstagram}/>
                         </Link>
                         <Link className="text-dark pl-2" to="#">
-                            <FontAwesomeIcon icon={faYoutube} />
+                            <FontAwesomeIcon icon={faYoutube}/>
                         </Link>
                     </div>
                 </div>
@@ -44,32 +56,48 @@ const Topbar = () => {
             <div className="row align-items-center py-3 px-xl-5 border-bottom">
                 <div className="col-lg-3 d-none d-lg-block">
                     <Link to={"/"} className="text-decoration-none">
-                        <Logo />
+                        <Logo/>
                     </Link>
                 </div>
                 <div className="col-lg-6 col-6 text-left">
                     <form action="">
                         <div className="input-group">
-                            <input type="text" className="form-control" placeholder="Tìm kiếm sản phẩm" />
+                            <input type="text" className="form-control" placeholder="Tìm kiếm sản phẩm"/>
                             <div className="input-group-append">
                                 <span className="input-group-text bg-transparent text-primary">
-                                    <FontAwesomeIcon icon={faMagnifyingGlass} size="1x" color="#000" />                            </span>
+                                    <FontAwesomeIcon icon={faMagnifyingGlass} size="1x" color="#000"/>
+                                </span>
                             </div>
                         </div>
                     </form>
                 </div>
                 <div className="col-lg-3 col-6 text-right">
-                    <Link to="#" className="btn border">
-                        <FontAwesomeIcon icon={faHeart} className="text-primary" />                        <span className="badge">0</span>
-                    </Link>
-                    <Link to={"/cart"} className="btn border">
-                        <FontAwesomeIcon icon={faShoppingCart} className="text-primary" />
-                        <span className="badge">{totalItems}</span>
-                    </Link>
+                    <NavLink to="#" className="btn border">
+                        <FontAwesomeIcon icon={faHeart} className="text-primary"/>
+                        <span className="badge">0</span>
+                    </NavLink>
+                    <div className="cart-container" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+                        <NavLink to="/cart" className="btn border">
+                            <FontAwesomeIcon icon={faShoppingCart} className="text-primary"/>
+                            <span className="badge">{totalItems}</span>
+                        </NavLink>
+                        <div className="hover-fill-space"></div>
+                        {showCartPreview && (
+                            <div className="cart-preview">
+                                <CartItemsMini/>
+                                <NavLink to={"/cart"}>
+                                    <div className="cart-buttons">
+                                        <FontAwesomeIcon style={{marginRight: ".3em"}} icon={faCartShopping}/>
+                                        Xem giỏ hàng
+                                    </div>
+                                </NavLink>
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
         </div>
-    )
+    );
 }
 
-export default Topbar
+export default Topbar;

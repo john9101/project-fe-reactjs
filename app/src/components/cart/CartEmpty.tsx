@@ -12,7 +12,6 @@ export default function CartEmpty(){
                             <div className="col-sm-12 empty-cart-cls text-center">
                                 <ShoppingCartIcon style={{fontSize: '80px', color: "#D19C97"}}/>
                                 <h3><strong>Giỏ hàng trống</strong></h3>
-                                <h4>Add something to make me happy :)</h4>
                                 <NavLink to="/" className="btn btn-primary cart-btn-transform m-3" data-abc="true">Tiếp
                                     tục mua sắm</NavLink>
                             </div>
