@@ -7,8 +7,7 @@ export interface IOption{
             quantity: number
         }
     ]
-    price: number
-    option_name: string
+    optionName: string
 }
 
 export interface IUser{
@@ -24,7 +23,7 @@ export interface IUser{
 }
 
 const optionSchema: Schema = new Schema({
-    option_name: {
+    optionName: {
         type: String,
         require: true
     },
@@ -40,9 +39,16 @@ const optionSchema: Schema = new Schema({
             }
         }
     ],
-    price: {
-        type: Number,
-        require: true
+    image: {
+        type: String,
+        required: true
+    },
+    productId: {
+        type: Schema.Types.ObjectId,
+        ref: "Product",
+    },
+    description: {
+        type: String,
     }
 })
 
@@ -58,6 +64,9 @@ const productSchema: Schema = new Schema({
         type: String, 
         require: true
     },
+    rating: {
+        type: Number
+    },
     category: {
         type: Schema.Types.ObjectId,
         ref: 'Category',
@@ -69,25 +78,23 @@ const productSchema: Schema = new Schema({
     longDescription: {
         type: String
     },
-    salePrice: {
-        type: Number
-    },
     originalPrice: {
         type: Number, 
         require: true
     },
-    images: [
-        {
-            type: String, 
-            require: true
-        }
-    ],
+    discountPercent: {
+        type: Number
+    },
     options: [
         {
             type: Schema.Types.ObjectId,
             ref: "Option"
         }
-    ]
+    ],
+    uniformGender: {
+        type: String,
+        require: true
+    }
 })
 
 const userSchema: Schema = new Schema({

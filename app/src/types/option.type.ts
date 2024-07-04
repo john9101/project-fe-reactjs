@@ -4,5 +4,8 @@ export interface Option {
     _id: string
     stocks: Stock[]
     price: number,
-    option_name: string
+    optionName: string
+    image: string
+    productId?: string
+    description?: string
 }

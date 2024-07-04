@@ -157,20 +157,20 @@ const ProductDetail = ()=> {
                 <div id="product-carousel" className="carousel slide" data-ride="carousel">
                     <div className="carousel-inner border">
                         <Slider ref={sliderRef} {... sliderSettings}>
-                            {product?.images.map((image, index) => (
-                                <div key={index} className="carousel-item active overflow-hidden" >
-                                    <img
-                                        className="w-100 h-100"
-                                        src={image}
-                                        alt="Image"
-                                        onMouseEnter={handleMouseEnterImage}
-                                        onMouseMove={event => handleMouseMoveAroundImage(event, index)}
-                                        onMouseLeave={handleMouseLeaveImage}
-                                        style={zoomStyle}
-                                        ref={el => imageRefs.current[index] = el}
-                                    />
-                                </div>
-                            ))}
+                            {/*{product?.images.map((image, index) => (*/}
+                            {/*    <div key={index} className="carousel-item active overflow-hidden" >*/}
+                            {/*        <img*/}
+                            {/*            className="w-100 h-100"*/}
+                            {/*            src={image}*/}
+                            {/*            alt="Image"*/}
+                            {/*            onMouseEnter={handleMouseEnterImage}*/}
+                            {/*            onMouseMove={event => handleMouseMoveAroundImage(event, index)}*/}
+                            {/*            onMouseLeave={handleMouseLeaveImage}*/}
+                            {/*            style={zoomStyle}*/}
+                            {/*            ref={el => imageRefs.current[index] = el}*/}
+                            {/*        />*/}
+                            {/*    </div>*/}
+                            {/*))}*/}
                         </Slider>
                     </div>
                 </div>
@@ -209,16 +209,16 @@ const ProductDetail = ()=> {
                 <div className="d-flex mb-4">
                     <p className="text-dark font-weight-medium mb-0 mr-3">Mẫu đồng phục:</p>
                     <form>
-                        {
-                            product?.options.map(option => (
-                                <div key={option._id} className="custom-control custom-radio custom-control-inline">
-                                    <input type="radio" className="custom-control-input" value={option.option_name}
-                                           id={option._id} name="option" onChange={handleSetSelectedOptionName}/>
-                                    <label className="custom-control-label"
-                                           htmlFor={option._id}>{option.option_name}</label>
-                                </div>
-                            ))
-                        }
+                        {/*{*/}
+                        {/*    product?.options.map(option => (*/}
+                        {/*        <div key={option._id} className="custom-control custom-radio custom-control-inline">*/}
+                        {/*            <input type="radio" className="custom-control-input" value={option.option_name}*/}
+                        {/*                   id={option._id} name="option" onChange={handleSetSelectedOptionName}/>*/}
+                        {/*            <label className="custom-control-label"*/}
+                        {/*                   htmlFor={option._id}>{option.option_name}</label>*/}
+                        {/*        </div>*/}
+                        {/*    ))*/}
+                        {/*}*/}
                     </form>
                 </div>
                 <p className="mb-4">Số lượng mẫu trong kho: {quantityInStock}</p>
