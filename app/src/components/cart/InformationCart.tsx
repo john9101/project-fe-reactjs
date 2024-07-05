@@ -2,6 +2,7 @@ import React, { useMemo } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store/store";
 import { formatCurrency } from "../../util/formatCurrency";
+import Voucher from "../common/Voucher";
 
 export default function InformationCart() {
     const cart = useSelector((state: RootState) => state.cart);
@@ -34,6 +35,11 @@ export default function InformationCart() {
                     </div>
                 </div>
             </form>
+            <div className="voucher-container">
+                <Voucher/>
+                <Voucher/>
+                <Voucher/>
+            </div>
             <div className="card border-secondary mb-5">
                 <div className="card-header bg-secondary border-0">
                     <h4 className="font-weight-semi-bold m-0">Giỏ hàng</h4>

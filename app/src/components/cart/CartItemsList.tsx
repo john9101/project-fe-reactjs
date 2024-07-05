@@ -1,13 +1,13 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash } from "@fortawesome/free-solid-svg-icons";
-import { formatCurrency } from "../../util/formatCurrency";
-import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../store/store";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faTrash} from "@fortawesome/free-solid-svg-icons";
+import {formatCurrency} from "../../util/formatCurrency";
+import React, {useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {AppDispatch, RootState} from "../../store/store";
 import Button from "react-bootstrap/Button";
-import { removeFromCart, updateCartItemQuantity, removeAllFromCart } from "../../store/cart.slice";
+import {removeFromCart, updateCartItemQuantity, removeAllFromCart} from "../../store/cart.slice";
 import ButtonQuantity from "../common/ButtonQuantity";
-import { Modal } from 'react-bootstrap';
+import {Modal} from 'react-bootstrap';
 
 export default function CartItemsList() {
     const cart = useSelector((state: RootState) => state.cart);
@@ -50,13 +50,14 @@ export default function CartItemsList() {
     };
 
     const handleQuantityChange = (id: string, newQuantity: number) => {
-        dispatch(updateCartItemQuantity({ id, newQuantity }));
+        dispatch(updateCartItemQuantity({id, newQuantity}));
     };
 
     return (
         <>
-            <div className="col-lg-8 table-responsive mb-5">
-                <table className="table table-bordered text-center mb-0">
+            <div className="col-lg-8 table-responsive mb-5 table-cart"
+                 style={{maxHeight: "500px", overflowY: "auto", msOverflowStyle: "none"}}>
+                <table className="table table-bordered text-center mb-0 fixed-header">
                     <thead className="bg-secondary text-dark">
                     <tr>
                         <th>Sản phẩm</th>

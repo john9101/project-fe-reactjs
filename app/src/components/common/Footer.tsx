@@ -39,7 +39,7 @@ const Footer = () => {
                         <div className="col-md-4 mb-5 text-left">
                             <h5 className="font-weight-bold text-dark mb-4">Liên kết </h5>
                             <div className="d-flex flex-column justify-content-start ">
-                                <NavLink className="text-dark mb-2" to="/home">
+                                <NavLink className="text-dark mb-2" to="/">
                                     <StyledFontAwesomeIcon icon={faHouse}/>Trang chủ
                                 </NavLink>
                                 <NavLink className="text-dark mb-2" to="#"><i
