@@ -11,4 +11,5 @@ export interface Product {
     options: Option[]
     originalPrice: number
     discountPercent: number
+    uniformGender: string
 }

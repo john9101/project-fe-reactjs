@@ -44,9 +44,12 @@ const optionSchema: Schema = new Schema({
         type: String,
         required: true
     },
-    product: {
+    productId: {
         type: Schema.Types.ObjectId,
         required: true
+    },
+    description: {
+        type: String
     }
 })
 
@@ -86,7 +89,11 @@ const productSchema: Schema = new Schema({
             type: Schema.Types.ObjectId,
             ref: "Option"
         }
-    ]
+    ],
+    uniformGender: {
+        type: String,
+        require: true
+    }
 })
 
 const userSchema: Schema = new Schema({
@@ -124,7 +131,32 @@ const userSchema: Schema = new Schema({
     }
 })
 
+const requireSchema: Schema = new Schema({
+    fullName: {
+        type: String,
+        require: true
+    },
+    email: {
+        type: String,
+        require: true,
+    },
+    phone: {
+        type: String,
+        require: true
+    },
+    companyName: {
+        type: String
+    },
+    content: {
+        type: String
+    },
+    sendDate: {
+        type: Date
+    }
+})
+
 export const Category = mongoose.model('Category', categorySchema, 'categories')
 export const Option = mongoose.model('Option', optionSchema, 'options')
 export const Product = mongoose.model('Product', productSchema, 'products')
 export const User = mongoose.model('User', userSchema, 'users')
+export const Require =mongoose.model("Require", requireSchema, 'requires')

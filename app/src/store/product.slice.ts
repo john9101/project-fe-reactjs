@@ -8,7 +8,10 @@ interface ProductSliceState {
     productDetail: {
         product: Product | null,
         quantityInStock: number,
-        selectedOptionName: string | null,
+        selectedOption: {
+            name: string | null,
+            description: string | null
+        } | null,
         selectedSize: string | null
     };
     status: 'idle' | 'loading' | 'succeeded' | 'failed';
@@ -20,7 +23,10 @@ const initialState: ProductSliceState = {
     productDetail: {
         product: null,
         quantityInStock: 0,
-        selectedOptionName:  null,
+        selectedOption: {
+            name: null,
+            description: null
+        },
         selectedSize: null
     },
     status: 'idle',
@@ -50,8 +56,8 @@ const productSlice = createSlice({
             const options = state.productDetail.product!.options
             if(action.payload) {
                 state.productDetail.selectedSize = action.payload
-                if(state.productDetail.selectedOptionName){
-                    const selectedOption = options.find(option => option.optionName === state.productDetail.selectedOptionName)
+                if(state.productDetail.selectedOption!.name){
+                    const selectedOption = options.find(option => option.optionName === state.productDetail.selectedOption!.name)
                     const selectedStock = selectedOption!.stocks.find(stock => stock.size === state.productDetail.selectedSize)
                     state.productDetail.quantityInStock = selectedStock?.quantity!
                 }
@@ -60,17 +66,19 @@ const productSlice = createSlice({
                 state.productDetail.quantityInStock = totalQuantityInStock(options)
             }
         },
-        setSelectedOptionName: (state, action: PayloadAction<string | null>) =>{
+        setSelectedOption: (state, action: PayloadAction<string | null>) =>{
+            console.log(1111)
             const options = state.productDetail.product!.options;
             if(action.payload){
-                state.productDetail.selectedOptionName = action.payload;
-                const selectedOption = options.find(option => option.optionName === state.productDetail.selectedOptionName)
+                state.productDetail.selectedOption!.name = action.payload;
+                const selectedOption = options.find(option => option.optionName === state.productDetail.selectedOption!.name)
+                state.productDetail.selectedOption!.description = selectedOption!.description!
                 if(state.productDetail.selectedSize){
                     const selectedStock = selectedOption!.stocks.find(stock => stock.size === state.productDetail.selectedSize)
                     state.productDetail.quantityInStock = selectedStock?.quantity!
                 }
             }else{
-                state.productDetail.selectedOptionName = null
+                state.productDetail.selectedOption = {name: null, description: null}
                 state.productDetail.quantityInStock = totalQuantityInStock(options)
             }
         }
@@ -81,14 +89,14 @@ const productSlice = createSlice({
                 state.status = "succeeded"
                 let product = action.payload;
                 state.productDetail!.product = product
-                if(!state.productDetail.selectedOptionName || !state.productDetail.selectedSize){
+                if(!state.productDetail.selectedOption || !state.productDetail.selectedSize){
                     state.productDetail!.quantityInStock = totalQuantityInStock(product.options)
                 }
             })
     }
 })
 
-export const {setSelectedOptionName, setSelectedSize} = productSlice.actions
+export const {setSelectedOption, setSelectedSize} = productSlice.actions
 const productReducer = productSlice.reducer
 export default productReducer;
 

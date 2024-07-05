@@ -2,7 +2,7 @@ import {useParams} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {AppDispatch, RootState} from "../store/store";
 import React, {useEffect, useRef, useState} from "react";
-import {fetchProductDetail, setSelectedOptionName, setSelectedSize} from "../store/product.slice";
+import {fetchProductDetail, setSelectedOption, setSelectedSize} from "../store/product.slice";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faPlus,faMinus, faCircleChevronLeft, faCircleChevronRight, faCircleUser, faCartShopping, faHeart, faClipboard} from "@fortawesome/free-solid-svg-icons";
 import {faFacebookF, faXTwitter, faLinkedinIn, faPinterest} from "@fortawesome/free-brands-svg-icons"
@@ -12,12 +12,14 @@ import StarIcon from '@mui/icons-material/Star';
 import Slider, { Settings } from "react-slick";
 import {formatCurrency} from "../util/formatCurrency";
 import GridRadioButtons from "../components/common/GridRadioButtons";
-import {Badge} from "react-bootstrap";
+import {Badge, Form, Modal, Button} from "react-bootstrap";
 import {Controller, useForm} from "react-hook-form";
 import * as Yup from 'yup'
 import {yupResolver} from "@hookform/resolvers/yup";
+import {isValidPhone} from "../util/validatePhone";
+import {isValidEmail} from "../util/validateEmail";
 
-const validationSchema = Yup.object().shape({
+const reviewValidationSchema = Yup.object().shape({
     rating: Yup.number()
         .required()
         .min(1, 'Bạn phải đánh giá ít nhất là 1 sao'),
@@ -27,12 +29,47 @@ const validationSchema = Yup.object().shape({
         .max(1000, 'Nội dung nhận xét của bạn chỉ tối đa 1000 ký tự')
 });
 
+const requireValidationSchema = Yup.object().shape({
+    fullName: Yup.string()
+        .required("Họ và tên người đại diện không được bỏ trống"),
+    email: Yup.string()
+        .required("Địa chỉ email không được bỏ trống")
+        .test('emailValidation', 'Địa chỉ email không hợp lệ', async (email: string) => {
+            if(email){
+                return await isValidEmail(email);
+            }else{
+                return true
+            }
+        }),
+    phone: Yup.string()
+        .required("Số điện thoại không được bỏ trống")
+        .test("phoneValidation", 'Số điện thoại không hợp lệ', async (phone: string) => {
+            if(phone){
+                return await isValidPhone(phone);
+            }else{
+                return true
+            }
+        }),
+    content: Yup.string()
+        .required("Nội dung yêu cầu không được bỏ trống")
+        .min(10, 'Nội dung yêu cầu phải tối thiểu 10 ký tự')
+        .max(1000, 'Nội dung yêu cầu chỉ tối đa 1000 ký tự')
+})
+
 interface ReviewFormData{
     rating: number
     comment: string
     fullName?: string
     avatar?: string
     sentDate?: string
+}
+
+interface RequireFormData{
+    fullName: string
+    email: string
+    phone: string
+    companyName?: string
+    content: string
 }
 
 interface TabPanelProps{
@@ -88,13 +125,19 @@ const ProductDetail = ()=> {
     //     message: ''
     // })
 
+    const [showRequireForm, setShowRequireForm] = useState<boolean>(false);
+    const handleClose = () => {
+        resetRequireForm()
+        setShowRequireForm(false)
+    };
+    const handleShowRequireForm = () => setShowRequireForm(true);
+
     useEffect(() => {
         const productDetailPromise = dispatch(fetchProductDetail(productId as string));
         return () => {
             productDetailPromise.abort()
         }
     }, [dispatch, productId]);
-
 
     // const handleSetSelectedOptionName = (e: React.ChangeEvent<HTMLInputElement>) => {
     //     const optionIndex = options?.findIndex(option => option.optionName === e.target.value);
@@ -123,7 +166,7 @@ const ProductDetail = ()=> {
                 }
             }
         }
-        dispatch(setSelectedOptionName(optionName))
+        dispatch(setSelectedOption(optionName))
     }
 
     // const handleSetSelectedSize = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -213,149 +256,163 @@ const ProductDetail = ()=> {
         });
     };
 
-    const {register, handleSubmit, formState: {errors}, control} = useForm<ReviewFormData>({
-        resolver: yupResolver(validationSchema),
+    const {register: reviewFormRegister, handleSubmit: handleSubmitReviewForm, formState: {errors: reviewFormErrors}, control: reviewFormControl} = useForm<ReviewFormData>({
+        resolver: yupResolver(reviewValidationSchema),
         defaultValues: {
             rating: 0,
             comment: ''
         },
     })
 
-    const handleSendReview = (data: ReviewFormData)=>{
+    const {
+        register: requireFormRegister,
+        handleSubmit: handleSubmitRequireForm,
+        formState: {errors: requireFormErrors},
+        reset: resetRequireForm
+    } = useForm<RequireFormData>({
+        resolver: yupResolver(requireValidationSchema)
+    })
 
+    const onSubmitSendReview = (data: ReviewFormData)=>{
+    }
+
+    const onSubmitSendRequire = async (data: RequireFormData)=>{
+        console.log(11111111)
     }
 
     return (
         <div className="container-fluid py-5">
-        <div className="row px-xl-5">
-            <div className="col-lg-5 pb-5">
-                <div id="product-carousel" className="carousel slide" data-ride="carousel">
-                    <div className="carousel-inner border">
-                        <Slider ref={sliderRef} {... sliderSettings}>
-                            {images?.map((image, index) => (
-                                <div key={index} className="carousel-item active overflow-hidden" >
-                                    <img
-                                        className="w-100 h-100"
-                                        src={image}
-                                        alt="Image"
-                                        onMouseEnter={handleMouseEnterImage}
-                                        onMouseMove={event => handleMouseMoveAroundImage(event, index)}
-                                        onMouseLeave={handleMouseLeaveImage}
-                                        style={zoomStyle}
-                                        ref={el => imageRefs.current[index] = el}
-                                    />
-                                </div>
-                            ))}
-                        </Slider>
+            <div className="row px-xl-5">
+                <div className="col-lg-5 pb-5">
+                    <div id="product-carousel" className="carousel slide" data-ride="carousel">
+                        <div className="carousel-inner border">
+                            <Slider ref={sliderRef} {... sliderSettings}>
+                                {images?.map((image, index) => (
+                                    <div key={index} className="carousel-item active overflow-hidden" >
+                                        <img
+                                            className="w-100 h-100"
+                                            src={image}
+                                            alt="Image"
+                                            onMouseEnter={handleMouseEnterImage}
+                                            onMouseMove={event => handleMouseMoveAroundImage(event, index)}
+                                            onMouseLeave={handleMouseLeaveImage}
+                                            style={zoomStyle}
+                                            ref={el => imageRefs.current[index] = el}
+                                        />
+                                    </div>
+                                ))}
+                            </Slider>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="col-lg-7 pb-5">
+                    <h3 className="font-weight-medium">{product?.name}</h3>
+                    <div className="d-flex align-items-center mb-1 mt-3">
+                        <div className="text-primary mr-2">
+                            <StarIcon/>
+                        </div>
+                        <p className={'mb-0'}><span className={'font-weight-semi-bold'}>Đánh giá:</span> {product?.rating}</p>
+                    </div>
+                    <div className="d-flex align-items-center mb-4">
+                        <div className="text-primary mr-2">
+                            <StyleIcon/>
+                        </div>
+                        <p className={'mb-0 display-6'}><span className={'font-weight-semi-bold'}>Danh mục:</span> {product?.category.name}</p>
+                    </div>
+                    <h3 className="font-weight-bold mb-3 d-inline-flex align-items-baseline">
+                        {formatCurrency((1 - product?.discountPercent!) * product?.originalPrice!)}
+                        {
+                            product?.discountPercent !== 0 &&
+                            <>
+                                <Badge style={{color: 'white'}} className={'mr-2 order-first align-self-center rounded'}>
+                                    {-(product?.discountPercent as number * 100)}%
+                                </Badge>
+                                <s className={"font-weight-medium ml-2"} style={{fontSize: "1rem", color: "var(--gray)"}}>
+                                    {formatCurrency(product?.originalPrice!)}
+                                </s>
+                            </>
+                        }
+                    </h3>
+                    <p className="mb-3">{product?.shortDescription}</p>
+                    <div className="d-flex flex-column mb-4">
+                    <p className="text-dark font-weight-medium mb-3">Kích cỡ: {productDetail.selectedSize && <span className={'text-primary'}>{productDetail.selectedSize}</span>}</p>
+                        <form>
+                            {/*{*/}
+                            {/*    uniqueSizes.map(size => (*/}
+                            {/*        <div className="custom-control custom-radio custom-control-inline">*/}
+                            {/*            <input type="radio" className="custom-control-input" value={size} id={size}*/}
+                            {/*                   name="size" onChange={handleSetSelectedSize}/>*/}
+                            {/*            <label className="custom-control-label" htmlFor={size}>{size}</label>*/}
+                            {/*        </div>*/}
+                            {/*    ))*/}
+                            {/*}*/}
+
+                            {uniqueSizes && <GridRadioButtons arrayValue={uniqueSizes} onSetSelectedSize={handleSetSelectedSize}/>}
+                        </form>
+                    </div>
+                    <div className="d-flex flex-column mb-4">
+                        <p className="text-dark font-weight-medium mb-3">
+                            Mẫu: {productDetail.selectedOption?.name && <span className={'text-primary'}>{productDetail.selectedOption!.name} ({productDetail.selectedOption!.description})</span>}
+                        </p>
+                        <form>
+                            {/*{*/}
+                            {/*    options?.map(option => (*/}
+                            {/*        <div key={option._id} className="custom-control custom-radio custom-control-inline">*/}
+                            {/*            <input type="radio" className="custom-control-input" value={option.optionName}*/}
+                            {/*                   id={option._id} name="option" onChange={handleSetSelectedOptionName}/>*/}
+                            {/*            <label className="custom-control-label"*/}
+                            {/*                   htmlFor={option._id}>{option.optionName}</label>*/}
+                            {/*        </div>*/}
+                            {/*    ))*/}
+                            {/*}*/}
+
+                            {optionNames && <GridRadioButtons arrayValue={optionNames!} onSetSelectedOptionName={handleSetSelectedOptionName}/>}
+                        </form>
+                    </div>
+                    <p className="text-dark font-weight-medium mb-3">Số lượng mẫu trong kho: <span className={'text-primary'}>{quantityInStock}</span></p>
+                    <div className="d-flex flex-wrap align-items-center mb-4 pt-2" style={{gap: '0.8rem'}}>
+                        <div className="input-group quantity" style={{width: "130px"}}>
+                            <div className="input-group-btn">
+                                <button className="btn btn-primary btn-minus">
+                                    <FontAwesomeIcon icon={faMinus}/>
+                                </button>
+                            </div>
+                            <input type="text" className="form-control bg-secondary text-center" value="1"/>
+                            <div className="input-group-btn">
+                                <button className="btn btn-primary btn-plus">
+                                    <FontAwesomeIcon icon={faPlus}/>
+                                </button>
+                            </div>
+                        </div>
+                        <button className="btn btn-primary px-3"><FontAwesomeIcon className={'mr-1'} icon={faCartShopping}/>Thêm
+                            vào giỏ hàng
+                        </button>
+                        <button className="btn btn-primary px-3"><FontAwesomeIcon className={'mr-1'} icon={faHeart}/> Thêm
+                            vào mục yêu thích
+                        </button>
+                        <button className="btn btn-primary px-3" onClick={handleShowRequireForm}><FontAwesomeIcon className={'mr-1'} icon={faClipboard}/> Yêu cầu thiết kế & kích cỡ khác
+                        </button>
+                    </div>
+                    <div className="d-flex pt-2">
+                        <p className="text-dark font-weight-medium mb-0 mr-2">Chia sẻ:</p>
+                        <div className="d-inline-flex">
+                            <a className="text-dark px-2" href="">
+                                <FontAwesomeIcon icon={faFacebookF}/>
+                            </a>
+                            <a className="text-dark px-2" href="">
+                                <FontAwesomeIcon icon={faXTwitter}/>
+                            </a>
+                            <a className="text-dark px-2" href="">
+                                <FontAwesomeIcon icon={faLinkedinIn}/>
+                            </a>
+                            <a className="text-dark px-2" href="">
+                                <FontAwesomeIcon icon={faPinterest}/>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
-
-            <div className="col-lg-7 pb-5">
-                <h3 className="font-weight-medium">{product?.name}</h3>
-                <div className="d-flex align-items-center mb-1 mt-3">
-                    <div className="text-primary mr-2">
-                        <StarIcon/>
-                    </div>
-                    <p className={'mb-0'}><span className={'font-weight-semi-bold'}>Đánh giá:</span> {product?.rating}</p>
-                </div>
-                <div className="d-flex align-items-center mb-4">
-                    <div className="text-primary mr-2">
-                        <StyleIcon/>
-                    </div>
-                    <p className={'mb-0 display-6'}><span className={'font-weight-semi-bold'}>Danh mục:</span> {product?.category.name}</p>
-                </div>
-                <h3 className="font-weight-bold mb-3 d-inline-flex align-items-baseline">
-                    {formatCurrency((1 - product?.discountPercent!) * product?.originalPrice!)}
-                    {
-                        product?.discountPercent !== 0 &&
-                        <>
-                            <Badge style={{color: 'white'}} className={'mr-2 order-first align-self-center rounded'}>
-                                {-(product?.discountPercent as number * 100)}%
-                            </Badge>
-                            <s className={"font-weight-medium ml-2"} style={{fontSize: "1rem", color: "var(--gray)"}}>
-                                {formatCurrency(product?.originalPrice!)}
-                            </s>
-                        </>
-                    }
-                </h3>
-                <p className="mb-3">{product?.shortDescription}</p>
-                <div className="d-flex flex-column mb-4">
-                <p className="text-dark font-weight-medium mb-3">Kích cỡ: {productDetail.selectedSize && <span className={'text-primary'}>{productDetail.selectedSize}</span>}</p>
-                    <form>
-                        {/*{*/}
-                        {/*    uniqueSizes.map(size => (*/}
-                        {/*        <div className="custom-control custom-radio custom-control-inline">*/}
-                        {/*            <input type="radio" className="custom-control-input" value={size} id={size}*/}
-                        {/*                   name="size" onChange={handleSetSelectedSize}/>*/}
-                        {/*            <label className="custom-control-label" htmlFor={size}>{size}</label>*/}
-                        {/*        </div>*/}
-                        {/*    ))*/}
-                        {/*}*/}
-
-                        {uniqueSizes && <GridRadioButtons arrayValue={uniqueSizes} onSetSelectedSize={handleSetSelectedSize}/>}
-                    </form>
-                </div>
-                <div className="d-flex flex-column mb-4">
-                    <p className="text-dark font-weight-medium mb-3">Mẫu: {productDetail.selectedOptionName && <span className={'text-primary'}>{productDetail.selectedOptionName}</span>}</p>
-                    <form>
-                        {/*{*/}
-                        {/*    options?.map(option => (*/}
-                        {/*        <div key={option._id} className="custom-control custom-radio custom-control-inline">*/}
-                        {/*            <input type="radio" className="custom-control-input" value={option.optionName}*/}
-                        {/*                   id={option._id} name="option" onChange={handleSetSelectedOptionName}/>*/}
-                        {/*            <label className="custom-control-label"*/}
-                        {/*                   htmlFor={option._id}>{option.optionName}</label>*/}
-                        {/*        </div>*/}
-                        {/*    ))*/}
-                        {/*}*/}
-
-                        {optionNames && <GridRadioButtons arrayValue={optionNames!} onSetSelectedOptionName={handleSetSelectedOptionName}/>}
-                    </form>
-                </div>
-                <p className="text-dark font-weight-medium mb-3">Số lượng mẫu trong kho: <span className={'text-primary'}>{quantityInStock}</span></p>
-                <div className="d-flex flex-wrap align-items-center mb-4 pt-2" style={{gap: '0.8rem'}}>
-                    <div className="input-group quantity" style={{width: "130px"}}>
-                        <div className="input-group-btn">
-                            <button className="btn btn-primary btn-minus">
-                                <FontAwesomeIcon icon={faMinus}/>
-                            </button>
-                        </div>
-                        <input type="text" className="form-control bg-secondary text-center" value="1"/>
-                        <div className="input-group-btn">
-                            <button className="btn btn-primary btn-plus">
-                                <FontAwesomeIcon icon={faPlus}/>
-                            </button>
-                        </div>
-                    </div>
-                    <button className="btn btn-primary px-3"><FontAwesomeIcon className={'mr-1'} icon={faCartShopping}/>Thêm
-                        vào giỏ hàng
-                    </button>
-                    <button className="btn btn-primary px-3"><FontAwesomeIcon className={'mr-1'} icon={faHeart}/> Thêm
-                        vào mục yêu thích
-                    </button>
-                    <button className="btn btn-primary px-3"><FontAwesomeIcon className={'mr-1'} icon={faClipboard}/> Yêu cầu thiết kế & kích cỡ khác
-                    </button>
-                </div>
-                <div className="d-flex pt-2">
-                    <p className="text-dark font-weight-medium mb-0 mr-2">Chia sẻ:</p>
-                    <div className="d-inline-flex">
-                        <a className="text-dark px-2" href="">
-                            <FontAwesomeIcon icon={faFacebookF}/>
-                        </a>
-                        <a className="text-dark px-2" href="">
-                            <FontAwesomeIcon icon={faXTwitter}/>
-                        </a>
-                        <a className="text-dark px-2" href="">
-                            <FontAwesomeIcon icon={faLinkedinIn}/>
-                        </a>
-                        <a className="text-dark px-2" href="">
-                            <FontAwesomeIcon icon={faPinterest}/>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
             <div className="row px-xl-5">
                 <div className="col">
                     <Box sx={{borderBottom: 1, borderColor: 'divider'}}>
@@ -397,13 +454,13 @@ const ProductDetail = ()=> {
                                 <div className="col-md-6">
                                     <h4 className="mb-2">Để lại đánh giá và nhận xét của bạn</h4>
                                     <small>Các trường bắt buộc được đánh dấu *</small>
-                                    <form onSubmit={handleSubmit(handleSendReview)}>
+                                    <form onSubmit={handleSubmitReviewForm(onSubmitSendReview)}>
                                         <div className="d-flex my-3 align-items-baseline">
                                             <p className="mb-0 mr-2">Đánh giá của bạn * :</p>
                                             <div className="text-primary align-self-center">
                                                 <Controller
                                                     name="rating"
-                                                    control={control}
+                                                    control={reviewFormControl}
                                                     render={({field}) => (
                                                         <Rating
                                                             {...field}
@@ -415,13 +472,13 @@ const ProductDetail = ()=> {
                                                     )}
                                                 />
                                             </div>
-                                            {errors.rating && <small className={'ml-2'} style={{color: 'var(--red)'}}>({errors.rating.message})</small>}
+                                            {reviewFormErrors.rating && <small className={'ml-2'} style={{color: 'var(--red)'}}>({reviewFormErrors.rating.message})</small>}
                                         </div>
                                         <div className="form-group">
                                             <label htmlFor="message">Nhận xét của bạn *:</label>
-                                            <textarea id="message" cols={30} rows={5} className="form-control" {...register('comment')}
+                                            <textarea id="message" cols={30} rows={5} className="form-control" {...reviewFormRegister('comment')}
                                                       placeholder="Viết nội dụng nhận xét của bạn ở đây (tối thiểu 10 ký tự và tối đa 1000 ký tự)"></textarea>
-                                            {errors.comment && <small style={{color: 'var(--red)'}}>{errors.comment.message}</small>}
+                                            {reviewFormErrors.comment && <small style={{color: 'var(--red)'}}>{reviewFormErrors.comment.message}</small>}
                                         </div>
                                         <div className="form-group mb-0">
                                             <input type="submit" value="Gửi đánh giá & nhận xét"
@@ -434,6 +491,87 @@ const ProductDetail = ()=> {
                     </ProductDetailTabPanel>
                 </div>
             </div>
+            <Modal show={showRequireForm} onHide={handleClose}>
+                <Modal.Header>
+                    <Modal.Title>Yêu cầu thiết kế & kích cỡ khác</Modal.Title>
+                    <button type="button" className="close align-self-center" style={{outline: 'none'}} onClick={handleClose} >
+                        <span style={{fontSize: '2rem'}}>&times;</span>
+                    </button>
+                </Modal.Header>
+                <Form onSubmit={handleSubmitRequireForm(onSubmitSendRequire)}>
+                    <Modal.Body>
+                            <Form.Group className="mb-3">
+                                <Form.Label>Họ và tên người đại diện *</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    placeholder="Nhập họ và tên của người đại diện"
+                                    autoFocus
+                                    {...requireFormRegister('fullName')}
+                                    isInvalid={!!requireFormErrors.fullName}
+                                />
+                                <Form.Control.Feedback type="invalid">
+                                    {requireFormErrors.fullName?.message}
+                                </Form.Control.Feedback>
+                            </Form.Group>
+                            <Form.Group className="mb-3">
+                                <Form.Label>Địa chỉ email *</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    placeholder="Nhập email của cá nhân hoặc công ty"
+                                    autoFocus
+                                    {...requireFormRegister('email')}
+                                    isInvalid={!!requireFormErrors.email}
+                                />
+                                <Form.Control.Feedback type="invalid">
+                                    {requireFormErrors.email?.message}
+                                </Form.Control.Feedback>
+                            </Form.Group>
+                            <Form.Group className="mb-3">
+                                <Form.Label>Số điện thoại *</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    placeholder="Nhập số điện thoại của cá nhân hoặc công ty"
+                                    autoFocus
+                                    {...requireFormRegister('phone')}
+                                    isInvalid={!!requireFormErrors.phone}
+                                />
+                                <Form.Control.Feedback type="invalid">
+                                    {requireFormErrors.phone?.message}
+                                </Form.Control.Feedback>
+                            </Form.Group>
+                            <Form.Group className="mb-3">
+                                <Form.Label>Tên công ty (nếu có)</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    placeholder="Nhập tên công ty đang làm việc"
+                                    autoFocus
+                                />
+                            </Form.Group>
+                            <Form.Group className="mb-3">
+                                <Form.Label>Nội dung yêu cầu *</Form.Label>
+                                <Form.Control
+                                    as="textarea"
+                                    rows={3}
+                                    autoFocus
+                                    placeholder="Nhập nội dung yêu cầu"
+                                    {...requireFormRegister('content')}
+                                    isInvalid={!!requireFormErrors.content}
+                                />
+                                <Form.Control.Feedback type="invalid">
+                                    {requireFormErrors.content?.message}
+                                </Form.Control.Feedback>
+                            </Form.Group>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button onClick={handleClose}>
+                            Hủy yêu cầu
+                        </Button>
+                        <Button type='submit'>
+                            Gửi yêu cầu
+                        </Button>
+                    </Modal.Footer>
+                </Form>
+            </Modal>
         </div>
     )
 }
