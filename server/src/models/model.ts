@@ -11,6 +11,15 @@ export interface IOption{
     option_name: string
 }
 
+export interface IRequire{
+    fullName: string
+    email: string
+    phone: string
+    companyName: string
+    content: string
+    sendDate: Schema.Types.Date
+}
+
 export interface IUser{
     username: string,
     password: string,
@@ -153,10 +162,12 @@ const requireSchema: Schema = new Schema({
     sendDate: {
         type: Date
     }
+}, {
+    versionKey: false
 })
 
 export const Category = mongoose.model('Category', categorySchema, 'categories')
 export const Option = mongoose.model('Option', optionSchema, 'options')
 export const Product = mongoose.model('Product', productSchema, 'products')
 export const User = mongoose.model('User', userSchema, 'users')
-export const Require =mongoose.model("Require", requireSchema, 'requires')
+export const Require =mongoose.model<IRequire>("Require", requireSchema, 'requires')
