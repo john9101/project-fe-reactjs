@@ -19,7 +19,7 @@ app.use(cors())
 app.use(morgan("common"))
 
 app.use('/api/products', productsRouter)
-app.use('api/requires', requiresRouter)
+app.use('/api/requires', requiresRouter)
 
 const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.CLUSTER_NAME}.nlnlbxk.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`
 

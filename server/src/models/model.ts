@@ -17,7 +17,7 @@ export interface IRequire{
     phone: string
     companyName: string
     content: string
-    sendDate: Schema.Types.Date
+    sendDate?: string
 }
 
 export interface IUser{
@@ -160,7 +160,8 @@ const requireSchema: Schema = new Schema({
         type: String
     },
     sendDate: {
-        type: Date
+        type: Schema.Types.Date,
+        default: Date.now
     }
 }, {
     versionKey: false
