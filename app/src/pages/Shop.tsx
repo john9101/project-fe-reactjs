@@ -5,8 +5,9 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faMagnifyingGlass} from "@fortawesome/free-solid-svg-icons";
 import {useDispatch, useSelector} from "react-redux";
 import {AppDispatch, RootState} from "../store/store";
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import noResults from '../assets/img/no-results.png'
+import Typed from 'typed.js';
 import {
     fetchNoQueryProductsList,
     fetchQueryFilterSearchProductsList
@@ -36,6 +37,9 @@ const Shop = () => {
     const imagesCollection = products.flatMap(product => product.options.map(option => option.image));
     const [minHeight, setMinHeight] = useState<number>(0);
 
+    const inputSearchRef = useRef<HTMLInputElement>(null);
+    const typedRef = useRef<Typed | null>(null)
+
     const [queryProduct, setQueryProduct] = useState<QueryProduct>({
         checkedPriceRanges: [],
         checkedGenders: [],
@@ -58,6 +62,27 @@ const Shop = () => {
             }
         }
     }, [location.search, dispatch]);
+
+    useEffect(() => {
+        console.log(typedRef.current === null)
+        if (inputSearchRef.current){
+            typedRef.current = new Typed(inputSearchRef.current, {
+                strings: [
+                    'Bạn đang muốn tìm kiếm đồng phục',
+                    'Bạn có thể nhập bất kỳ tên đồng phục nào vào đây',
+                    'Kết quả tìm kiếm sẽ hiển thị ngay lập tức cho bạn'
+                ],
+                typeSpeed: 25,
+                backSpeed: 25,
+                loop: true,
+                attr: 'placeholder',
+                smartBackspace: true
+            })
+        }
+        return () => {
+            typedRef.current?.destroy()
+        }
+    },[])
 
 
     // useEffect(() => {
@@ -136,24 +161,30 @@ const Shop = () => {
                 </div>
                 <div className="col-lg-9 col-md-12">
                     <div className="row pb-3">
-                        <div className="col-12 pb-1">
-                            <div className="d-flex align-items-center justify-content-between mb-4">
-                                <form action="">
+                        <div className="col-12 pb-1 container">
+                            <div className="d-flex align-items-center justify-content-between mb-4 row" style={{gap: '0.8rem'}}>
+                                <form className='col-8'>
                                     <div className="input-group">
-                                        <input type="text" className="form-control" value={queryProduct.searchedName} placeholder="Tìm kiếm đồng phục" onChange={handleSearchNameChange}/>
-                                        <div className="input-group-append">
-                                        <span className="input-group-text bg-transparent text-primary">
-                                            <FontAwesomeIcon icon={faMagnifyingGlass} />
-                                        </span>
-                                        </div>
+                                        <input
+                                            type="text"
+                                            className="form-control"
+                                            value={queryProduct.searchedName}
+                                            onChange={handleSearchNameChange}
+                                            ref={inputSearchRef}
+                                        />
+                                        {/*<div className="input-group-append">*/}
+                                        {/*<span className="input-group-text bg-transparent text-primary">*/}
+                                        {/*    <FontAwesomeIcon icon={faMagnifyingGlass} />*/}
+                                        {/*</span>*/}
+                                        {/*</div>*/}
                                     </div>
                                 </form>
-                                <div className="dropdown ml-4">
+                                <div className="position-relative mx-3 text-right">
                                     {
                                         !notFound &&
                                         (
                                             queryProduct.searchedName &&
-                                            <>Tìm thấy {products.length} kết quả cho <span className='font-weight-bold'>"{queryProduct.searchedName}"</span></>
+                                            <span style={{fontSize: '1.2em'}}><FontAwesomeIcon icon={faMagnifyingGlass}/> Tìm thấy {products.length} kết quả cho <span className='font-weight-bold'>"{queryProduct.searchedName}"</span></span>
                                         )
                                     }
                                 </div>
