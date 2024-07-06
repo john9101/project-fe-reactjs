@@ -6,4 +6,5 @@ export interface Option {
     optionName: string
     image: string
     productId: string
+    description?: string
 }

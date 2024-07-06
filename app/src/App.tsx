@@ -1,6 +1,8 @@
 // App.tsx
 import React, { lazy, Suspense } from 'react';
 import './App.css';
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 import './assets/css/style.module.scss';
 import './assets/css/styleLogin.scss';
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';

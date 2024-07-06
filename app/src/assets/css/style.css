@@ -5917,7 +5917,8 @@ a.close.disabled {
 .carousel-control-prev,
 .carousel-control-next {
   position: absolute;
-  top: 0;
+  top: 50%;
+  height: fit-content;
   bottom: 0;
   z-index: 1;
   display: flex;
@@ -5928,6 +5929,8 @@ a.close.disabled {
   text-align: center;
   opacity: 0.5;
   transition: opacity 0.15s ease;
+  font-size: 2.5rem;
+  transform: translateY(-50%);
 }
 
 @media (prefers-reduced-motion: reduce) {
