@@ -9,8 +9,9 @@ import Chip from '@mui/material/Chip';
 import StarIcon from '@mui/icons-material/Star';
 import {NavLink} from "react-router-dom";
 import {useState} from "react";
-import {Modal} from "react-bootstrap";
+import {Button, Modal} from "react-bootstrap";
 import ProductDetail from "../../pages/ProductDetail";
+import '../../assets/css/styleShop.scss'
 
 interface ProductCardProps {
     product: Product
@@ -63,14 +64,7 @@ const ProductCard = ({product, minHeight}: ProductCardProps) => {
                             <Tooltip title="Xem nhanh" placement="top">
                                 <FontAwesomeIcon
                                     icon={faEyeRegular}
-                                    className='position-absolute rounded-circle p-3 bg-light'
-                                    style={{
-                                        top: '50%',
-                                        left: '50%',
-                                        transform: 'translate(-50%, -50%)',
-                                        fontSize: '1.2rem',
-                                        cursor: 'pointer'
-                                    }}
+                                    className='position-absolute rounded-circle p-3 bg-light quick-see-product'
                                     onClick={handleShowQuickSeeModal}
                                 />
                             </Tooltip>
@@ -108,22 +102,25 @@ const ProductCard = ({product, minHeight}: ProductCardProps) => {
                     <div className="card-footer d-flex justify-content-between bg-light border">
                         <NavLink to={`/products/${product._id}`} className="btn btn-sm text-dark p-0"><FontAwesomeIcon
                             icon={faEyeSolid} className='text-primary mr-1'/>Xem chi tiết</NavLink>
-                        <a href="" className="btn btn-sm text-dark p-0"><FontAwesomeIcon icon={faCartShopping}
-                                                                                         className='text-primary mr-1'/> Thêm
-                            vào giỏ hàng</a>
+                        <span className="btn btn-sm text-dark p-0" onClick={handleShowQuickSeeModal}>
+                            <FontAwesomeIcon icon={faCartShopping} className='text-primary mr-1'/> Thêm vào giỏ hàng
+                        </span>
                     </div>
                 </div>
             </div>
-            <Modal show={showQuickSeeModal} onHide={handleCloseQuickSeeModal}>
-                {/*<Modal.Header>*/}
-                {/*    <Modal.Title>Yêu cầu thiết kế & kích cỡ khác</Modal.Title>*/}
-                {/*    <button type="button" className="close align-self-center" style={{outline: 'none'}}*/}
-                {/*            onClick={handleCloseQuickSeeModal}>*/}
-                {/*        <span style={{fontSize: '2rem'}}>&times;</span>*/}
-                {/*    </button>*/}
-                {/*</Modal.Header>*/}
+            <Modal
+                centered
+                show={showQuickSeeModal}
+                onHide={handleCloseQuickSeeModal}
+            >
+                <Modal.Header>
+                    <button type="button" className="close align-self-center" style={{outline: 'none'}}
+                            onClick={handleCloseQuickSeeModal}>
+                        <span style={{fontSize: '2.4rem'}}>&times;</span>
+                    </button>
+                </Modal.Header>
                 <Modal.Body>
-
+                    <ProductDetail productId={product._id}/>
                 </Modal.Body>
             </Modal>
         </>

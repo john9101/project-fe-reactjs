@@ -94,8 +94,13 @@ const ProductDetailTabPanel = (props: TabPanelProps) =>{
     )
 }
 
-const ProductDetail = ()=> {
-    const {productId} = useParams()
+interface ProductDetailProps{
+    productId?: string
+}
+
+const ProductDetail = ({productId: productIdFromProp}: ProductDetailProps)=> {
+    const {productId: productIdFromParam} = useParams()
+    const productId = productIdFromProp || productIdFromParam
     const dispatch = useDispatch<AppDispatch>();
     const productDetail = useSelector((state: RootState) => state.products.productDetail!);
     const product = productDetail.product;
@@ -313,7 +318,7 @@ const ProductDetail = ()=> {
                         </div>
                         <p className={'mb-0 display-6'}><span className={'font-weight-semi-bold'}>Danh mục:</span> {product?.category.name}</p>
                     </div>
-                    <h3 className="font-weight-bold mb-3 d-inline-flex align-items-baseline">
+                    <h3 className="font-weight-bold mb-3 d-inline-flex align-items-baseline flex-wrap">
                         {formatCurrency((1 - product?.discountPercent!) * product?.originalPrice!)}
                         {
                             product?.discountPercent !== 0 &&
@@ -363,13 +368,18 @@ const ProductDetail = ()=> {
                         <button className="btn btn-primary px-3"><FontAwesomeIcon className={'mr-1'} icon={faHeart}/> Thêm
                             vào mục yêu thích
                         </button>
-                        <button className="btn btn-primary px-3" onClick={handleShowRequireFormModal}><FontAwesomeIcon className={'mr-1'} icon={faClipboard}/> Yêu cầu thiết kế & kích cỡ khác
-                        </button>
+                        {
+                            !productIdFromProp &&
+                            <button className="btn btn-primary px-3" onClick={handleShowRequireFormModal}>
+                                <FontAwesomeIcon className={'mr-1'} icon={faClipboard}/>
+                                Yêu cầu thiết kế & kích cỡ khác
+                            </button>
+                        }
                     </div>
                     <div className="d-flex pt-2">
                         <p className="text-dark font-weight-medium mb-0 mr-2">Chia sẻ:</p>
                         <div className="d-inline-flex">
-                            <a className="text-dark px-2" href="">
+                        <a className="text-dark px-2" href="">
                                 <FontAwesomeIcon icon={faFacebookF}/>
                             </a>
                             <a className="text-dark px-2" href="">
@@ -385,196 +395,208 @@ const ProductDetail = ()=> {
                     </div>
                 </div>
             </div>
-            <div className="row px-xl-5">
-                <div className="col">
-                    <Box sx={{borderBottom: 1, borderColor: 'divider'}}>
-                        <Tabs
-                            value={tabDisplayIndex}
-                            onChange={handleChangeTabDisplay}
-                            aria-label={'product detail tabs'}
-                        >
-                            <Tab label="Mô tả chi tiết"/>
-                            <Tab label="Đánh giá & nhận xét"/>
-                        </Tabs>
-                    </Box>
-                    <ProductDetailTabPanel index={0} value={tabDisplayIndex}>
-                        {product?.longDescription}
-                    </ProductDetailTabPanel>
-                    <ProductDetailTabPanel index={1} value={tabDisplayIndex} >
-                        <div className="tab-pane fade active show" id="tab-pane-3">
-                            <div className="row">
-                                <div className="col-md-6">
-                                    <h4 className="mb-4">1 lượt đánh giá & nhận xét cho "{product?.name}"</h4>
-                                    <div className="media mb-4">
-                                        <img src="img/user.jpg" alt="Image" className="img-fluid mr-3 mt-1"
-                                             style={{width: "45px"}}/>
-                                        <div className="media-body">
-                                            <h6>John Doe<small> - <i>01 Jan 2045</i></small></h6>
-                                            <div className="text-primary mb-2">
-                                                <i className="fas fa-star"></i>
-                                                <i className="fas fa-star"></i>
-                                                <i className="fas fa-star"></i>
-                                                <i className="fas fa-star-half-alt"></i>
-                                                <i className="far fa-star"></i>
+            {
+                !productIdFromProp &&
+                <>
+                    <div className="row px-xl-5">
+                        <div className="col">
+                            <Box sx={{borderBottom: 1, borderColor: 'divider'}}>
+                                <Tabs
+                                    value={tabDisplayIndex}
+                                    onChange={handleChangeTabDisplay}
+                                    aria-label={'product detail tabs'}
+                                >
+                                    <Tab label="Mô tả chi tiết"/>
+                                    <Tab label="Đánh giá & nhận xét"/>
+                                </Tabs>
+                            </Box>
+                            <ProductDetailTabPanel index={0} value={tabDisplayIndex}>
+                                {product?.longDescription}
+                            </ProductDetailTabPanel>
+                            <ProductDetailTabPanel index={1} value={tabDisplayIndex}>
+                                <div className="tab-pane fade active show" id="tab-pane-3">
+                                    <div className="row">
+                                        <div className="col-md-6">
+                                            <h4 className="mb-4">1 lượt đánh giá & nhận xét cho "{product?.name}"</h4>
+                                            <div className="media mb-4">
+                                                <img src="img/user.jpg" alt="Image" className="img-fluid mr-3 mt-1"
+                                                     style={{width: "45px"}}/>
+                                                <div className="media-body">
+                                                    <h6>John Doe<small> - <i>01 Jan 2045</i></small></h6>
+                                                    <div className="text-primary mb-2">
+                                                        <i className="fas fa-star"></i>
+                                                        <i className="fas fa-star"></i>
+                                                        <i className="fas fa-star"></i>
+                                                        <i className="fas fa-star-half-alt"></i>
+                                                        <i className="far fa-star"></i>
+                                                    </div>
+                                                    <p>Diam amet duo labore stet elitr ea clita ipsum, tempor labore accusam
+                                                        ipsum et no at. Kasd diam tempor rebum magna dolores sed sed eirmod
+                                                        ipsum.</p>
+                                                </div>
                                             </div>
-                                            <p>Diam amet duo labore stet elitr ea clita ipsum, tempor labore accusam
-                                                ipsum et no at. Kasd diam tempor rebum magna dolores sed sed eirmod
-                                                ipsum.</p>
+                                        </div>
+                                        <div className="col-md-6">
+                                            <h4 className="mb-2">Để lại đánh giá và nhận xét của bạn</h4>
+                                            <small>Các trường bắt buộc được đánh dấu <span className='text-danger'>*</span></small>
+                                            <Form onSubmit={handleSubmitReviewForm(onSubmitSendReview)}>
+                                                <div className="d-flex mt-3 mb-2 align-items-baseline">
+                                                    <p className="mb-0 mr-2 font-weight-semi-bold">Đánh giá của bạn <span
+                                                        className='text-danger'>*</span></p>
+                                                    <div className="text-primary align-self-center">
+                                                        <Controller
+                                                            name="rating"
+                                                            control={reviewFormControl}
+                                                            render={({field}) => (
+                                                                <Rating
+                                                                    {...field}
+                                                                    value={field.value}
+                                                                    onChange={(event, newRating) => {
+                                                                        field.onChange(newRating)
+                                                                    }}
+                                                                />
+                                                            )}
+                                                        />
+                                                    </div>
+                                                    {reviewFormErrors.rating && <small
+                                                        className='ml-1 text-danger'>({reviewFormErrors.rating.message})</small>}
+                                                </div>
+                                                <Form.Group controlId='comement' className='mb-3'>
+                                                    <Form.Label className='font-weight-semi-bold'>Nhận xét của bạn <span
+                                                        className='text-danger'>*</span></Form.Label>
+                                                    <Form.Control
+                                                        as='textarea'
+                                                        cols={30}
+                                                        rows={5}
+                                                        className='form-control'
+                                                        {...reviewFormRegister('comment')}
+                                                        placeholder="Nhập nội dụng nhận xét (tối thiểu 10 ký tự và tối đa 1000 ký tự)"
+                                                        isInvalid={!!reviewFormErrors.comment}
+                                                    />
+                                                    <Form.Control.Feedback type="invalid">
+                                                        {reviewFormErrors.comment?.message}
+                                                    </Form.Control.Feedback>
+                                                </Form.Group>
+                                                <Button variant="primary" type="submit" className='px-3'>
+                                                    Gửi đánh giá & nhận xét
+                                                </Button>
+                                            </Form>
                                         </div>
                                     </div>
                                 </div>
-                                <div className="col-md-6">
-                                    <h4 className="mb-2">Để lại đánh giá và nhận xét của bạn</h4>
-                                    <small>Các trường bắt buộc được đánh dấu <span className='text-danger'>*</span></small>
-                                    <Form onSubmit={handleSubmitReviewForm(onSubmitSendReview)}>
-                                        <div className="d-flex mt-3 mb-2 align-items-baseline">
-                                            <p className="mb-0 mr-2 font-weight-semi-bold">Đánh giá của bạn <span className='text-danger'>*</span></p>
-                                            <div className="text-primary align-self-center">
-                                                <Controller
-                                                    name="rating"
-                                                    control={reviewFormControl}
-                                                    render={({field}) => (
-                                                        <Rating
-                                                            {...field}
-                                                            value={field.value}
-                                                            onChange={(event, newRating) => {
-                                                                field.onChange(newRating)
-                                                            }}
-                                                        />
-                                                    )}
-                                                />
-                                            </div>
-                                            {reviewFormErrors.rating && <small className='ml-1 text-danger'>({reviewFormErrors.rating.message})</small>}
-                                        </div>
-                                        <Form.Group controlId='comement' className='mb-3'>
-                                            <Form.Label className='font-weight-semi-bold'>Nhận xét của bạn <span className='text-danger'>*</span></Form.Label>
-                                            <Form.Control
-                                                as='textarea'
-                                                cols={30}
-                                                rows={5}
-                                                className='form-control'
-                                                {...reviewFormRegister('comment')}
-                                                placeholder="Nhập nội dụng nhận xét (tối thiểu 10 ký tự và tối đa 1000 ký tự)"
-                                                isInvalid={!!reviewFormErrors.comment}
-                                            />
-                                            <Form.Control.Feedback type="invalid">
-                                                {reviewFormErrors.comment?.message}
-                                            </Form.Control.Feedback>
-                                        </Form.Group>
-                                        <Button variant="primary" type="submit" className='px-3'>
-                                            Gửi đánh giá & nhận xét
-                                        </Button>
-                                    </Form>
+                            </ProductDetailTabPanel>
+                        </div>
+                    </div>
+                    <Modal show={showRequireFormModal} onHide={handleCloseRequireFormModal}>
+                        <Modal.Header>
+                            <Modal.Title>Yêu cầu thiết kế & kích cỡ khác</Modal.Title>
+                            <button type="button" className="close align-self-center" style={{outline: 'none'}}
+                                    onClick={handleCloseRequireFormModal}>
+                                <span style={{fontSize: '2rem'}}>&times;</span>
+                            </button>
+                        </Modal.Header>
+                        <Form onSubmit={handleSubmitRequireForm(onSubmitSendRequire)}>
+                            <Modal.Body>
+                                <Form.Group className="mb-3" controlId='fullName'>
+                                    <Form.Label className='font-weight-semi-bold'>Họ và tên người đại diện <span
+                                        className='text-danger'>*</span></Form.Label>
+                                    <Form.Control
+                                        type="text"
+                                        placeholder="Nhập họ và tên của người đại diện"
+                                        autoFocus
+                                        {...requireFormRegister('fullName')}
+                                        isInvalid={!!requireFormErrors.fullName}
+                                    />
+                                    <Form.Control.Feedback type="invalid">
+                                        {requireFormErrors.fullName?.message}
+                                    </Form.Control.Feedback>
+                                </Form.Group>
+                                <Form.Group className="mb-3" controlId='email'>
+                                    <Form.Label className='font-weight-semi-bold'>Địa chỉ email <span
+                                        className='text-danger'>*</span></Form.Label>
+                                    <Form.Control
+                                        type="text"
+                                        placeholder="Nhập email của cá nhân hoặc công ty"
+                                        autoFocus
+                                        {...requireFormRegister('email')}
+                                        isInvalid={!!requireFormErrors.email}
+                                    />
+                                    <Form.Control.Feedback type="invalid">
+                                        {requireFormErrors.email?.message}
+                                    </Form.Control.Feedback>
+                                </Form.Group>
+                                <Form.Group className="mb-3" controlId='phone'>
+                                    <Form.Label className='font-weight-semi-bold'>Số điện thoại <span
+                                        className='text-danger'>*</span></Form.Label>
+                                    <Form.Control
+                                        type="text"
+                                        placeholder="Nhập số điện thoại của cá nhân hoặc công ty"
+                                        autoFocus
+                                        {...requireFormRegister('phone')}
+                                        isInvalid={!!requireFormErrors.phone}
+                                    />
+                                    <Form.Control.Feedback type="invalid">
+                                        {requireFormErrors.phone?.message}
+                                    </Form.Control.Feedback>
+                                </Form.Group>
+                                <Form.Group className="mb-3" controlId='companyName'>
+                                    <Form.Label className='font-weight-semi-bold'>Tên công ty (nếu có)</Form.Label>
+                                    <Form.Control
+                                        type="text"
+                                        placeholder="Nhập tên công ty đang làm việc"
+                                        autoFocus
+                                        {...requireFormRegister(('companyName'))}
+                                    />
+                                </Form.Group>
+                                <Form.Group className="mb-3" controlId='content'>
+                                    <Form.Label className='font-weight-semi-bold'>Nội dung yêu cầu <span
+                                        className='text-danger'>*</span></Form.Label>
+                                    <Form.Control
+                                        as="textarea"
+                                        rows={6}
+                                        autoFocus
+                                        placeholder="Nhập nội dung yêu cầu (tối thiểu 10 ký tự và tối đa 1000 ký tự"
+                                        {...requireFormRegister('content')}
+                                        isInvalid={!!requireFormErrors.content}
+                                    />
+                                    <Form.Control.Feedback type="invalid">
+                                        {requireFormErrors.content?.message}
+                                    </Form.Control.Feedback>
+                                </Form.Group>
+                            </Modal.Body>
+                            <Modal.Footer>
+                                <Button variant='secondary' onClick={handleCloseRequireFormModal}>
+                                    Hủy yêu cầu
+                                </Button>
+                                <Button variant='primary' type='submit'>
+                                    Gửi yêu cầu
+                                </Button>
+                            </Modal.Footer>
+                        </Form>
+                    </Modal>
+                    <Modal show={showSendRequireSuccessModal} onHide={() => handleCloseSendRequireSuccessModal(false)}>
+                        <Form>
+                            <Modal.Body>
+                                <div className='d-flex flex-column text-center align-items-center'>
+                                    <div className='d-flex flex-column align-items-center mb-3'>
+                                        <AssignmentTurnedInIcon className='text-success' style={{fontSize: '12rem'}}/>
+                                        <strong style={{fontSize: '1.8rem'}}>Gửi yêu cầu thành công</strong>
+                                    </div>
+                                    <span style={{fontSize: '1.1rem'}}>Cảm ơn bạn đã gửi yêu cầu cho chúng tôi. Chúng tôi sẽ cố gắng phản hồi sớm nhất trong vòng 24h. Vui lòng bạn chú ý điện thoại hoặc email để nhận được phản hồi từ chúng tôi</span>
                                 </div>
-                            </div>
-                        </div>
-                    </ProductDetailTabPanel>
-                </div>
-            </div>
-            <Modal show={showRequireFormModal} onHide={handleCloseRequireFormModal}>
-                <Modal.Header>
-                    <Modal.Title>Yêu cầu thiết kế & kích cỡ khác</Modal.Title>
-                    <button type="button" className="close align-self-center" style={{outline: 'none'}}
-                            onClick={handleCloseRequireFormModal}>
-                        <span style={{fontSize: '2rem'}}>&times;</span>
-                    </button>
-                </Modal.Header>
-                <Form onSubmit={handleSubmitRequireForm(onSubmitSendRequire)}>
-                    <Modal.Body>
-                        <Form.Group className="mb-3" controlId='fullName'>
-                            <Form.Label className='font-weight-semi-bold'>Họ và tên người đại diện <span className='text-danger'>*</span></Form.Label>
-                            <Form.Control
-                                type="text"
-                                placeholder="Nhập họ và tên của người đại diện"
-                                autoFocus
-                                {...requireFormRegister('fullName')}
-                                isInvalid={!!requireFormErrors.fullName}
-                            />
-                            <Form.Control.Feedback type="invalid">
-                                {requireFormErrors.fullName?.message}
-                            </Form.Control.Feedback>
-                        </Form.Group>
-                        <Form.Group className="mb-3" controlId='email'>
-                            <Form.Label className='font-weight-semi-bold'>Địa chỉ email <span className='text-danger'>*</span></Form.Label>
-                            <Form.Control
-                                type="text"
-                                placeholder="Nhập email của cá nhân hoặc công ty"
-                                autoFocus
-                                {...requireFormRegister('email')}
-                                isInvalid={!!requireFormErrors.email}
-                            />
-                            <Form.Control.Feedback type="invalid">
-                                {requireFormErrors.email?.message}
-                            </Form.Control.Feedback>
-                        </Form.Group>
-                        <Form.Group className="mb-3" controlId='phone'>
-                            <Form.Label className='font-weight-semi-bold'>Số điện thoại <span className='text-danger'>*</span></Form.Label>
-                            <Form.Control
-                                type="text"
-                                placeholder="Nhập số điện thoại của cá nhân hoặc công ty"
-                                autoFocus
-                                {...requireFormRegister('phone')}
-                                isInvalid={!!requireFormErrors.phone}
-                            />
-                            <Form.Control.Feedback type="invalid">
-                                {requireFormErrors.phone?.message}
-                            </Form.Control.Feedback>
-                        </Form.Group>
-                        <Form.Group className="mb-3" controlId='companyName'>
-                            <Form.Label className='font-weight-semi-bold'>Tên công ty (nếu có)</Form.Label>
-                            <Form.Control
-                                type="text"
-                                placeholder="Nhập tên công ty đang làm việc"
-                                autoFocus
-                                {...requireFormRegister(('companyName'))}
-                            />
-                        </Form.Group>
-                        <Form.Group className="mb-3" controlId='content'>
-                            <Form.Label className='font-weight-semi-bold'>Nội dung yêu cầu <span className='text-danger'>*</span></Form.Label>
-                            <Form.Control
-                                as="textarea"
-                                rows={6}
-                                autoFocus
-                                placeholder="Nhập nội dung yêu cầu (tối thiểu 10 ký tự và tối đa 1000 ký tự"
-                                {...requireFormRegister('content')}
-                                isInvalid={!!requireFormErrors.content}
-                            />
-                            <Form.Control.Feedback type="invalid">
-                                {requireFormErrors.content?.message}
-                            </Form.Control.Feedback>
-                        </Form.Group>
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button variant='secondary' onClick={handleCloseRequireFormModal}>
-                            Hủy yêu cầu
-                        </Button>
-                        <Button variant='primary' type='submit'>
-                            Gửi yêu cầu
-                        </Button>
-                    </Modal.Footer>
-                </Form>
-            </Modal>
-            <Modal show={showSendRequireSuccessModal} onHide={() => handleCloseSendRequireSuccessModal(false)}>
-                <Form>
-                    <Modal.Body>
-                        <div className='d-flex flex-column text-center align-items-center'>
-                            <div className='d-flex flex-column align-items-center mb-3'>
-                                <AssignmentTurnedInIcon className='text-success' style={{fontSize: '12rem'}} />
-                                <strong style={{fontSize: '1.8rem'}}>Gửi yêu cầu thành công</strong>
-                            </div>
-                            <span style={{fontSize: '1.1rem'}}>Cảm ơn bạn đã gửi yêu cầu cho chúng tôi. Chúng tôi sẽ cố gắng phản hồi sớm nhất trong vòng 24h. Vui lòng bạn chú ý điện thoại hoặc email để nhận được phản hồi từ chúng tôi</span>
-                        </div>
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button variant='secondary' onClick={() => handleCloseSendRequireSuccessModal(true)}>
-                            Tiếp tục tạo yêu cầu mới
-                        </Button>
-                        <Button variant='primary' onClick={() => handleCloseSendRequireSuccessModal(false)}>
-                            Đóng
-                        </Button>
-                    </Modal.Footer>
-                </Form>
-            </Modal>
+                            </Modal.Body>
+                            <Modal.Footer>
+                                <Button variant='secondary' onClick={() => handleCloseSendRequireSuccessModal(true)}>
+                                    Tiếp tục tạo yêu cầu mới
+                                </Button>
+                                <Button variant='primary' onClick={() => handleCloseSendRequireSuccessModal(false)}>
+                                    Đóng
+                                </Button>
+                            </Modal.Footer>
+                        </Form>
+                    </Modal>
+                </>
+            }
         </div>
     )
 }
