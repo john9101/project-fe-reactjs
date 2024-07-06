@@ -11,6 +11,15 @@ export interface IOption{
     option_name: string
 }
 
+export interface IRequire{
+    fullName: string
+    email: string
+    phone: string
+    companyName: string
+    content: string
+    sendDate?: string
+}
+
 export interface IUser{
     username: string,
     password: string,
@@ -51,9 +60,12 @@ const optionSchema: Schema = new Schema({
         type: String,
         required: true
     },
-    product: {
+    productId: {
         type: Schema.Types.ObjectId,
         required: true
+    },
+    description: {
+        type: String
     }
 })
 
@@ -93,7 +105,11 @@ const productSchema: Schema = new Schema({
             type: Schema.Types.ObjectId,
             ref: "Option"
         }
-    ]
+    ],
+    uniformGender: {
+        type: String,
+        require: true
+    }
 })
 
 const userSchema: Schema = new Schema({
@@ -131,6 +147,32 @@ const userSchema: Schema = new Schema({
     }
 })
 
+const requireSchema: Schema = new Schema({
+    fullName: {
+        type: String,
+        require: true
+    },
+    email: {
+        type: String,
+        require: true,
+    },
+    phone: {
+        type: String,
+        require: true
+    },
+    companyName: {
+        type: String
+    },
+    content: {
+        type: String
+    },
+    sendDate: {
+        type: Schema.Types.Date,
+        default: Date.now
+    }
+}, {
+    versionKey: false
+})
 const contactSchema: Schema = new Schema({
     username:{
         type: String,
@@ -154,4 +196,5 @@ export const Category = mongoose.model('Category', categorySchema, 'categories')
 export const Option = mongoose.model('Option', optionSchema, 'options')
 export const Product = mongoose.model('Product', productSchema, 'products')
 export const User = mongoose.model('User', userSchema, 'users')
+export const Require =mongoose.model<IRequire>("Require", requireSchema, 'requires')
 export const Contact = mongoose.model("Contact", contactSchema, 'contacts')

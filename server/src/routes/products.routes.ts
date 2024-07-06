@@ -1,8 +1,8 @@
 import {Router} from 'express'
-import {pagingProductsController, productDetailController } from '../controllers/products.controllers'
+import {getPagingProductsController, getProductDetailController } from '../controllers/products.controllers'
 const productsRouter = Router()
 
-productsRouter.get('/', pagingProductsController)
-productsRouter.get('/:id', productDetailController)
+productsRouter.get('/', getPagingProductsController)
+productsRouter.get('/:id', getProductDetailController)
 
 export default productsRouter
