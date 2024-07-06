@@ -1,7 +1,7 @@
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {Product} from "../types/product.type";
 import http from "../util/http";
-import {formatCurrency} from "../util/formatCurrency";
+import {Option} from "../types/option.type";
 export interface ProductList{
     products: Product[]
     currentPage: number
@@ -16,9 +16,11 @@ interface ProductSliceState {
     productsList: ProductList;
     productDetail: {
         product: Product | null,
-        priceWithUnit: string | null,
         quantityInStock: number,
-        selectedOptionName: string | null,
+        selectedOption: {
+            name: string | null,
+            description: string | null
+        } | null,
         selectedSize: string | null
     };
     status: 'idle' | 'loading' | 'succeeded' | 'failed';
@@ -34,9 +36,11 @@ const initialState: ProductSliceState = {
     },
     productDetail: {
         product: null,
-        priceWithUnit: null,
         quantityInStock: 0,
-        selectedOptionName:  null,
+        selectedOption: {
+            name: null,
+            description: null
+        },
         selectedSize: null
     },
     status: 'idle',
@@ -74,30 +78,44 @@ export const fetchQueryFilterSearchProductsList = createAsyncThunk(
     }
 )
 
+const totalQuantityInStock = (options: Option[]) => {
+    return options.flatMap(option => option.stocks)
+                    .reduce((total, stock) => total + stock.quantity!, 0)
+}
+
 const productSlice = createSlice({
     name: "products",
     initialState,
     reducers: {
-        setSelectedSize: (state, action: PayloadAction<string>) => {
-            // const options = state.productDetail.product!.options
-            // state.productDetail.selectedSize = action.payload;
-            // if(state.productDetail.selectedOptionName){
-            //     const selectedOption = options.find(option => option.option_name === state.productDetail.selectedOptionName)
-            //     const selectedStock = selectedOption!.stocks.find(stock => stock.size === state.productDetail.selectedSize)
-            //     state.productDetail.quantityInStock = selectedStock?.quantity!
-            //     state.productDetail.priceWithUnit = formatCurrency(selectedOption!.price)
-            // }
+        setSelectedSize: (state, action: PayloadAction<string | null>) => {
+            const options = state.productDetail.product!.options
+            if(action.payload) {
+                state.productDetail.selectedSize = action.payload
+                if(state.productDetail.selectedOption!.name){
+                    const selectedOption = options.find(option => option.optionName === state.productDetail.selectedOption!.name)
+                    const selectedStock = selectedOption!.stocks.find(stock => stock.size === state.productDetail.selectedSize)
+                    state.productDetail.quantityInStock = selectedStock?.quantity!
+                }
+            }else{
+                state.productDetail.selectedSize = null
+                state.productDetail.quantityInStock = totalQuantityInStock(options)
+            }
         },
-        setSelectedOptionName: (state, action: PayloadAction<string>) => {
-            // const options = state.productDetail.product!.options
-            // state.productDetail.selectedOptionName = action.payload;
-            //
-            // const selectedOption = options.find(option => option.option_name === state.productDetail.selectedOptionName)
-            // state.productDetail.priceWithUnit = formatCurrency(selectedOption!.price)
-            // if(state.productDetail.selectedSize){
-            //     const selectedStock = selectedOption!.stocks.find(stock => stock.size === state.productDetail.selectedSize)
-            //     state.productDetail.quantityInStock = selectedStock?.quantity!
-            // }
+        setSelectedOption: (state, action: PayloadAction<string | null>) =>{
+            console.log(1111)
+            const options = state.productDetail.product!.options;
+            if(action.payload){
+                state.productDetail.selectedOption!.name = action.payload;
+                const selectedOption = options.find(option => option.optionName === state.productDetail.selectedOption!.name)
+                state.productDetail.selectedOption!.description = selectedOption!.description!
+                if(state.productDetail.selectedSize){
+                    const selectedStock = selectedOption!.stocks.find(stock => stock.size === state.productDetail.selectedSize)
+                    state.productDetail.quantityInStock = selectedStock?.quantity!
+                }
+            }else{
+                state.productDetail.selectedOption = {name: null, description: null}
+                state.productDetail.quantityInStock = totalQuantityInStock(options)
+            }
         }
     },
     extraReducers: (builder)=>{
@@ -106,17 +124,9 @@ const productSlice = createSlice({
                 state.status = "succeeded"
                 let product = action.payload;
                 state.productDetail!.product = product
-
-                const options = product.options
-                const stocks = options.flatMap(options => options.stocks)
-                stocks.forEach(stock => {
-                    state.productDetail!.quantityInStock += stock.quantity!
-                })
-
-                const prices = options.map(option => option.price)
-                const minPrice = Math.min(...prices)
-                const maxPrice = Math.max(...prices)
-                state.productDetail!.priceWithUnit = formatCurrency(minPrice).concat(" - ", formatCurrency(maxPrice))
+                if(!state.productDetail.selectedOption || !state.productDetail.selectedSize){
+                    state.productDetail!.quantityInStock = totalQuantityInStock(product.options)
+                }
             })
             .addCase(fetchNoQueryProductsList.fulfilled, (state, action)=>{
                 state.notFound = null
@@ -135,6 +145,7 @@ const productSlice = createSlice({
     }
 })
 
-export const {setSelectedOptionName, setSelectedSize} = productSlice.actions
+export const {setSelectedOption, setSelectedSize} = productSlice.actions
 const productReducer = productSlice.reducer
 export default productReducer;
+
