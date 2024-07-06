@@ -154,13 +154,6 @@ const userSchema: Schema = new Schema({
     }
 });
 
-<<<<<<< HEAD
-
-export const User = mongoose.model('User', userSchema)
-export const Category = mongoose.model('Category', categorySchema)
-export const Option = mongoose.model('Option', optionSchema)
-export const Product = mongoose.model('Product', productSchema)
-=======
 const contactSchema: Schema = new Schema({
     username:{
         type: String,
@@ -185,4 +178,3 @@ export const Option = mongoose.model('Option', optionSchema, 'options')
 export const Product = mongoose.model('Product', productSchema, 'products')
 export const User = mongoose.model('User', userSchema, 'users')
 export const Contact = mongoose.model("Contact", contactSchema, 'contacts')
->>>>>>> 1ebd7a0865a7594a8a25ef3f19d1ccc045abf526
