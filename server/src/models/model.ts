@@ -1,6 +1,6 @@
 import mongoose, {Schema} from "mongoose";
 
-export interface IOption {
+export interface IOption{
     stocks: [
         {
             size: string,
@@ -11,7 +11,16 @@ export interface IOption {
     option_name: string
 }
 
-export interface IUser {
+export interface IRequire{
+    fullName: string
+    email: string
+    phone: string
+    companyName: string
+    content: string
+    sendDate?: string
+}
+
+export interface IUser{
     username: string,
     password: string,
     fullName: string,
@@ -51,9 +60,12 @@ const optionSchema: Schema = new Schema({
         type: String,
         required: true
     },
-    product: {
+    productId: {
         type: Schema.Types.ObjectId,
         required: true
+    },
+    description: {
+        type: String
     }
 })
 
@@ -93,7 +105,11 @@ const productSchema: Schema = new Schema({
             type: Schema.Types.ObjectId,
             ref: "Option"
         }
-    ]
+    ],
+    uniformGender: {
+        type: String,
+        require: true
+    }
 })
 
 const userSchema: Schema = new Schema({
@@ -131,12 +147,38 @@ const userSchema: Schema = new Schema({
     }
 })
 
-const contactSchema: Schema = new Schema({
-    username: {
+const requireSchema: Schema = new Schema({
+    fullName: {
         type: String,
         require: true
     },
     email: {
+        type: String,
+        require: true,
+    },
+    phone: {
+        type: String,
+        require: true
+    },
+    companyName: {
+        type: String
+    },
+    content: {
+        type: String
+    },
+    sendDate: {
+        type: Schema.Types.Date,
+        default: Date.now
+    }
+}, {
+    versionKey: false
+})
+const contactSchema: Schema = new Schema({
+    username:{
+        type: String,
+        require: true
+    },
+    email:{
         type: String,
         require: true
     },

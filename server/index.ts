@@ -11,7 +11,6 @@ import cors from "cors"
 // @ts-ignore
 import morgan from 'morgan'
 import contactsRouter from "./src/routes/contacts.routes";
-import vouchersRouter from "./src/routes/vouchers.routes";
 
 config()
 const app = express()
@@ -24,6 +23,8 @@ app.use(morgan("common"))
 app.use('/api/products', productsRouter)
 app.use('/api/categories', categoryRouter);
 app.use('/api/contacts', contactsRouter)
+app.use('/api/requires', requiresRouter)
+
 app.use('/api/vouchers', vouchersRouter)
 const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.CLUSTER_NAME}.nlnlbxk.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`
 
