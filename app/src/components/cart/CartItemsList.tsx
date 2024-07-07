@@ -109,7 +109,7 @@ export default function CartItemsList() {
 
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header>
-                    <Modal.Title>Xóa sản phẩm</Modal.Title>
+                <Modal.Title>Xóa sản phẩm</Modal.Title>
                     <button type="button" className="close" data-dismiss="modal" aria-label="Close"
                             onClick={handleClose}>
                         <span aria-hidden="true">&times;</span>

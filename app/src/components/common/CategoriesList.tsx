@@ -38,7 +38,7 @@ const MenuPopupState: React.FC = () => {
     const styleMenuCategoriesItem = {
         width: '360px',
         padding: '8px 16px',
-        borderBottom: '1px solid #d3ebff',
+        // borderBottom: '1px solid #d3ebff',
         '&:hover': {
             backgroundColor: 'var(--primary)',
             color: 'white',
@@ -50,7 +50,7 @@ const MenuPopupState: React.FC = () => {
                 <React.Fragment>
                     <Button variant='contained' {...bindTrigger(popupState)}
                         sx={{ maxWidth: 360, height: 50, ...styleCategoriesList }}
-                        className="col-lg-4 CategoriesList">
+                        className="col-lg-4">
                         Categories
                     </Button>
                     <Menu {...bindMenu(popupState)} className="MenuCategories" sx={{ ...styleMenuCategories }}>

@@ -1,11 +1,12 @@
-import React, { useMemo } from "react";
+import React, {useMemo, useState} from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store/store";
 import { formatCurrency } from "../../util/formatCurrency";
-import Voucher from "../common/Voucher";
+import VoucherCard from "../common/VoucherCard";
 
 export default function InformationCart() {
     const cart = useSelector((state: RootState) => state.cart);
+    const [voucherCode, setVoucherCode] = useState<string>("");
 
     const totalPrice = useMemo(() => {
         return cart.cartItems.reduce((total, cartItem) => {
@@ -24,22 +25,23 @@ export default function InformationCart() {
             return total + cartItem.product.originalPrice * cartItem.quantity;
         }, 0);
     }, [cart.cartItems]);
-
+    const handleApplyVoucher = (code: string) => {
+        setVoucherCode(code);
+    };
     return (
         <div className="col-lg-4">
+            <div className="voucher-container">
+                <VoucherCard onSelectVoucher={handleApplyVoucher}/>
+            </div>
             <form className="mb-5" action="">
                 <div className="input-group">
-                    <input type="text" className="form-control p-4" placeholder="Mã giảm"/>
+                    <input type="text" className="form-control p-4" placeholder="Mã giảm" value={voucherCode}/>
                     <div className="input-group-append">
                         <button className="btn btn-primary">Áp dụng giảm giá</button>
                     </div>
                 </div>
             </form>
-            <div className="voucher-container">
-                <Voucher/>
-                <Voucher/>
-                <Voucher/>
-            </div>
+
             <div className="card border-secondary mb-5">
                 <div className="card-header bg-secondary border-0">
                     <h4 className="font-weight-semi-bold m-0">Giỏ hàng</h4>
