@@ -1,16 +1,18 @@
 import { NavLink, useLocation } from "react-router-dom";
 import Logo from "./Logo";
 import HomeCarosel from "../carousel/HomeCarousel";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import CategoryList from "./CategoriesList";
 import { useAuth } from "../../context/UserContext";
-import defaultAvatar from '../../assets/img/default-avatar.jpg'
+import defaultAvatar from '../../assets/img/default-avatar.jpg';
 
 const Navbar: React.FC = () => {
     const location = useLocation();
     const { authState } = useAuth();
     const { isAuthenticated, user } = authState;
 
+    // Parse the user data from localStorage
+    const customer = JSON.parse(localStorage.getItem('user') || '{}');
     return (
         <div className="container-fluid mb-5">
             <div className="row border-top px-xl-5">
@@ -30,7 +32,7 @@ const Navbar: React.FC = () => {
                             <div className="navbar-nav ml-auto py-0">
                                 {isAuthenticated && user ? (
                                     <div className="nav-item">
-                                        <NavLink to={`/personal/${user._id}`} className="nav-link">
+                                        <NavLink to={`/personal/${customer._id}`} className="nav-link">
                                             <img
                                                 src={user.avatar || defaultAvatar}
                                                 alt="avatar"
@@ -38,7 +40,6 @@ const Navbar: React.FC = () => {
                                                 style={{ width: '40px', height: '40px' }}
                                             />
                                         </NavLink>
-
                                     </div>
                                 ) : (
                                     <>

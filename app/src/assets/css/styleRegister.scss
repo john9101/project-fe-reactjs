@@ -60,6 +60,26 @@
         margin: 20px 0px;
     }
 
+    .chooseArea {
+        margin: 20px 0px;
+
+        .chooseDOB,
+        .chooseGender {
+            display: flex;
+            flex-direction: column;
+            width: 40%;
+        }
+    }
+
+    .chooseArea,
+    .groupGender {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+
     .inputArea {
         width: 100%;
     }

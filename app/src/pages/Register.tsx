@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import '../assets/css/styleRegister.scss';
 import Link from '@mui/material/Link';
-import { Alert, Button, Checkbox, Fade, FormControlLabel, Snackbar, TextField } from '@mui/material';
+import { Alert, Button, Checkbox, Fade, FormControlLabel, Radio, RadioGroup, Snackbar, TextField } from '@mui/material';
 import Address from '../components/common/Address';
 import ReplyIcon from '@mui/icons-material/Reply';
 
@@ -207,11 +207,22 @@ const Register = () => {
                     error={!!errors.fullName}
                     helperText={errors.fullName}
                 />
-                <span className='titleInput'>Ngày sinh:</span>
-                <TextField
-                    className='inputArea'
-                    type='date'
-                />
+                <div className='chooseArea'>
+                    <div className="chooseDOB">
+                        <span className='titleInput'>Ngày sinh:</span>
+                        <TextField
+                            className='inputArea'
+                            type='date'
+                        />
+                    </div>
+                    <div className="chooseGender">
+                        <span className='titleInput'>Giới tính: </span>
+                        <RadioGroup className='groupGender'>
+                            <FormControlLabel value="female" control={<Radio />} label="Nam" />
+                            <FormControlLabel value="male" control={<Radio />} label="Nữ" />
+                        </RadioGroup>
+                    </div>
+                </div>
                 <span className='titleInput'>Tên công ty:</span>
                 <TextField
                     className='inputArea'

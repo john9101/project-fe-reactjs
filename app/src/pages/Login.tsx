@@ -3,7 +3,7 @@ import TextField from '@mui/material/TextField';
 import { Button, Alert, Snackbar, Fade } from '@mui/material';
 import Link from '@mui/material/Link';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/UserContext'; // Import useAuth hook
+import { useAuth } from '../context/UserContext';
 import '../assets/css/styleLogin.scss';
 import http from '../util/http';
 
@@ -19,7 +19,15 @@ const Login: React.FC = () => {
     const [successMessage, setSuccessMessage] = useState<boolean>(false);
     const [failureMessage, setFailureMessage] = useState<boolean>(false);
     const navigate = useNavigate();
-    const { login } = useAuth(); 
+    const { login } = useAuth();
+
+    useEffect(() => {
+        const storedUser = localStorage.getItem('user');
+        if (storedUser) {
+            const user = JSON.parse(storedUser);
+            setUsername(user.username);
+        }
+    }, []);
 
     useEffect(() => {
         if (successMessage || failureMessage) {
@@ -45,7 +53,9 @@ const Login: React.FC = () => {
             try {
                 const response = await http.post('login', { username, password });
                 const user = response.data;
-                login(user); 
+                localStorage.setItem('user', JSON.stringify(user.user));
+                console.log(user.user);
+                login(user);
                 setSuccessMessage(true);
                 setFailureMessage(false);
                 navigate('/');
