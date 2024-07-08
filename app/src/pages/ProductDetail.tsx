@@ -602,5 +602,3 @@ const ProductDetail = ({productId: productIdFromProp}: ProductDetailProps)=> {
 }
 
 export default ProductDetail;
-
-

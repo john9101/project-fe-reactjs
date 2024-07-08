@@ -8,11 +8,13 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import MainLayout from "./layout/MainLayout";
 import { CircularProgress } from "@mui/material";
 import FormLayout from './layout/FormLayout';
-import Shop from "./pages/Shop";
+import { ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+import ChatBox from "./components/ChatBox";
 
 const Home = lazy(() => import('./pages/Home'));
 const ContactUs = lazy(() => import('./pages/ContactUs'));
-const CartDetail = lazy(() => import('./components/cart/CartDetail'));
+const CartDetail = lazy(() => import('./pages/cart/CartDetail'));
 const Login = lazy(() => import('./pages/Login'));
 const Register = lazy(() => import('./pages/Register'));
 const ForgotPassword = lazy(() => import('./pages/ForgotPassword'));
@@ -22,6 +24,7 @@ const ProductDetail = lazy(() => import('./pages/ProductDetail'));
 function App() {
     return (
         <BrowserRouter>
+            <ToastContainer/>
             <div className="App">
                 <Suspense fallback={<CircularProgress color="success" />}>
                     <Routes>
@@ -29,9 +32,9 @@ function App() {
                             <Route index element={<Home />} />
                             <Route path="cart" element={<CartDetail />} />
                             <Route path="contact-us" element={<ContactUs />} />
-                            <Route path="products/:productId" element={<ProductDetail />} />
+                            <Route path="products/:productId" element={<ProductDetail/>} />
                             <Route path="about-us" element={<AboutUs />} />
-                            <Route path="shop" element={<Shop/>}/>
+                            
                         </Route>
                         <Route path="account" element={<FormLayout />}>
                             <Route path="login" element={<Login />} />
@@ -39,6 +42,7 @@ function App() {
                             <Route path='forgot-password' element={<ForgotPassword />} />
                         </Route>
 
+                        <Route path='chat' element={<ChatBox />} />
                     </Routes>
                 </Suspense>
             </div>

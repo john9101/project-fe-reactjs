@@ -31,6 +31,13 @@ export interface IUser{
     avatar: string,
 }
 
+export interface IContact {
+    username: string,
+    email: string,
+    topic: string,
+    message: string
+}
+
 const optionSchema: Schema = new Schema({
     optionName: {
         type: String,
@@ -70,7 +77,7 @@ const categorySchema: Schema = new Schema({
 
 const productSchema: Schema = new Schema({
     name: {
-        type: String, 
+        type: String,
         require: true
     },
     rating: {
@@ -88,7 +95,7 @@ const productSchema: Schema = new Schema({
         type: String
     },
     originalPrice: {
-        type: Number, 
+        type: Number,
         require: true
     },
     discountPercent: {
@@ -168,9 +175,28 @@ const requireSchema: Schema = new Schema({
 }, {
     versionKey: false
 })
+const contactSchema: Schema = new Schema({
+    username:{
+        type: String,
+        require: true
+    },
+    email:{
+        type: String,
+        require: true
+    },
+    topic: {
+        type: String,
+        require: true
+    },
+    message:{
+        type: String,
+        require: true
+    }
+},  { versionKey: false })
 
 export const Category = mongoose.model('Category', categorySchema, 'categories')
 export const Option = mongoose.model('Option', optionSchema, 'options')
 export const Product = mongoose.model('Product', productSchema, 'products')
 export const User = mongoose.model('User', userSchema, 'users')
 export const Require =mongoose.model<IRequire>("Require", requireSchema, 'requires')
+export const Contact = mongoose.model("Contact", contactSchema, 'contacts')
