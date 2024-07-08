@@ -40,7 +40,7 @@ export interface IContact {
 }
 
 const optionSchema: Schema = new Schema({
-    optionName: {
+    name: {
         type: String,
         require: true
     },
