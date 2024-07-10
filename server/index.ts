@@ -17,8 +17,6 @@ import { Server } from "socket.io";
 
 config()
 const app = express()
-const httpServer = createServer(app);
-
 const port = process.env.PORT
 
 app.use(bodyParser.json({limit: "50mb"}))
@@ -36,42 +34,6 @@ mongoose.connect(uri)
     .then(() => console.log('MongoDB connected...'))
     .catch(error => console.error('MongoDB connection error:', error))
 
-const io = new Server(httpServer, {
-    cors: {
-        origin: 'http://localhost:3000'
-    }
-});
-
-const users: {
-    [key: string]: {
-        socket_id: string
-    }
-} = {}
-
-io.on('connection', (socket) => {
-    console.log(`${socket.id} connected!`)
-
-    const user_id = socket.handshake.auth.user_id
-    users[user_id] = {
-        socket_id: socket.id
-    }
-    console.log(users)
-
-    socket.on("private-message", (data) => {
-        console.log(data)
-        const receiver_socket_id = users[data.to].socket_id
-        socket.to(receiver_socket_id).emit("receive_private-message", {
-            content: data.content,
-            from: user_id
-        })
-    })
-
-    socket.on('disconnect', () => {
-        console.log(`${socket.id} disconnected!`)
-        delete users[user_id]
-    })
-})
-
-httpServer.listen(port, ()=>{
+app.listen(port, ()=>{
     console.log(`Example app listening on port ${port}`)
 })
