@@ -10,7 +10,7 @@ interface CustomRadioButtonProps {
 }
 
 interface GridRadioButtonsProps{
-    arrayValue: string[];
+    arrayValue: (string | null)[];
     onSetSelectedOptionName?: (optionName: string | null) => void
     onSetSelectedSize?: (size: string | null) => void
 }
@@ -114,8 +114,8 @@ const GridRadioButtons = ({arrayValue, onSetSelectedOptionName, onSetSelectedSiz
                     {arrayValue.map((value, index) => (
                         <Grid item key={index}>
                             <CustomRadioButton
-                                label={value}
-                                value={value}
+                                label={value!}
+                                value={value!}
                                 selectedValue={selectedValue}
                                 onChange={handleChange}
                             />

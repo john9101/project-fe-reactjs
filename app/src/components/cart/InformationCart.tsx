@@ -1,8 +1,9 @@
 import React, {useMemo, useState} from "react";
-import { useSelector } from "react-redux";
-import { RootState } from "../../store/store";
-import { formatCurrency } from "../../util/formatCurrency";
+import {useSelector} from "react-redux";
+import {RootState} from "../../store/store";
+import {formatCurrency} from "../../util/formatCurrency";
 import VoucherCard from "../common/VoucherCard";
+import {NavLink} from "react-router-dom";
 
 export default function InformationCart() {
     const cart = useSelector((state: RootState) => state.cart);
@@ -69,7 +70,11 @@ export default function InformationCart() {
                         <h5 className="font-weight-bold">Tổng tiền</h5>
                         <h5 className="font-weight-bold">{formatCurrency(totalPrice)}</h5>
                     </div>
-                    <button className="btn btn-block btn-primary my-3 py-3">Đặt hàng</button>
+                    <NavLink to={"/check-out"}>
+                        <button className="btn btn-block btn-primary my-3 py-3">
+                            Đặt hàng
+                        </button>
+                    </NavLink>
                 </div>
             </div>
         </div>

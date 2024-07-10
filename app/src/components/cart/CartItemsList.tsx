@@ -71,7 +71,7 @@ export default function CartItemsList() {
                     </thead>
                     <tbody>
                     {cart.cartItems?.map((cartItem) => {
-                        const selectedOption = cartItem.product.options.find(option => option.optionName === cartItem.selectedOption);
+                        const selectedOption = cartItem.product.options.find(option => option.name === cartItem.selectedOption.name);
                         const image = selectedOption ? selectedOption.image : '';
 
                         return (
@@ -81,7 +81,7 @@ export default function CartItemsList() {
                                     <img src={image} alt={cartItem.product.name} style={{width: '65px'}}/>
                                     {/*{cartItem.product.name}*/}
                                 </td>
-                                <td className="align-middle">{cartItem.selectedOption}</td>
+                                <td className="align-middle">{cartItem.selectedOption.name}</td>
                                 <td className="align-middle">{formatCurrency(cartItem.product.originalPrice * (1 - cartItem.product.discountPercent))}</td>
                                 <td className="align-middle">{cartItem.selectedSize}</td>
                                 <td className="align-middle">
@@ -109,7 +109,7 @@ export default function CartItemsList() {
 
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header>
-                <Modal.Title>Xóa sản phẩm</Modal.Title>
+                    <Modal.Title>Xóa sản phẩm</Modal.Title>
                     <button type="button" className="close" data-dismiss="modal" aria-label="Close"
                             onClick={handleClose}>
                         <span aria-hidden="true">&times;</span>

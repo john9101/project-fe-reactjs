@@ -10,6 +10,10 @@ import { CircularProgress } from "@mui/material";
 import FormLayout from './layout/FormLayout';
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import CheckOut from "./pages/CheckOut";
+import FirstStep from "./components/check-out/FirstStep";
+import SecondStep from "./components/check-out/SecondStep";
+import ThirdStep from "./components/check-out/ThirdStep";
 
 const Home = lazy(() => import('./pages/Home'));
 const ContactUs = lazy(() => import('./pages/ContactUs'));
@@ -33,7 +37,7 @@ function App() {
                             <Route path="contact-us" element={<ContactUs />} />
                             <Route path="products/:productId" element={<ProductDetail/>} />
                             <Route path="about-us" element={<AboutUs />} />
-                            
+                            <Route path="check-out" element={<CheckOut />}/>
                         </Route>
                         <Route path="account" element={<FormLayout />}>
                             <Route path="login" element={<Login />} />

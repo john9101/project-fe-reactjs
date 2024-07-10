@@ -3,8 +3,8 @@ import {Stock} from "./stock.type";
 export interface Option {
     _id: string
     stocks: Stock[],
-    optionName: string
+    name: string | null
     image: string
     productId: string
-    description?: string
+    description: string | null
 }

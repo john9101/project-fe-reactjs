@@ -20,12 +20,12 @@ const cartSlide = createSlice({
     reducers: {
         addToCart: (state, action: PayloadAction<CartItem>) => {
             const cartItem = action.payload;
-            const isExist = state.cartItems.find(item => item.product._id === cartItem.product._id && item.selectedOption === cartItem.selectedOption && item.selectedSize === cartItem.selectedSize);
+            const isExist = state.cartItems.find(item => item.product._id === cartItem.product._id && item.selectedOption.name === cartItem.selectedOption.name && item.selectedSize === cartItem.selectedSize);
             if (!isExist) {
                 state.cartItems.push(cartItem);
                 state.totalItem = state.cartItems.length;
             } else {
-                const targetCartItem = state.cartItems.find(item => item.product._id === cartItem.product._id && item.selectedOption === cartItem.selectedOption && item.selectedSize === cartItem.selectedSize);
+                const targetCartItem = state.cartItems.find(item => item.product._id === cartItem.product._id && item.selectedOption.name === cartItem.selectedOption.name && item.selectedSize === cartItem.selectedSize);
                 targetCartItem!.quantity += cartItem.quantity;
                 state.totalItem = state.cartItems.length;
             }

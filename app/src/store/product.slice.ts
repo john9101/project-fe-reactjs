@@ -8,10 +8,7 @@ interface ProductSliceState {
     productDetail: {
         product: Product | null,
         quantityInStock: number,
-        selectedOption: {
-            name: string | null,
-            description: string | null
-        } | null,
+        selectedOption: Pick<Option, 'name' | 'description'>,
         selectedSize: string | null
     };
     status: 'idle' | 'loading' | 'succeeded' | 'failed';
@@ -25,7 +22,7 @@ const initialState: ProductSliceState = {
         quantityInStock: 0,
         selectedOption: {
             name: null,
-            description: null
+            description: null,
         },
         selectedSize: null
     },
@@ -57,7 +54,7 @@ const productSlice = createSlice({
             if(action.payload) {
                 state.productDetail.selectedSize = action.payload
                 if(state.productDetail.selectedOption!.name){
-                    const selectedOption = options.find(option => option.optionName === state.productDetail.selectedOption!.name)
+                    const selectedOption = options.find(option => option.name === state.productDetail.selectedOption!.name)
                     const selectedStock = selectedOption!.stocks.find(stock => stock.size === state.productDetail.selectedSize)
                     state.productDetail.quantityInStock = selectedStock?.quantity!
                 }
@@ -71,7 +68,7 @@ const productSlice = createSlice({
             const options = state.productDetail.product!.options;
             if(action.payload){
                 state.productDetail.selectedOption!.name = action.payload;
-                const selectedOption = options.find(option => option.optionName === state.productDetail.selectedOption!.name)
+                const selectedOption = options.find(option => option.name === state.productDetail.selectedOption!.name)
                 state.productDetail.selectedOption!.description = selectedOption!.description!
                 if(state.productDetail.selectedSize){
                     const selectedStock = selectedOption!.stocks.find(stock => stock.size === state.productDetail.selectedSize)

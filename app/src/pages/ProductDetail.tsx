@@ -21,6 +21,10 @@ import {isValidPhone} from "../util/validatePhone";
 import {isValidEmail} from "../util/validateEmail";
 import {Require} from "../types/require.type";
 import http from "../util/http";
+import {toast} from "react-toastify";
+import {nanoid} from "@reduxjs/toolkit";
+import {addToCart} from "../store/cart.slice";
+import ButtonQuantity from "../components/common/ButtonQuantity";
 
 const reviewFormSchema = Yup.object().shape({
     rating: Yup.number()
@@ -102,7 +106,7 @@ const ProductDetail = ()=> {
     const quantityInStock = productDetail.quantityInStock;
     const options = product?.options;
     const images = options?.map(option => option.image)
-    const optionNames = options?.map(option => option.optionName)
+    const optionNames = options?.map(option => option.name)
     const sizes = options?.flatMap(option => option.stocks).map(stock => stock.size);
     const uniqueSizes = Array.from(new Set(sizes));
 
@@ -114,6 +118,8 @@ const ProductDetail = ()=> {
     });
     const [tabDisplayIndex, setTabDisplayIndex] = useState<number>(0);
     const [,setSlideIndex] = useState<number>(0);
+    const [quantity, setQuantity] = useState<number>(1);
+
 
     const [showRequireFormModal, setShowRequireFormModal] = useState<boolean>(false);
     const [showSendRequireSuccessModal, setShowSendRequireSuccessModal] = useState<boolean>(false);
@@ -145,7 +151,7 @@ const ProductDetail = ()=> {
                 sliderRef.current.slickPlay()
             }
         } else {
-            const optionIndex = options?.findIndex(option => option.optionName === optionName);
+            const optionIndex = options?.findIndex(option => option.name === optionName);
             if(optionIndex !== undefined && optionIndex >= 0){
                 setSlideIndex(optionIndex!)
                 if(sliderRef.current) {
@@ -273,6 +279,37 @@ const ProductDetail = ()=> {
         }
     }
 
+    const handleAddToCart = () => {
+        const selectedOption = productDetail.selectedOption;
+        const selectedSize = productDetail.selectedSize;
+        if (quantityInStock === 0) {
+            toast.error("Sản phẩm đã hết hàng", {
+                position: "bottom-left",
+                autoClose: 2000
+            });
+            return;
+        }
+        if (selectedOption?.name === null || selectedSize === null) {
+            toast.error("Vui lòng chọn kích cỡ và mẫu", {
+                position: "bottom-left",
+                autoClose: 1000
+            });
+            return;
+        }
+        (product && selectedOption?.name && selectedSize && dispatch(addToCart({
+            id: nanoid(),
+            product,
+            quantity,
+            selectedOption,
+            selectedSize,
+        })));
+        toast.success("Đã thêm vào giỏ hàng", {
+            position: "bottom-left",
+            autoClose: 1000
+        });
+    }
+
+
     return (
         <div className="container-fluid py-5">
             <div className="row px-xl-5">
@@ -345,19 +382,9 @@ const ProductDetail = ()=> {
                     <p className="text-dark font-weight-medium mb-3">Số lượng mẫu trong kho: <span className={'text-primary'}>{quantityInStock}</span></p>
                     <div className="d-flex flex-wrap align-items-center mb-4 pt-2" style={{gap: '0.8rem'}}>
                         <div className="input-group quantity" style={{width: "130px"}}>
-                            <div className="input-group-btn">
-                                <button className="btn btn-primary btn-minus">
-                                    <FontAwesomeIcon icon={faMinus}/>
-                                </button>
-                            </div>
-                            <input type="text" className="form-control bg-secondary text-center" value="1"/>
-                            <div className="input-group-btn">
-                                <button className="btn btn-primary btn-plus">
-                                    <FontAwesomeIcon icon={faPlus}/>
-                                </button>
-                            </div>
+                            <ButtonQuantity quantity={quantity} setQuantity={setQuantity}/>
                         </div>
-                        <button className="btn btn-primary px-3"><FontAwesomeIcon className={'mr-1'} icon={faCartShopping}/>Thêm
+                        <button className="btn btn-primary px-3" onClick={handleAddToCart}><FontAwesomeIcon className={'mr-1'} icon={faCartShopping}/>Thêm
                             vào giỏ hàng
                         </button>
                         <button className="btn btn-primary px-3"><FontAwesomeIcon className={'mr-1'} icon={faHeart}/> Thêm

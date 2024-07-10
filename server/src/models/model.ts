@@ -40,7 +40,7 @@ export interface IContact {
 }
 
 const optionSchema: Schema = new Schema({
-    optionName: {
+    name: {
         type: String,
         require: true
     },
@@ -258,4 +258,5 @@ export const Option = mongoose.model('Option', optionSchema, 'options')
 export const Product = mongoose.model('Product', productSchema, 'products')
 export const User = mongoose.model('User', userSchema, 'users')
 export const Contact = mongoose.model("Contact", contactSchema, 'contacts')
+export const Require =mongoose.model<IRequire>("Require", requireSchema, 'requires')
 export const Voucher = mongoose.model('Voucher', voucherSchema, 'voucher')
