@@ -1,4 +1,4 @@
-export interface User{
+export interface User {
     _id: string;
     username: string;
     password: string;
@@ -9,4 +9,5 @@ export interface User{
     address: string;
     companyName: string;
     avatar: string;
+    dob: String;
 }

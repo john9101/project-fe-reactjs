@@ -142,9 +142,16 @@ const userSchema: Schema = new Schema({
         type: String,
         required: true
     },
+    rePassword: {
+        type: String,
+        required: true
+    },
     fullName: {
         type: String,
         required: true
+    },
+    dob: {
+        type: String,
     },
     gender: {
         type: String,

@@ -1,35 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
-import '../../assets/css/styleRegister.scss';
+import { fetchProvinces, fetchDistricts, fetchWards } from '../../util/apiAddress';
 
 interface AddressProps {
     errors: Errors;
     setAddressData: (data: AddressData) => void;
     setAddressErrors: (errors: Errors) => void;
+    addressData?: AddressData; // Thêm prop này để nhận dữ liệu địa chỉ ban đầu
 }
 
-interface Address {
-    id: number;
-    province: string;
-    district: string[];
-    ward: string[];
+interface Province {
+    ProvinceID: number;
+    ProvinceName: string;
 }
 
-const address: Address[] = [
-    {
-        id: 0,
-        province: 'TP. Hồ Chí Minh',
-        district: ['Quận 1', 'Quận 2', 'Quận 3', 'Quận 4', 'Quận 5', 'Quận 6', 'TP Thủ Đức'],
-        ward: ['Linh Trung', 'Linh Xuân', 'Linh Đông', 'Linh Tây', 'Bình Trưng Đông']
-    },
-    {
-        id: 1,
-        province: 'Hà Nội',
-        district: ['Quận 1', 'Quận 2', 'Quận 3', 'Quận 4', 'Quận 5', 'Quận 6', 'TP Thủ Đức'],
-        ward: ['Linh Trung', 'Linh Xuân', 'Linh Đông', 'Linh Tây', 'Bình Trưng Đông']
-    }
-];
+interface District {
+    DistrictID: number;
+    DistrictName: string;
+}
+
+interface Ward {
+    WardCode: string;
+    WardName: string;
+}
 
 interface Errors {
     province?: string;
@@ -45,43 +39,105 @@ interface AddressData {
     specificAddress: string;
 }
 
-const ComboBox: React.FC<AddressProps> = ({ errors, setAddressData, setAddressErrors }) => {
-    const [selectedProvince, setSelectedProvince] = useState<Address | null>(null);
-    const [selectedDistrict, setSelectedDistrict] = useState<string | null>(null);
-    const [selectedWard, setSelectedWard] = useState<string | null>(null);
+const ComboBox: React.FC<AddressProps> = ({ errors, setAddressData, setAddressErrors, addressData }) => {
+    const [provinces, setProvinces] = useState<Province[]>([]);
+    const [districts, setDistricts] = useState<District[]>([]);
+    const [wards, setWards] = useState<Ward[]>([]);
+    const [selectedProvince, setSelectedProvince] = useState<Province | null>(null);
+    const [selectedDistrict, setSelectedDistrict] = useState<District | null>(null);
+    const [selectedWard, setSelectedWard] = useState<Ward | null>(null);
     const [specificAddress, setSpecificAddress] = useState<string>('');
 
     useEffect(() => {
+        const getProvinces = async () => {
+            const data = await fetchProvinces();
+            setProvinces(data);
+        };
+        getProvinces();
+    }, []);
+
+    useEffect(() => {
+        if (selectedProvince) {
+            const getDistricts = async () => {
+                const data = await fetchDistricts(selectedProvince.ProvinceID);
+                setDistricts(data);
+                setWards([]);
+                setSelectedDistrict(null);
+                setSelectedWard(null);
+            };
+            getDistricts();
+        }
+    }, [selectedProvince]);
+
+    useEffect(() => {
+        if (selectedDistrict) {
+            const getWards = async () => {
+                const data = await fetchWards(selectedDistrict.DistrictID);
+                setWards(data);
+                setSelectedWard(null);
+            };
+            getWards();
+        }
+    }, [selectedDistrict]);
+
+    useEffect(() => {
         setAddressData({
-            province: selectedProvince ? selectedProvince.province : null,
-            district: selectedDistrict,
-            ward: selectedWard,
-            specificAddress: specificAddress
+            province: selectedProvince ? selectedProvince.ProvinceName : null,
+            district: selectedDistrict ? selectedDistrict.DistrictName : null,
+            ward: selectedWard ? selectedWard.WardName : null,
+            specificAddress: specificAddress,
         });
-    }, [selectedProvince, selectedDistrict, selectedWard, specificAddress, setAddressData]);
+    }, [selectedProvince, selectedDistrict, selectedWard, specificAddress]);
 
-    const getDistricts = (province: Address | null): string[] => {
-        if (!province) return [];
-        return province.district;
-    };
+    // Sử dụng useEffect để nạp dữ liệu địa chỉ ban đầu
+    useEffect(() => {
+        if (addressData) {
+            const { province, district, ward, specificAddress } = addressData;
+            setSpecificAddress(specificAddress || '');
 
-    const getWards = (province: Address | null, district: string | null): string[] => {
-        if (!province || !district) return [];
-        return province.ward;
-    };
+            if (province) {
+                const selectedProv = provinces.find(p => p.ProvinceName === province);
+                setSelectedProvince(selectedProv || null);
+            }
+
+            if (district) {
+                const fetchAndSetDistricts = async () => {
+                    if (selectedProvince) {
+                        const districtsData = await fetchDistricts(selectedProvince.ProvinceID);
+                        setDistricts(districtsData);
+                        const selectedDist = districtsData.find((d: { DistrictName: string; }) => d.DistrictName === district);
+                        setSelectedDistrict(selectedDist || null);
+                    }
+                };
+                fetchAndSetDistricts();
+            }
+
+            if (ward) {
+                const fetchAndSetWards = async () => {
+                    if (selectedDistrict) {
+                        const wardsData = await fetchWards(selectedDistrict.DistrictID);
+                        setWards(wardsData);
+                        const selectedWrd = wardsData.find((w: { WardName: string; }) => w.WardName === ward);
+                        setSelectedWard(selectedWrd || null);
+                    }
+                };
+                fetchAndSetWards();
+            }
+        }
+    }, [addressData, provinces, selectedProvince, selectedDistrict]);
 
     return (
         <div className='inputAddress'>
-            <Autocomplete className='inputArea'
+            <Autocomplete
+                className='inputArea'
                 disablePortal
                 id="province-combo-box"
-                options={address}
+                options={provinces}
                 sx={{ width: 300, marginBottom: 2 }}
-                getOptionLabel={(option) => option.province}
+                getOptionLabel={(option) => option.ProvinceName}
+                value={selectedProvince}
                 onChange={(event, value) => {
                     setSelectedProvince(value);
-                    setSelectedDistrict(null);
-                    setSelectedWard(null);
                 }}
                 renderInput={(params) => (
                     <TextField
@@ -92,15 +148,16 @@ const ComboBox: React.FC<AddressProps> = ({ errors, setAddressData, setAddressEr
                     />
                 )}
             />
-            <Autocomplete className='inputArea'
+            <Autocomplete
+                className='inputArea'
                 disablePortal
                 id="district-combo-box"
-                options={getDistricts(selectedProvince)}
+                options={districts}
                 sx={{ width: 300, marginBottom: 2 }}
+                getOptionLabel={(option) => option.DistrictName}
                 value={selectedDistrict}
                 onChange={(event, value) => {
                     setSelectedDistrict(value);
-                    setSelectedWard(null);
                 }}
                 renderInput={(params) => (
                     <TextField
@@ -112,11 +169,13 @@ const ComboBox: React.FC<AddressProps> = ({ errors, setAddressData, setAddressEr
                 )}
                 disabled={!selectedProvince}
             />
-            <Autocomplete className='inputArea'
+            <Autocomplete
+                className='inputArea'
                 disablePortal
                 id="ward-combo-box"
-                options={getWards(selectedProvince, selectedDistrict)}
+                options={wards}
                 sx={{ width: 300, marginBottom: 2 }}
+                getOptionLabel={(option) => option.WardName}
                 value={selectedWard}
                 onChange={(event, value) => {
                     setSelectedWard(value);
@@ -131,7 +190,8 @@ const ComboBox: React.FC<AddressProps> = ({ errors, setAddressData, setAddressEr
                 )}
                 disabled={!selectedDistrict}
             />
-            <TextField className='inputArea'
+            <TextField
+                className='inputArea'
                 id="outlined-basic"
                 label="Địa chỉ cụ thể"
                 sx={{ width: 300 }}
