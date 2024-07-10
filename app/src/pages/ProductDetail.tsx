@@ -4,7 +4,7 @@ import {AppDispatch, RootState} from "../store/store";
 import React, {useEffect, useRef, useState} from "react";
 import {fetchProductDetail, setSelectedOption, setSelectedSize} from "../store/product.slice";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faPlus,faMinus, faCircleChevronLeft, faCircleChevronRight, faCircleUser, faCartShopping, faHeart, faClipboard} from "@fortawesome/free-solid-svg-icons";
+import {faPlus,faMinus, faCircleChevronLeft, faCircleChevronRight, faCircleUser, faTape, faRulerHorizontal, faCartShopping, faHeart, faClipboard} from "@fortawesome/free-solid-svg-icons";
 import {faFacebookF, faXTwitter, faLinkedinIn, faPinterest} from "@fortawesome/free-brands-svg-icons"
 import {Box, Rating, Tab, Tabs} from "@mui/material";
 import StyleIcon from '@mui/icons-material/Style';
@@ -13,7 +13,7 @@ import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
 import Slider, { Settings } from "react-slick";
 import {formatCurrency} from "../util/formatCurrency";
 import GridRadioButtons from "../components/common/GridRadioButtons";
-import {Badge, Form, Modal, Button} from "react-bootstrap";
+import {Badge, Form, Modal, Button, Table} from "react-bootstrap";
 import {Controller, useForm} from "react-hook-form";
 import * as Yup from 'yup'
 import {yupResolver} from "@hookform/resolvers/yup";
@@ -21,6 +21,8 @@ import {isValidPhone} from "../util/validatePhone";
 import {isValidEmail} from "../util/validateEmail";
 import {Require} from "../types/require.type";
 import http from "../util/http";
+import {formatKilogram, formatMeter} from "../util/formatUnitMeasure";
+import {computeUniformSpecMeasure, computeBodyMetricsRange} from "../util/formularSizeChart";
 
 const reviewFormSchema = Yup.object().shape({
     rating: Yup.number()
@@ -99,12 +101,17 @@ const ProductDetail = ()=> {
     const dispatch = useDispatch<AppDispatch>();
     const productDetail = useSelector((state: RootState) => state.products.productDetail!);
     const product = productDetail.product;
-    const quantityInStock = productDetail.quantityInStock;
+
     const options = product?.options;
+    const initialWeightRange = product?.initialWeightRange
+    const initialHeightRange = product?.initialHeightRange
+    const sizeCharts = product?.sizeCharts;
+
+    const quantityInStock = productDetail.quantityInStock;
     const images = options?.map(option => option.image)
-    const optionNames = options?.map(option => option.optionName)
-    const sizes = options?.flatMap(option => option.stocks).map(stock => stock.size);
-    const uniqueSizes = Array.from(new Set(sizes));
+    const optionNames = options?.map(option => option.name)
+    const sizeNames = options?.flatMap(option => option.stocks).map(stock => stock.size);
+    const uniqueSizeNames = Array.from(new Set(sizeNames));
 
     const sliderRef = useRef<Slider>(null);
     const imageRefs = useRef<(HTMLImageElement | null)[]>([]);
@@ -117,6 +124,7 @@ const ProductDetail = ()=> {
 
     const [showRequireFormModal, setShowRequireFormModal] = useState<boolean>(false);
     const [showSendRequireSuccessModal, setShowSendRequireSuccessModal] = useState<boolean>(false);
+    const [showSizeGuideModal, setShowSizeGuideModal] = useState<boolean>(false)
 
     const handleShowRequireFormModal = () => setShowRequireFormModal(true);
     const handleCloseRequireFormModal = () => {
@@ -132,6 +140,9 @@ const ProductDetail = ()=> {
         setShowSendRequireSuccessModal(false);
     }
 
+    const handleShowSizeGuideModal = () => setShowSizeGuideModal(true);
+    const handleCloseSizeGuideModal = () => setShowSizeGuideModal(false);
+
     useEffect(() => {
         const productDetailPromise = dispatch(fetchProductDetail(productId as string));
         return () => {
@@ -145,7 +156,7 @@ const ProductDetail = ()=> {
                 sliderRef.current.slickPlay()
             }
         } else {
-            const optionIndex = options?.findIndex(option => option.optionName === optionName);
+            const optionIndex = options?.findIndex(option => option.name === optionName);
             if(optionIndex !== undefined && optionIndex >= 0){
                 setSlideIndex(optionIndex!)
                 if(sliderRef.current) {
@@ -157,8 +168,13 @@ const ProductDetail = ()=> {
         dispatch(setSelectedOption(optionName))
     }
 
-    const handleSetSelectedSize = (size: string | null) => {
-        dispatch(setSelectedSize(size))
+    const handleSetSelectedSizeName = (sizeName: string | null) => {
+        const sizeIndex = uniqueSizeNames.indexOf(sizeName!)
+        let selectedSize = null
+        if(sizeName && sizeIndex >= 0){
+            selectedSize = {name: sizeName!, index: sizeIndex};
+        }
+        dispatch(setSelectedSize(selectedSize))
     }
 
     const handleChangeTabDisplay = (event: React.SyntheticEvent, newTabDisplayIndex: number) => {
@@ -328,18 +344,32 @@ const ProductDetail = ()=> {
                         }
                     </h3>
                     <p className="mb-3">{product?.shortDescription}</p>
+                    <p className='d-flex mb-3 align-items-center font-weight-semi-bold' style={{cursor: "pointer"}} onClick={handleShowSizeGuideModal}>
+                        <FontAwesomeIcon icon={faRulerHorizontal} className='mr-1' style={{fontSize: '1.5rem'}}/> Huớng dẫn chọn kích cỡ
+                    </p>
                     <div className="d-flex flex-column mb-4">
-                    <p className="text-dark font-weight-medium mb-3">Kích cỡ: {productDetail.selectedSize && <span className={'text-primary'}>{productDetail.selectedSize}</span>}</p>
+                        <p className="text-dark font-weight-medium mb-3 flex-wrap">
+                            Kích cỡ: {productDetail.selectedSize &&
+                            <span className={'text-primary'}>
+                                {productDetail.selectedSize!.name}
+                                (<span>
+                                    Cân nặng: {formatKilogram(computeBodyMetricsRange(initialWeightRange!, productDetail.selectedSize.index).min)} - {formatKilogram(computeBodyMetricsRange(initialWeightRange!, productDetail.selectedSize.index).max)} |
+                                    Chiều cao: {formatMeter(computeBodyMetricsRange(initialHeightRange!, productDetail.selectedSize.index).min)} - {formatMeter(computeBodyMetricsRange(initialHeightRange!, productDetail.selectedSize.index).max)}
+                                </span>)
+                            </span>}
+                        </p>
                         <form>
-                            {uniqueSizes && <GridRadioButtons arrayValue={uniqueSizes} onSetSelectedSize={handleSetSelectedSize}/>}
+                            {uniqueSizeNames && <GridRadioButtons arrayValues={uniqueSizeNames}
+                                                                  onSetSelectedSizeName={handleSetSelectedSizeName}/>}
                         </form>
                     </div>
                     <div className="d-flex flex-column mb-4">
                         <p className="text-dark font-weight-medium mb-3">
-                            Mẫu: {productDetail.selectedOption?.name && <span className={'text-primary'}>{productDetail.selectedOption!.name} ({productDetail.selectedOption!.description})</span>}
+                            Mẫu: {productDetail.selectedOption &&
+                            <span className={'text-primary'}>{productDetail.selectedOption!.name} ({productDetail.selectedOption!.description})</span>}
                         </p>
                         <form>
-                            {optionNames && <GridRadioButtons arrayValue={optionNames!} onSetSelectedOptionName={handleSetSelectedOptionName}/>}
+                            {optionNames && <GridRadioButtons arrayValues={optionNames!} onSetSelectedOptionName={handleSetSelectedOptionName}/>}
                         </form>
                     </div>
                     <p className="text-dark font-weight-medium mb-3">Số lượng mẫu trong kho: <span className={'text-primary'}>{quantityInStock}</span></p>
@@ -574,6 +604,63 @@ const ProductDetail = ()=> {
                         </Button>
                     </Modal.Footer>
                 </Form>
+            </Modal>
+            <Modal show={showSizeGuideModal} onHide={handleCloseSizeGuideModal} size='lg'>
+                <Modal.Header>
+                    <Modal.Title>Hướng dẫn chọn kích cỡ</Modal.Title>
+                    <button type="button" className="close align-self-center" style={{outline: 'none'}}
+                            onClick={handleCloseSizeGuideModal}>
+                        <span style={{fontSize: '2rem'}}>&times;</span>
+                    </button>
+                </Modal.Header>
+                <Modal.Body>
+                    {sizeCharts?.map(sizeChart => (
+                        <div className='d-flex flex-column mb-4'>
+                            <span className='mb-2 font-weight-semi-bold' style={{fontSize: '1.5rem'}}><FontAwesomeIcon icon={faTape} /> {sizeChart.name}</span>
+                            <Table striped bordered hover>
+                                <thead className='bg-primary text-white'>
+                                    <tr>
+                                        <th>Kích cỡ</th>
+                                        {uniqueSizeNames.map(size => <th>{size}</th>)}
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Cân nặng</td>
+                                        {uniqueSizeNames.map((_, index) => (
+                                            <td>
+                                                {formatKilogram(computeBodyMetricsRange(initialWeightRange!, index).min)} -
+                                                {formatKilogram(computeBodyMetricsRange(initialWeightRange!, index).max)}
+                                            </td>
+                                        ))}
+                                    </tr>
+                                    <tr>
+                                        <td>Chiều cao</td>
+                                        {uniqueSizeNames.map((_, index) => (
+                                            <td>
+                                                {formatMeter(computeBodyMetricsRange(initialHeightRange!, index).min)} -
+                                                {formatMeter(computeBodyMetricsRange(initialHeightRange!, index).max)}
+                                            </td>
+                                        ))}
+                                    </tr>
+                                    {sizeChart.initialUniformSpecs.map((initialUniformSpec, index) => (
+                                        <tr>
+                                            <td>{initialUniformSpec.measurement.name}</td>
+                                            {uniqueSizeNames.map((_, index) => (
+                                                <td>
+                                                    {computeUniformSpecMeasure(initialUniformSpec,index)}
+                                                </td>
+                                            ))}
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </Table>
+                        </div>
+                    ))}
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant='primary' onClick={handleCloseSizeGuideModal}>Đóng</Button>
+                </Modal.Footer>
             </Modal>
         </div>
     )

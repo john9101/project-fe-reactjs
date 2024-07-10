@@ -29,6 +29,7 @@
     "babel-plugin-relay": "^16.2.0",
     "bootstrap": "^5.3.3",
     "date-fns": "^3.6.0",
+    "decimal.js": "^10.4.3",
     "eslint": "^8.57.0",
     "flow-bin": "^0.236.0",
     "formik": "^2.4.6",

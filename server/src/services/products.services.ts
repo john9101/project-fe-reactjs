@@ -22,7 +22,12 @@ class ProductService{
     }
 
     async getProductById(productId: string){
-        const product = await Product.findById(productId).populate("options category")
+        const product = await Product.findById(productId).populate("options category").populate({
+            path: "sizeCharts",
+            populate: {
+                path: "initialUniformSpecs.measurement"
+            }
+        })
         return product
     }
 }
