@@ -95,9 +95,13 @@ const ProductDetailTabPanel = (props: TabPanelProps) =>{
         </div>
     )
 }
+interface ProductDetailProps{
+    productId?: string
+}
 
-const ProductDetail = ()=> {
-    const {productId} = useParams()
+const ProductDetail = ({productId: productIdFromProp}:ProductDetailProps)=> {
+    const {productId: productIdFromParam} = useParams()
+    const productId = productIdFromProp || productIdFromParam
     const dispatch = useDispatch<AppDispatch>();
     const productDetail = useSelector((state: RootState) => state.products.productDetail!);
     const product = productDetail.product;
