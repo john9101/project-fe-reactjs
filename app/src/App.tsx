@@ -20,6 +20,7 @@ const Register = lazy(() => import('./pages/Register'));
 const ForgotPassword = lazy(() => import('./pages/ForgotPassword'));
 const AboutUs = lazy(() => import('./pages/AboutUs'));
 const ProductDetail = lazy(() => import('./pages/ProductDetail'));
+const Shop = lazy(() => import('./pages/Shop'));
 
 function App() {
     return (
@@ -34,15 +35,13 @@ function App() {
                             <Route path="contact-us" element={<ContactUs />} />
                             <Route path="products/:productId" element={<ProductDetail/>} />
                             <Route path="about-us" element={<AboutUs />} />
-                            
+                            <Route path="shop" element={<Shop/>}/>
                         </Route>
                         <Route path="account" element={<FormLayout />}>
                             <Route path="login" element={<Login />} />
                             <Route path="register" element={<Register />} />
                             <Route path='forgot-password' element={<ForgotPassword />} />
                         </Route>
-
-                        <Route path='chat' element={<ChatBox />} />
                     </Routes>
                 </Suspense>
             </div>
