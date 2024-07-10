@@ -419,92 +419,98 @@ const ProductDetail = ({productId: productIdFromProp}:ProductDetailProps)=> {
                     </div>
                 </div>
             </div>
-            <div className="row px-xl-5">
-                <div className="col">
-                    <Box sx={{borderBottom: 1, borderColor: 'divider'}}>
-                        <Tabs
-                            value={tabDisplayIndex}
-                            onChange={handleChangeTabDisplay}
-                            aria-label={'product detail tabs'}
-                        >
-                            <Tab label="Mô tả chi tiết"/>
-                            <Tab label="Đánh giá & nhận xét"/>
-                        </Tabs>
-                    </Box>
-                    <ProductDetailTabPanel index={0} value={tabDisplayIndex}>
-                        {product?.longDescription}
-                    </ProductDetailTabPanel>
-                    <ProductDetailTabPanel index={1} value={tabDisplayIndex} >
-                        <div className="tab-pane fade active show" id="tab-pane-3">
-                            <div className="row">
-                                <div className="col-md-6">
-                                    <h4 className="mb-4">1 lượt đánh giá & nhận xét cho "{product?.name}"</h4>
-                                    <div className="media mb-4">
-                                        <img src="img/user.jpg" alt="Image" className="img-fluid mr-3 mt-1"
-                                             style={{width: "45px"}}/>
-                                        <div className="media-body">
-                                            <h6>John Doe<small> - <i>01 Jan 2045</i></small></h6>
-                                            <div className="text-primary mb-2">
-                                                <i className="fas fa-star"></i>
-                                                <i className="fas fa-star"></i>
-                                                <i className="fas fa-star"></i>
-                                                <i className="fas fa-star-half-alt"></i>
-                                                <i className="far fa-star"></i>
+            {
+                (!productIdFromProp && productIdFromParam) &&
+                <div className="row px-xl-5">
+                    <div className="col">
+                        <Box sx={{borderBottom: 1, borderColor: 'divider'}}>
+                            <Tabs
+                                value={tabDisplayIndex}
+                                onChange={handleChangeTabDisplay}
+                                aria-label={'product detail tabs'}
+                            >
+                                <Tab label="Mô tả chi tiết"/>
+                                <Tab label="Đánh giá & nhận xét"/>
+                            </Tabs>
+                        </Box>
+                        <ProductDetailTabPanel index={0} value={tabDisplayIndex}>
+                            {product?.longDescription}
+                        </ProductDetailTabPanel>
+                        <ProductDetailTabPanel index={1} value={tabDisplayIndex}>
+                            <div className="tab-pane fade active show" id="tab-pane-3">
+                                <div className="row">
+                                    <div className="col-md-6">
+                                        <h4 className="mb-4">1 lượt đánh giá & nhận xét cho "{product?.name}"</h4>
+                                        <div className="media mb-4">
+                                            <img src="img/user.jpg" alt="Image" className="img-fluid mr-3 mt-1"
+                                                 style={{width: "45px"}}/>
+                                            <div className="media-body">
+                                                <h6>John Doe<small> - <i>01 Jan 2045</i></small></h6>
+                                                <div className="text-primary mb-2">
+                                                    <i className="fas fa-star"></i>
+                                                    <i className="fas fa-star"></i>
+                                                    <i className="fas fa-star"></i>
+                                                    <i className="fas fa-star-half-alt"></i>
+                                                    <i className="far fa-star"></i>
+                                                </div>
+                                                <p>Diam amet duo labore stet elitr ea clita ipsum, tempor labore accusam
+                                                    ipsum et no at. Kasd diam tempor rebum magna dolores sed sed eirmod
+                                                    ipsum.</p>
                                             </div>
-                                            <p>Diam amet duo labore stet elitr ea clita ipsum, tempor labore accusam
-                                                ipsum et no at. Kasd diam tempor rebum magna dolores sed sed eirmod
-                                                ipsum.</p>
                                         </div>
                                     </div>
-                                </div>
-                                <div className="col-md-6">
-                                    <h4 className="mb-2">Để lại đánh giá và nhận xét của bạn</h4>
-                                    <small>Các trường bắt buộc được đánh dấu <span className='text-danger'>*</span></small>
-                                    <Form onSubmit={handleSubmitReviewForm(onSubmitSendReview)}>
-                                        <div className="d-flex mt-3 mb-2 align-items-baseline">
-                                            <p className="mb-0 mr-2 font-weight-semi-bold">Đánh giá của bạn <span className='text-danger'>*</span></p>
-                                            <div className="text-primary align-self-center">
-                                                <Controller
-                                                    name="rating"
-                                                    control={reviewFormControl}
-                                                    render={({field}) => (
-                                                        <Rating
-                                                            {...field}
-                                                            value={field.value}
-                                                            onChange={(event, newRating) => {
-                                                                field.onChange(newRating)
-                                                            }}
-                                                        />
-                                                    )}
-                                                />
+                                    <div className="col-md-6">
+                                        <h4 className="mb-2">Để lại đánh giá và nhận xét của bạn</h4>
+                                        <small>Các trường bắt buộc được đánh dấu <span className='text-danger'>*</span></small>
+                                        <Form onSubmit={handleSubmitReviewForm(onSubmitSendReview)}>
+                                            <div className="d-flex mt-3 mb-2 align-items-baseline">
+                                                <p className="mb-0 mr-2 font-weight-semi-bold">Đánh giá của bạn <span
+                                                    className='text-danger'>*</span></p>
+                                                <div className="text-primary align-self-center">
+                                                    <Controller
+                                                        name="rating"
+                                                        control={reviewFormControl}
+                                                        render={({field}) => (
+                                                            <Rating
+                                                                {...field}
+                                                                value={field.value}
+                                                                onChange={(event, newRating) => {
+                                                                    field.onChange(newRating)
+                                                                }}
+                                                            />
+                                                        )}
+                                                    />
+                                                </div>
+                                                {reviewFormErrors.rating && <small
+                                                    className='ml-1 text-danger'>({reviewFormErrors.rating.message})</small>}
                                             </div>
-                                            {reviewFormErrors.rating && <small className='ml-1 text-danger'>({reviewFormErrors.rating.message})</small>}
-                                        </div>
-                                        <Form.Group controlId='comement' className='mb-3'>
-                                            <Form.Label className='font-weight-semi-bold'>Nhận xét của bạn <span className='text-danger'>*</span></Form.Label>
-                                            <Form.Control
-                                                as='textarea'
-                                                cols={30}
-                                                rows={5}
-                                                className='form-control'
-                                                {...reviewFormRegister('comment')}
-                                                placeholder="Nhập nội dụng nhận xét (tối thiểu 10 ký tự và tối đa 1000 ký tự)"
-                                                isInvalid={!!reviewFormErrors.comment}
-                                            />
-                                            <Form.Control.Feedback type="invalid">
-                                                {reviewFormErrors.comment?.message}
-                                            </Form.Control.Feedback>
-                                        </Form.Group>
-                                        <Button variant="primary" type="submit" className='px-3'>
-                                            Gửi đánh giá & nhận xét
-                                        </Button>
-                                    </Form>
+                                            <Form.Group controlId='comement' className='mb-3'>
+                                                <Form.Label className='font-weight-semi-bold'>Nhận xét của bạn <span
+                                                    className='text-danger'>*</span></Form.Label>
+                                                <Form.Control
+                                                    as='textarea'
+                                                    cols={30}
+                                                    rows={5}
+                                                    className='form-control'
+                                                    {...reviewFormRegister('comment')}
+                                                    placeholder="Nhập nội dụng nhận xét (tối thiểu 10 ký tự và tối đa 1000 ký tự)"
+                                                    isInvalid={!!reviewFormErrors.comment}
+                                                />
+                                                <Form.Control.Feedback type="invalid">
+                                                    {reviewFormErrors.comment?.message}
+                                                </Form.Control.Feedback>
+                                            </Form.Group>
+                                            <Button variant="primary" type="submit" className='px-3'>
+                                                Gửi đánh giá & nhận xét
+                                            </Button>
+                                        </Form>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </ProductDetailTabPanel>
+                        </ProductDetailTabPanel>
+                    </div>
                 </div>
-            </div>
+            }
             <Modal show={showRequireFormModal} onHide={handleCloseRequireFormModal}>
                 <Modal.Header>
                     <Modal.Title>Yêu cầu thiết kế & kích cỡ khác</Modal.Title>
