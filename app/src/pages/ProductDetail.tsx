@@ -345,7 +345,7 @@ const ProductDetail = ()=> {
                     </h3>
                     <p className="mb-3">{product?.shortDescription}</p>
                     <p className='d-flex mb-3 align-items-center font-weight-semi-bold' style={{cursor: "pointer"}} onClick={handleShowSizeGuideModal}>
-                        <FontAwesomeIcon icon={faRulerHorizontal} className='mr-1' style={{fontSize: '1.5rem'}}/> Huớng dẫn chọn kích cỡ
+                        <FontAwesomeIcon icon={faRulerHorizontal} className='mr-1 text-primary' style={{fontSize: '1.5rem'}}/> Huớng dẫn chọn kích cỡ
                     </p>
                     <div className="d-flex flex-column mb-4">
                         <p className="text-dark font-weight-medium mb-3 flex-wrap">
