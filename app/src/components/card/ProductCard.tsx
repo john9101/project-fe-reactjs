@@ -11,7 +11,7 @@ import {NavLink} from "react-router-dom";
 import {useState} from "react";
 import {Button, Modal} from "react-bootstrap";
 import ProductDetail from "../../pages/ProductDetail";
-import '../../assets/css/styleShop.scss'
+// import '../../assets/css/styleShop.scss'
 
 interface ProductCardProps {
     product: Product
@@ -112,6 +112,7 @@ const ProductCard = ({product, minHeight}: ProductCardProps) => {
                 centered
                 show={showQuickSeeModal}
                 onHide={handleCloseQuickSeeModal}
+                size='xl'
             >
                 <Modal.Header>
                     <button type="button" className="close align-self-center" style={{outline: 'none'}}
