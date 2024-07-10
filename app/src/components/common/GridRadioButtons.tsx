@@ -10,9 +10,9 @@ interface CustomRadioButtonProps {
 }
 
 interface GridRadioButtonsProps{
-    arrayValue: string[];
+    arrayValues: string[];
     onSetSelectedOptionName?: (optionName: string | null) => void
-    onSetSelectedSize?: (size: string | null) => void
+    onSetSelectedSizeName?: (size: string | null) => void
 }
 
 const CustomRadioButton = ({ label, value, selectedValue, onChange }: CustomRadioButtonProps) => (
@@ -81,7 +81,7 @@ const CustomRadioButton = ({ label, value, selectedValue, onChange }: CustomRadi
     </Box>
 );
 
-const GridRadioButtons = ({arrayValue, onSetSelectedOptionName, onSetSelectedSize}: GridRadioButtonsProps) => {
+const GridRadioButtons = ({arrayValues, onSetSelectedOptionName, onSetSelectedSizeName}: GridRadioButtonsProps) => {
     const [selectedValue, setSelectedValue] = useState<string | null>(null);
 
     const handleChange = (value: string) => {
@@ -91,8 +91,8 @@ const GridRadioButtons = ({arrayValue, onSetSelectedOptionName, onSetSelectedSiz
                 onSetSelectedOptionName(null);
             }
 
-            if(onSetSelectedSize){
-                onSetSelectedSize(null)
+            if(onSetSelectedSizeName){
+                onSetSelectedSizeName(null)
             }
         }else {
             setSelectedValue(value);
@@ -100,8 +100,8 @@ const GridRadioButtons = ({arrayValue, onSetSelectedOptionName, onSetSelectedSiz
                 onSetSelectedOptionName(value)
             }
 
-            if(onSetSelectedSize){
-                onSetSelectedSize(value)
+            if(onSetSelectedSizeName){
+                onSetSelectedSizeName(value)
             }
         }
     };
@@ -111,7 +111,7 @@ const GridRadioButtons = ({arrayValue, onSetSelectedOptionName, onSetSelectedSiz
             <RadioGroup
                 onChange={event => handleChange(event.target.value)}>
                 <Grid container spacing={2}>
-                    {arrayValue.map((value, index) => (
+                    {arrayValues.map((value, index) => (
                         <Grid item key={index}>
                             <CustomRadioButton
                                 label={value}
