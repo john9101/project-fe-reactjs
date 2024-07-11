@@ -39,6 +39,18 @@ export interface IContact {
     message: string
 }
 
+export interface IUser{
+    username: string,
+    password: string,
+    fullName: string,
+    gender: string,
+    email: string,
+    phone: string,
+    address: string,
+    companyName: string,
+    avatar: string,
+}
+
 const optionSchema: Schema = new Schema({
     optionName: {
         type: String,
@@ -60,12 +72,9 @@ const optionSchema: Schema = new Schema({
         type: String,
         required: true
     },
-    productId: {
+    product: {
         type: Schema.Types.ObjectId,
         required: true
-    },
-    description: {
-        type: String
     }
 })
 
@@ -78,7 +87,7 @@ const categorySchema: Schema = new Schema({
 
 const productSchema: Schema = new Schema({
     name: {
-        type: String,
+        type: String, 
         require: true
     },
     category: {
@@ -92,8 +101,11 @@ const productSchema: Schema = new Schema({
     longDescription: {
         type: String
     },
+    salePrice: {
+        type: Number
+    },
     originalPrice: {
-        type: Number,
+        type: Number, 
         require: true
     },
     discountPercent: {
@@ -253,6 +265,40 @@ const voucherSchema: Schema = new Schema({
     }
 });
 
+const userSchema: Schema = new Schema({
+    username: {
+        type: String,
+        require: true
+    },
+    password: {
+        type: String,
+        require: true
+    },
+    fullName: {
+        type: String,
+        require: true
+    },
+    gender: {
+        type: String,
+    },
+    phone: {
+        type: String,
+    },
+    email: {
+        type: String,
+        require: true
+    },
+    address: {
+        type: String,
+        require: true
+    },
+    companyName: {
+        type: String
+    },
+    avatar: {
+        type: String
+    }
+})
 export const Category = mongoose.model('Category', categorySchema, 'categories')
 export const Option = mongoose.model('Option', optionSchema, 'options')
 export const Product = mongoose.model('Product', productSchema, 'products')
