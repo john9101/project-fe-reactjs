@@ -1,5 +1,5 @@
+// @ts-ignore
 import {IOption, IRequire, Require} from "../models/model";
-
 class RequireService{
     async saveNewRequire(data: IRequire){
         const newRequire = new Require(data)

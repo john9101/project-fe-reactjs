@@ -8,7 +8,7 @@ export interface IOption{
         }
     ]
     price: number
-    option_name: string
+    name: string
 }
 
 export interface IRequire{
@@ -39,20 +39,8 @@ export interface IContact {
     message: string
 }
 
-export interface IUser{
-    username: string,
-    password: string,
-    fullName: string,
-    gender: string,
-    email: string,
-    phone: string,
-    address: string,
-    companyName: string,
-    avatar: string,
-}
-
 const optionSchema: Schema = new Schema({
-    optionName: {
+    name: {
         type: String,
         require: true
     },
@@ -72,9 +60,12 @@ const optionSchema: Schema = new Schema({
         type: String,
         required: true
     },
-    product: {
+    productId: {
         type: Schema.Types.ObjectId,
         required: true
+    },
+    description: {
+        type: String
     }
 })
 
@@ -87,7 +78,7 @@ const categorySchema: Schema = new Schema({
 
 const productSchema: Schema = new Schema({
     name: {
-        type: String, 
+        type: String,
         require: true
     },
     category: {
@@ -101,11 +92,8 @@ const productSchema: Schema = new Schema({
     longDescription: {
         type: String
     },
-    salePrice: {
-        type: Number
-    },
     originalPrice: {
-        type: Number, 
+        type: Number,
         require: true
     },
     discountPercent: {
@@ -121,7 +109,67 @@ const productSchema: Schema = new Schema({
     uniformGender: {
         type: String,
         require: true
+    },
+    initialHeightRange: {
+        min: {
+            type: Number,
+            require: true
+        },
+        max: {
+            type: Number,
+            require: true
+        }
+    },
+    initialWeightRange: {
+        min: {
+            type: Number,
+            require: true
+        },
+        max: {
+            type: Number,
+            require: true
+        }
+    },
+    sizeCharts: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'SizeChart',
+        }
+    ]
+})
+
+const measurementSchema: Schema = new Schema({
+    name: {
+        type: String,
+        require: true
     }
+})
+
+const sizeChartSchema: Schema = new Schema({
+    name: {
+        type: String,
+        require: true
+    },
+    productId: {
+        type: Schema.Types.ObjectId,
+        ref: 'Product',
+    },
+    initialUniformSpecs: [
+        {
+            measurement: {
+                type: Schema.Types.ObjectId,
+                ref: 'Measurement'
+            },
+            value: {
+                type: Number,
+                require: true
+            },
+            distanceToNext: {
+                type: Number,
+                require: true
+            }
+        }
+    ]
 })
 
 const userSchema: Schema = new Schema({
@@ -198,11 +246,11 @@ const contactSchema: Schema = new Schema({
         type: String,
         require: true
     },
-    message: {
+    message:{
         type: String,
         require: true
     }
-}, {versionKey: false});
+},  { versionKey: false })
 
 const voucherSchema: Schema = new Schema({
     code: {
@@ -265,43 +313,12 @@ const voucherSchema: Schema = new Schema({
     }
 });
 
-const userSchema: Schema = new Schema({
-    username: {
-        type: String,
-        require: true
-    },
-    password: {
-        type: String,
-        require: true
-    },
-    fullName: {
-        type: String,
-        require: true
-    },
-    gender: {
-        type: String,
-    },
-    phone: {
-        type: String,
-    },
-    email: {
-        type: String,
-        require: true
-    },
-    address: {
-        type: String,
-        require: true
-    },
-    companyName: {
-        type: String
-    },
-    avatar: {
-        type: String
-    }
-})
 export const Category = mongoose.model('Category', categorySchema, 'categories')
 export const Option = mongoose.model('Option', optionSchema, 'options')
 export const Product = mongoose.model('Product', productSchema, 'products')
 export const User = mongoose.model('User', userSchema, 'users')
+export const Require =mongoose.model<IRequire>("Require", requireSchema, 'requires')
 export const Contact = mongoose.model("Contact", contactSchema, 'contacts')
+export const Measurement = mongoose.model('Measurement', measurementSchema, 'measurements')
+export const SizeChart = mongoose.model("SizeChart", sizeChartSchema, 'size_charts')
 export const Voucher = mongoose.model('Voucher', voucherSchema, 'voucher')

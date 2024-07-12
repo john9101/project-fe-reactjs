@@ -3,5 +3,5 @@ import {findAllVouchersController} from "../controllers/vouchers.controller";
 // @ts-ignore
 const voucherRouter = new Router();
 
-voucherRouter.use('/', findAllVouchersController);
+voucherRouter.get('/', findAllVouchersController);
 export default voucherRouter;
