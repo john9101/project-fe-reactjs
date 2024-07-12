@@ -4,27 +4,16 @@ import {AppDispatch, RootState} from "../store/store";
 import React, {useEffect, useRef, useState} from "react";
 import {fetchProductDetail, setSelectedOption, setSelectedSize} from "../store/product.slice";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {
-    faPlus,
-    faMinus,
-    faCircleChevronLeft,
-    faCircleChevronRight,
-    faCircleUser,
-    faTape,
-    faRulerHorizontal,
-    faCartShopping,
-    faHeart,
-    faClipboard
-} from "@fortawesome/free-solid-svg-icons";
+import {faPlus,faMinus, faCircleChevronLeft, faCircleChevronRight, faCircleUser, faCartShopping, faHeart, faClipboard} from "@fortawesome/free-solid-svg-icons";
 import {faFacebookF, faXTwitter, faLinkedinIn, faPinterest} from "@fortawesome/free-brands-svg-icons"
 import {Box, Rating, Tab, Tabs} from "@mui/material";
 import StyleIcon from '@mui/icons-material/Style';
 import StarIcon from '@mui/icons-material/Star';
 import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
-import Slider, {Settings} from "react-slick";
+import Slider, { Settings } from "react-slick";
 import {formatCurrency} from "../util/formatCurrency";
 import GridRadioButtons from "../components/common/GridRadioButtons";
-import {Badge, Form, Modal, Button, Table} from "react-bootstrap";
+import {Badge, Form, Modal, Button} from "react-bootstrap";
 import {Controller, useForm} from "react-hook-form";
 import * as Yup from 'yup'
 import {yupResolver} from "@hookform/resolvers/yup";
@@ -32,12 +21,6 @@ import {isValidPhone} from "../util/validatePhone";
 import {isValidEmail} from "../util/validateEmail";
 import {Require} from "../types/require.type";
 import http from "../util/http";
-import {formatKilogram, formatMeter} from "../util/formatUnitMeasure";
-import {computeUniformSpecMeasure, computeBodyMetricsRange} from "../util/formularSizeChart";
-import {toast} from "react-toastify";
-import {addToCart} from "../store/cart.slice";
-import {nanoid} from "@reduxjs/toolkit";
-import ButtonQuantity from "../components/common/ButtonQuantity";
 
 const reviewFormSchema = Yup.object().shape({
     rating: Yup.number()
@@ -54,18 +37,18 @@ const requireFormSchema = Yup.object().shape({
     email: Yup.string()
         .required("Địa chỉ email không được bỏ trống")
         .test('emailValidation', 'Địa chỉ email không hợp lệ', async (email: string) => {
-            if (email) {
+            if(email){
                 return await isValidEmail(email);
-            } else {
+            }else{
                 return true
             }
         }),
     phone: Yup.string()
         .required("Số điện thoại không được bỏ trống")
         .test("phoneValidation", 'Số điện thoại không hợp lệ', async (phone: string) => {
-            if (phone) {
+            if(phone){
                 return await isValidPhone(phone);
-            } else {
+            }else{
                 return true
             }
         }),
@@ -76,7 +59,7 @@ const requireFormSchema = Yup.object().shape({
     companyName: Yup.string(),
 })
 
-interface ReviewFormData {
+interface ReviewFormData{
     rating: number
     comment: string
     fullName?: string
@@ -84,7 +67,7 @@ interface ReviewFormData {
     sentDate?: string
 }
 
-interface TabPanelProps {
+interface TabPanelProps{
     children?: React.ReactNode
     index: number
     value: number
@@ -96,7 +79,7 @@ interface ZoomStyle {
     transition: string;
 }
 
-const ProductDetailTabPanel = (props: TabPanelProps) => {
+const ProductDetailTabPanel = (props: TabPanelProps) =>{
     const {children, value, index, ...other} = props;
     return (
         <div
@@ -106,28 +89,18 @@ const ProductDetailTabPanel = (props: TabPanelProps) => {
             aria-labelledby={`simple-tabpanel-${index}`}
             {...other}
         >
-            {value === index && <Box sx={{p: 3}}>{children}</Box>}
+            {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
         </div>
     )
 }
 
-interface ProductDetailProps {
-    productId?: string
-}
-
-const ProductDetail = ({productId: productIdFromProp}: ProductDetailProps) => {
-    const {productId: productIdFromParam} = useParams()
-    const productId = productIdFromProp || productIdFromParam
+const ProductDetail = ()=> {
+    const {productId} = useParams()
     const dispatch = useDispatch<AppDispatch>();
     const productDetail = useSelector((state: RootState) => state.products.productDetail!);
     const product = productDetail.product;
-
-    const options = product?.options;
-    const initialWeightRange = product?.initialWeightRange
-    const initialHeightRange = product?.initialHeightRange
-    const sizeCharts = product?.sizeCharts;
-
     const quantityInStock = productDetail.quantityInStock;
+    const options = product?.options;
     const images = options?.map(option => option.image)
     const optionNames = options?.map(option => option.name)
     const sizeNames = options?.flatMap(option => option.stocks).map(stock => stock.size);
@@ -173,14 +146,14 @@ const ProductDetail = ({productId: productIdFromProp}: ProductDetailProps) => {
 
     const handleSetSelectedOptionName = (optionName: string | null) => {
         if (!optionName) {
-            if (sliderRef.current) {
+            if(sliderRef.current){
                 sliderRef.current.slickPlay()
             }
         } else {
             const optionIndex = options?.findIndex(option => option.name === optionName);
             if (optionIndex !== undefined && optionIndex >= 0) {
                 setSlideIndex(optionIndex!)
-                if (sliderRef.current) {
+                if(sliderRef.current) {
                     sliderRef.current.slickGoTo(optionIndex!)
                     sliderRef.current.slickPause()
                 }
@@ -189,10 +162,11 @@ const ProductDetail = ({productId: productIdFromProp}: ProductDetailProps) => {
         dispatch(setSelectedOption(optionName))
     }
 
+
     const handleSetSelectedSizeName = (sizeName: string | null) => {
         const sizeIndex = uniqueSizeNames.indexOf(sizeName!)
         let selectedSize = null
-        if (sizeName && sizeIndex >= 0) {
+        if(sizeName && sizeIndex >= 0){
             selectedSize = {name: sizeName!, index: sizeIndex};
         }
         dispatch(setSelectedSize(selectedSize))
@@ -211,7 +185,7 @@ const ProductDetail = ({productId: productIdFromProp}: ProductDetailProps) => {
         )
     }
 
-    const PreviousArrowCustom = () => {
+    const PreviousArrowCustom = () =>{
         return (
             <div className="carousel-control-next" onClick={handleNextSlide}>
                 <FontAwesomeIcon icon={faCircleChevronRight} className="custom-arrow-icon"/>
@@ -221,13 +195,13 @@ const ProductDetail = ({productId: productIdFromProp}: ProductDetailProps) => {
 
     const handleNextSlide = () => {
         if (sliderRef.current) {
-            sliderRef.current.slickNext();
+          sliderRef.current.slickNext();
         }
     };
 
     const handlePreviousSlide = () => {
         if (sliderRef.current) {
-            sliderRef.current.slickPrev();
+          sliderRef.current.slickPrev();
         }
     };
 
@@ -295,11 +269,11 @@ const ProductDetail = ({productId: productIdFromProp}: ProductDetailProps) => {
         resolver: yupResolver(requireFormSchema)
     })
 
-    const onSubmitSendReview = (data: ReviewFormData) => {
+    const onSubmitSendReview = (data: ReviewFormData)=>{
 
     }
 
-    const onSubmitSendRequire = async (data: Require) => {
+    const onSubmitSendRequire = async (data: Require)=>{
         try {
             const response = await http.post<Omit<Require, '_id'>>('requires', data)
             handleCloseRequireFormModal()
@@ -344,9 +318,9 @@ const ProductDetail = ({productId: productIdFromProp}: ProductDetailProps) => {
                 <div className="col-lg-5 pb-5">
                     <div id="product-carousel" className="carousel slide" data-ride="carousel">
                         <div className="carousel-inner border">
-                            <Slider ref={sliderRef} {...sliderSettings}>
+                            <Slider ref={sliderRef} {... sliderSettings}>
                                 {images?.map((image, index) => (
-                                    <div key={index} className="carousel-item active overflow-hidden">
+                                    <div key={index} className="carousel-item active overflow-hidden" >
                                         <img
                                             className="w-100 h-100"
                                             src={image}
@@ -370,37 +344,31 @@ const ProductDetail = ({productId: productIdFromProp}: ProductDetailProps) => {
                         <div className="text-primary mr-2">
                             <StarIcon/>
                         </div>
-                        <p className={'mb-0'}><span
-                            className={'font-weight-semi-bold'}>Đánh giá:</span> {product?.rating}</p>
+                        <p className={'mb-0'}><span className={'font-weight-semi-bold'}>Đánh giá:</span> {product?.rating}</p>
                     </div>
                     <div className="d-flex align-items-center mb-4">
                         <div className="text-primary mr-2">
                             <StyleIcon/>
                         </div>
-                        <p className={'mb-0 display-6'}><span
-                            className={'font-weight-semi-bold'}>Danh mục:</span> {product?.category.name}</p>
+                        <p className={'mb-0 display-6'}><span className={'font-weight-semi-bold'}>Danh mục:</span> {product?.category.name}</p>
                     </div>
                     <h3 className="font-weight-bold mb-3 d-inline-flex align-items-baseline">
                         {formatCurrency((1 - product?.discountPercent!) * product?.originalPrice!)}
                         {
                             product?.discountPercent !== 0 &&
                             <>
-                                <Badge style={{color: 'white'}}
-                                       className={'mr-2 order-first align-self-center rounded'}>
+                                <Badge style={{color: 'white'}} className={'mr-2 order-first align-self-center rounded'}>
                                     {-(product?.discountPercent as number * 100)}%
                                 </Badge>
-                                <s className={"font-weight-medium ml-2"}
-                                   style={{fontSize: "1rem", color: "var(--gray)"}}>
+                                <s className={"font-weight-medium ml-2"} style={{fontSize: "1rem", color: "var(--gray)"}}>
                                     {formatCurrency(product?.originalPrice!)}
                                 </s>
                             </>
                         }
                     </h3>
                     <p className="mb-3">{product?.shortDescription}</p>
-                    <p className='d-flex mb-3 align-items-center font-weight-semi-bold' style={{cursor: "pointer"}}
-                       onClick={handleShowSizeGuideModal}>
-                        <FontAwesomeIcon icon={faRulerHorizontal} className='mr-1 text-primary'
-                                         style={{fontSize: '1.5rem'}}/> Huớng dẫn chọn kích cỡ
+                    <p className='d-flex mb-3 align-items-center font-weight-semi-bold' style={{cursor: "pointer"}} onClick={handleShowSizeGuideModal}>
+                        <FontAwesomeIcon icon={faRulerHorizontal} className='mr-1 text-primary' style={{fontSize: '1.5rem'}}/> Huớng dẫn chọn kích cỡ
                     </p>
                     <div className="d-flex flex-column mb-4">
                         <p className="text-dark font-weight-medium mb-3 flex-wrap">
@@ -421,12 +389,10 @@ const ProductDetail = ({productId: productIdFromProp}: ProductDetailProps) => {
                     <div className="d-flex flex-column mb-4">
                         <p className="text-dark font-weight-medium mb-3">
                             Mẫu: {productDetail.selectedOption &&
-                            <span
-                                className={'text-primary'}>{productDetail.selectedOption!.name} ({productDetail.selectedOption!.description})</span>}
+                            <span className={'text-primary'}>{productDetail.selectedOption!.name} ({productDetail.selectedOption!.description})</span>}
                         </p>
                         <form>
-                            {optionNames && <GridRadioButtons arrayValues={optionNames!}
-                                                              onSetSelectedOptionName={handleSetSelectedOptionName}/>}
+                            {optionNames && <GridRadioButtons arrayValues={optionNames!} onSetSelectedOptionName={handleSetSelectedOptionName}/>}
                         </form>
                     </div>
                     <p className="text-dark font-weight-medium mb-3">Số lượng mẫu trong kho: <span
@@ -569,8 +535,7 @@ const ProductDetail = ({productId: productIdFromProp}: ProductDetailProps) => {
                 <Form onSubmit={handleSubmitRequireForm(onSubmitSendRequire)}>
                     <Modal.Body>
                         <Form.Group className="mb-3" controlId='fullName'>
-                            <Form.Label className='font-weight-semi-bold'>Họ và tên người đại diện <span
-                                className='text-danger'>*</span></Form.Label>
+                            <Form.Label className='font-weight-semi-bold'>Họ và tên người đại diện <span className='text-danger'>*</span></Form.Label>
                             <Form.Control
                                 type="text"
                                 placeholder="Nhập họ và tên của người đại diện"
@@ -620,8 +585,7 @@ const ProductDetail = ({productId: productIdFromProp}: ProductDetailProps) => {
                             />
                         </Form.Group>
                         <Form.Group className="mb-3" controlId='content'>
-                            <Form.Label className='font-weight-semi-bold'>Nội dung yêu cầu <span
-                                className='text-danger'>*</span></Form.Label>
+                            <Form.Label className='font-weight-semi-bold'>Nội dung yêu cầu <span className='text-danger'>*</span></Form.Label>
                             <Form.Control
                                 as="textarea"
                                 rows={6}
@@ -650,7 +614,7 @@ const ProductDetail = ({productId: productIdFromProp}: ProductDetailProps) => {
                     <Modal.Body>
                         <div className='d-flex flex-column text-center align-items-center'>
                             <div className='d-flex flex-column align-items-center mb-3'>
-                                <AssignmentTurnedInIcon className='text-success' style={{fontSize: '12rem'}}/>
+                                <AssignmentTurnedInIcon className='text-success' style={{fontSize: '12rem'}} />
                                 <strong style={{fontSize: '1.8rem'}}>Gửi yêu cầu thành công</strong>
                             </div>
                             <span style={{fontSize: '1.1rem'}}>Cảm ơn bạn đã gửi yêu cầu cho chúng tôi. Chúng tôi sẽ cố gắng phản hồi sớm nhất trong vòng 24h. Vui lòng bạn chú ý điện thoại hoặc email để nhận được phản hồi từ chúng tôi</span>

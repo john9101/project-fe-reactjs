@@ -1,3 +1,4 @@
+// import {Measurement} from "./measurement.type";
 import {UniformSpec} from "./uniformSpec.type";
 
 export interface SizeChart {

@@ -56,6 +56,7 @@ const productSlice = createSlice({
             const options = state.productDetail.product!.options
             if(action.payload) {
                 state.productDetail.selectedSize = action.payload
+                console.log(state.productDetail.selectedSize)
                 if(state.productDetail.selectedOption){
                     const selectedOption = options.find(option => option.name === state.productDetail.selectedOption!.name)
                     const selectedStock = selectedOption!.stocks.find(stock => stock.size === action.payload!.name)
