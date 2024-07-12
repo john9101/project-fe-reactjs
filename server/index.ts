@@ -28,6 +28,7 @@ app.use('/api/products', productsRouter)
 app.use('/api/categories', categoryRouter);
 app.use('/api/contacts', contactsRouter)
 app.use('/api/requires', requiresRouter)
+app.use('/api/vouchers', voucherRouter);
 
 const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.CLUSTER_NAME}.nlnlbxk.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`
 

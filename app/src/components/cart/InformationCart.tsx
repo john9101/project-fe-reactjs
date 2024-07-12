@@ -46,13 +46,7 @@ export default function InformationCart() {
             <VoucherCard onSelectVoucher={handleApplyVoucher}/>
             <form className="mb-5" action="">
                 <div className="input-group">
-                    <input type="text" className="form-control p-4" placeholder="Mã giảm" value={voucherCode}/>
-                    {/*<div className="input-group-append">*/}
-                    {/*    <button className="btn btn-primary"*/}
-                    {/*            type={"button"}*/}
-                    {/*            onClick={() => handleApplyVoucher(voucherCode, voucherDiscount)}>Áp dụng giảm giá*/}
-                    {/*    </button>*/}
-                    {/*</div>*/}
+                    <input type="text" className="form-control p-4" placeholder="Mã giảm" value={voucherCode} aria-placeholder={"Mã giảm"}/>
                 </div>
             </form>
 
