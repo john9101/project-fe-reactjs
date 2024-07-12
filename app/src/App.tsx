@@ -33,14 +33,12 @@ function App() {
                             <Route path="contact-us" element={<ContactUs />} />
                             <Route path="products/:productId" element={<ProductDetail/>} />
                             <Route path="about-us" element={<AboutUs />} />
-                            
                         </Route>
                         <Route path="account" element={<FormLayout />}>
                             <Route path="login" element={<Login />} />
                             <Route path="register" element={<Register />} />
                             <Route path='forgot-password' element={<ForgotPassword />} />
                         </Route>
-
                     </Routes>
                 </Suspense>
             </div>
