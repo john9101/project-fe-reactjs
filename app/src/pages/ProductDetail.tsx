@@ -319,7 +319,7 @@ const ProductDetail = ({productId: productIdFromProp}: ProductDetailProps) => {
             });
             return;
         }
-        if (selectedOption?.name === null || selectedSize === null) {
+        if (selectedOption === null || selectedSize === null) {
             toast.error("Vui lòng chọn kích cỡ và mẫu", {
                 position: "bottom-left",
                 autoClose: 1000
