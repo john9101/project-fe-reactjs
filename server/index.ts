@@ -3,7 +3,7 @@ import express from 'express'
 import productsRouter from './src/routes/products.routes'
 import categoryRouter from './src/routes/categories.routes';
 import { config } from 'dotenv'
-import mongoose from 'mongoose'
+import mongoose, {Schema} from 'mongoose'
 // @ts-ignore
 import bodyParser from 'body-parser'
 // @ts-ignore
@@ -12,6 +12,8 @@ import cors from "cors"
 import morgan from 'morgan'
 import requiresRouter from "./src/routes/requires.routes";
 import contactsRouter from "./src/routes/contacts.routes";
+import { createServer } from "http";
+import { Server } from "socket.io";
 
 config()
 const app = express()

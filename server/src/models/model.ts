@@ -8,7 +8,7 @@ export interface IOption{
         }
     ]
     price: number
-    option_name: string
+    name: string
 }
 
 export interface IRequire{
@@ -40,7 +40,7 @@ export interface IContact {
 }
 
 const optionSchema: Schema = new Schema({
-    optionName: {
+    name: {
         type: String,
         require: true
     },
@@ -109,7 +109,67 @@ const productSchema: Schema = new Schema({
     uniformGender: {
         type: String,
         require: true
+    },
+    initialHeightRange: {
+        min: {
+            type: Number,
+            require: true
+        },
+        max: {
+            type: Number,
+            require: true
+        }
+    },
+    initialWeightRange: {
+        min: {
+            type: Number,
+            require: true
+        },
+        max: {
+            type: Number,
+            require: true
+        }
+    },
+    sizeCharts: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'SizeChart',
+        }
+    ]
+})
+
+const measurementSchema: Schema = new Schema({
+    name: {
+        type: String,
+        require: true
     }
+})
+
+const sizeChartSchema: Schema = new Schema({
+    name: {
+        type: String,
+        require: true
+    },
+    productId: {
+        type: Schema.Types.ObjectId,
+        ref: 'Product',
+    },
+    initialUniformSpecs: [
+        {
+            measurement: {
+                type: Schema.Types.ObjectId,
+                ref: 'Measurement'
+            },
+            value: {
+                type: Number,
+                require: true
+            },
+            distanceToNext: {
+                type: Number,
+                require: true
+            }
+        }
+    ]
 })
 
 const userSchema: Schema = new Schema({
@@ -198,3 +258,5 @@ export const Product = mongoose.model('Product', productSchema, 'products')
 export const User = mongoose.model('User', userSchema, 'users')
 export const Require =mongoose.model<IRequire>("Require", requireSchema, 'requires')
 export const Contact = mongoose.model("Contact", contactSchema, 'contacts')
+export const Measurement = mongoose.model('Measurement', measurementSchema, 'measurements')
+export const SizeChart = mongoose.model("SizeChart", sizeChartSchema, 'size_charts')
