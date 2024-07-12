@@ -20,7 +20,7 @@ function CartItemsMini() {
         <div className="cart-items-mini">
             {cartItems.length > 0 ? (
                 cartItems.map(item => {
-                    const selectedOption = item.product.options.find(option => option.optionName === item.selectedOption);
+                    const selectedOption = item.product.options.find(option => option.name === item.selectedOption.name);
                     const image = selectedOption ? selectedOption.image : '';
                     return (
                         <StyledNavLink to={`/products/${item.product._id}`} key={item.id}>
@@ -29,8 +29,8 @@ function CartItemsMini() {
                                 <div className="cart-item-details text-left">
                                     <h6>{item.product.name}</h6>
                                     <div className="cart-item-details-sub">
-                                        <p>Loại: {item.selectedOption}</p>
-                                        <p>Size: {item.selectedSize}</p>
+                                        <p>Loại: {item.selectedOption.name}</p>
+                                        <p>Size: {item.selectedSize.name}</p>
                                     </div>
                                     <div className="cart-item-details-sub">
                                         <p>Số lượng: {item.quantity} </p>

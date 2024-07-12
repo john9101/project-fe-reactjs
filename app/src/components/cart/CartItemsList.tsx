@@ -71,7 +71,7 @@ export default function CartItemsList() {
                     </thead>
                     <tbody>
                     {cart.cartItems?.map((cartItem) => {
-                        const selectedOption = cartItem.product.options.find(option => option.optionName === cartItem.selectedOption);
+                        const selectedOption = cartItem.product.options.find(option => option.name === cartItem.selectedOption.name);
                         const image = selectedOption ? selectedOption.image : '';
 
                         return (
@@ -81,9 +81,9 @@ export default function CartItemsList() {
                                     <img src={image} alt={cartItem.product.name} style={{width: '65px'}}/>
                                     {/*{cartItem.product.name}*/}
                                 </td>
-                                <td className="align-middle">{cartItem.selectedOption}</td>
+                                <td className="align-middle">{cartItem.selectedOption.name}</td>
                                 <td className="align-middle">{formatCurrency(cartItem.product.originalPrice * (1 - cartItem.product.discountPercent))}</td>
-                                <td className="align-middle">{cartItem.selectedSize}</td>
+                                <td className="align-middle">{cartItem.selectedSize.name}</td>
                                 <td className="align-middle">
                                     <div className="input-group quantity mx-auto" style={{width: '100%'}}>
                                         <ButtonQuantity
