@@ -1,8 +1,8 @@
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import React from 'react';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import {NavLink} from "react-router-dom";
-import React from "react";
 
-export default function CartEmpty(){
+function FavouriteEmpty() {
     return (
         <div className="container-fluid mt-100">
             <div className="row">
@@ -10,8 +10,8 @@ export default function CartEmpty(){
                     <div className="card">
                         <div className="card-body cart">
                             <div className="col-sm-12 empty-cart-cls text-center">
-                                <ShoppingCartIcon style={{fontSize: '80px', color: "#D19C97"}}/>
-                                <h3><strong>Giỏ hàng trống</strong></h3>
+                                <FavoriteBorderIcon style={{fontSize: '80px', color: "#D19C97"}}/>
+                                <h3><strong>Chưa có sản phẩm yêu thích nào</strong></h3>
                                 <NavLink to="/" className="btn btn-primary cart-btn-transform m-3" data-abc="true">Tiếp
                                     tục mua sắm</NavLink>
                             </div>
@@ -22,3 +22,5 @@ export default function CartEmpty(){
         </div>
     );
 }
+
+export default FavouriteEmpty;

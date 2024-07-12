@@ -5,18 +5,15 @@ import React, {useEffect, useRef, useState} from "react";
 import {fetchProductDetail, setSelectedOption, setSelectedSize} from "../store/product.slice";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {
-    faPlus,
-    faMinus,
+    faCartShopping,
     faCircleChevronLeft,
     faCircleChevronRight,
-    faCircleUser,
-    faTape,
-    faRulerHorizontal,
-    faCartShopping,
+    faClipboard,
     faHeart,
-    faClipboard
+    faRulerHorizontal,
+    faTape
 } from "@fortawesome/free-solid-svg-icons";
-import {faFacebookF, faXTwitter, faLinkedinIn, faPinterest} from "@fortawesome/free-brands-svg-icons"
+import {faFacebookF, faLinkedinIn, faPinterest, faXTwitter} from "@fortawesome/free-brands-svg-icons"
 import {Box, Rating, Tab, Tabs} from "@mui/material";
 import StyleIcon from '@mui/icons-material/Style';
 import StarIcon from '@mui/icons-material/Star';
@@ -24,7 +21,7 @@ import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
 import Slider, {Settings} from "react-slick";
 import {formatCurrency} from "../util/formatCurrency";
 import GridRadioButtons from "../components/common/GridRadioButtons";
-import {Badge, Form, Modal, Button, Table} from "react-bootstrap";
+import {Badge, Button, Form, Modal, Table} from "react-bootstrap";
 import {Controller, useForm} from "react-hook-form";
 import * as Yup from 'yup'
 import {yupResolver} from "@hookform/resolvers/yup";
@@ -33,11 +30,12 @@ import {isValidEmail} from "../util/validateEmail";
 import {Require} from "../types/require.type";
 import http from "../util/http";
 import {formatKilogram, formatMeter} from "../util/formatUnitMeasure";
-import {computeUniformSpecMeasure, computeBodyMetricsRange} from "../util/formularSizeChart";
+import {computeBodyMetricsRange, computeUniformSpecMeasure} from "../util/formularSizeChart";
 import {toast} from "react-toastify";
 import {addToCart} from "../store/cart.slice";
 import {nanoid} from "@reduxjs/toolkit";
 import ButtonQuantity from "../components/common/ButtonQuantity";
+import {addToFavourite, removeFromFavourite} from "../store/favourite.slice";
 
 const reviewFormSchema = Yup.object().shape({
     rating: Yup.number()
@@ -338,6 +336,24 @@ const ProductDetail = ({productId: productIdFromProp}: ProductDetailProps) => {
             autoClose: 1000
         });
     }
+
+    const favouriteProducts = useSelector((state: RootState) => state.favourite.products);
+    const [isFavourite, setIsFavourite] = useState<boolean>(false);
+
+    useEffect(() => {
+        console.log(favouriteProducts);
+        console.log(product)
+        const exists = favouriteProducts.some(favProduct => favProduct._id == productId);
+        setIsFavourite(exists);
+    }, [favouriteProducts, product]);
+
+    const handleAddToFavourite = () => {
+        if (isFavourite) {
+            dispatch(removeFromFavourite(product!._id));
+        } else {
+            dispatch(addToFavourite(product!));
+        }
+    };
     return (
         <div className="container-fluid py-5">
             <div className="row px-xl-5">
@@ -439,9 +455,8 @@ const ProductDetail = ({productId: productIdFromProp}: ProductDetailProps) => {
                             className={'mr-1'} icon={faCartShopping}/>Thêm
                             vào giỏ hàng
                         </button>
-                        <button className="btn btn-primary px-3"><FontAwesomeIcon className={'mr-1'}
-                                                                                  icon={faHeart}/> Thêm
-                            vào mục yêu thích
+                        <button className="btn btn-primary px-3" onClick={handleAddToFavourite}><FontAwesomeIcon className={'mr-1'}
+                                                                                  icon={faHeart}/> {isFavourite ? "Đã thêm vào yêu thích" : "Thêm vào yêu thích"}
                         </button>
                         <button className="btn btn-primary px-3" onClick={handleShowRequireFormModal}><FontAwesomeIcon
                             className={'mr-1'} icon={faClipboard}/> Yêu cầu thiết kế & kích cỡ khác

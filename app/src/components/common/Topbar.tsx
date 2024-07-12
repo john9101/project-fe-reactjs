@@ -5,11 +5,12 @@ import {faCartShopping, faHeart, faMagnifyingGlass, faShoppingCart} from "@forta
 import Logo from "./Logo";
 import {useSelector} from "react-redux";
 import {RootState} from "../../store/store";
-import React, {useState} from "react";
+import React, {useMemo, useState} from "react";
 import CartItemsMini from "../cart/CartItemsMini";
 
 const Topbar = () => {
     const totalItems = useSelector((state: RootState) => state.cart.totalItem);
+    const totalFavourite: number = useSelector((state :RootState) => state.favourite.totalItem);
 
     const [showCartPreview, setShowCartPreview] = useState(false);
 
@@ -72,9 +73,9 @@ const Topbar = () => {
                     </form>
                 </div>
                 <div className="col-lg-3 col-6 text-right">
-                    <NavLink to="#" className="btn border">
+                    <NavLink to="/favourite" className="btn border">
                         <FontAwesomeIcon icon={faHeart} className="text-primary"/>
-                        <span className="badge">0</span>
+                        <span className="badge">{totalFavourite}</span>
                     </NavLink>
                     <div className="cart-container" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
                         <NavLink to="/cart" className="btn border">
