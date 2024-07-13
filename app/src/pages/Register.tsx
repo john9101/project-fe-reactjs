@@ -4,6 +4,7 @@ import Link from '@mui/material/Link';
 import { Alert, Button, Checkbox, Fade, FormControlLabel, Radio, RadioGroup, Snackbar, TextField } from '@mui/material';
 import Address from '../components/common/Address';
 import ReplyIcon from '@mui/icons-material/Reply';
+import http from '../util/http';
 
 interface Errors {
     username?: string;
@@ -13,10 +14,6 @@ interface Errors {
     phone?: string;
     email?: string;
     termsAccepted?: string;
-    province?: string;
-    district?: string;
-    ward?: string;
-    specificAddress?: string;
 }
 
 interface AddressData {
@@ -30,10 +27,10 @@ const Register = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [rePassword, setRePassword] = useState('');
-    const [fullName, setfullName] = useState('');
-    const [phone, setphone] = useState('');
-    const [email, setemail] = useState('');
-    const [termsAccepted, settermsAccepted] = useState(false);
+    const [fullName, setFullName] = useState('');
+    const [phone, setPhone] = useState('');
+    const [email, setEmail] = useState('');
+    const [termsAccepted, setTermsAccepted] = useState(false);
     const [errors, setErrors] = useState<Errors>({});
     const [addressData, setAddressData] = useState<AddressData>({
         province: null,
@@ -41,8 +38,8 @@ const Register = () => {
         ward: null,
         specificAddress: '',
     });
-    const [successMessage, setSuccessMessage] = useState<boolean>(false);
-    const [failureMessage, setFailureMessage] = useState<boolean>(false);
+    const [successMessage, setSuccessMessage] = useState(false);
+    const [failureMessage, setFailureMessage] = useState(false);
 
     useEffect(() => {
         if (successMessage || failureMessage) {
@@ -56,90 +53,102 @@ const Register = () => {
 
     const validate = () => {
         let tempErrors: Errors = {};
-        tempErrors.username = username ? '' : 'Vui lòng nhập tên đănng nhập của bạn';
-        tempErrors.password = passwordValidator(password)
-        tempErrors.rePassword = comparePasword(password, rePassword);
+        tempErrors.username = username ? '' : 'Vui lòng nhập tên đăng nhập của bạn';
+        tempErrors.password = passwordValidator(password);
+        tempErrors.rePassword = comparePassword(password, rePassword);
         tempErrors.fullName = fullName ? '' : 'Vui lòng nhập họ và tên';
-        tempErrors.phone = validatePhone(phone)
-        tempErrors.email = validateEmail(email)
+        tempErrors.phone = validatePhone(phone);
+        tempErrors.email = validateEmail(email);
         tempErrors.termsAccepted = termsAccepted ? '' : 'Bạn phải đồng ý với điều khoản của chúng tôi';
-        tempErrors.province = addressData.province ? '' : 'Vui lòng chọn Tỉnh/Thành Phố';
-        tempErrors.district = addressData.district ? '' : 'Vui lòng chọn Quận/Huyện';
-        tempErrors.ward = addressData.ward ? '' : 'Vui lòng chọn Phường/Xã';
-        tempErrors.specificAddress = addressData.specificAddress ? '' : 'Vui lòng nhập địa chỉ cụ thể';
         setErrors(tempErrors);
         return Object.values(tempErrors).every(x => x === '');
     };
-    const comparePasword = (password: string, rePassword: string) => {
-        passwordValidator(rePassword)
+
+    const comparePassword = (password: string, rePassword: string) => {
+        const passwordError = passwordValidator(rePassword);
+        if (passwordError) return passwordError;
         if (password !== rePassword) {
             return 'Mật khẩu không khớp';
         }
         return '';
-    }
+    };
+
     const passwordValidator = (password: string) => {
-        // Password length should be at least 8 characters
+        if (password.length === 0) {
+            return 'Vui lòng nhập mật khẩu của bạn';
+        }
         if (password.length < 8) {
-            if (password.length === 0) {
-                return 'Vui lòng nhập mật khẩu của bạn';
-            }
             return 'Mật khẩu phải nhiều hơn 8 kí tự';
         }
-        // Password should contain at least one uppercase letter
         if (!/[A-Z]/.test(password)) {
             return 'Mật khẩu phải có ít nhất một kí tự in hoa';
         }
-        // Password should contain at least one lowercase letter
         if (!/[a-z]/.test(password)) {
-            return 'Mật khẩu phải có ít nhất 1 kí tự là chữ';
+            return 'Mật khẩu phải có ít nhất một kí tự là chữ';
         }
-        // Password should contain at least one number
         if (!/[0-9]/.test(password)) {
             return 'Mật khẩu phải có ít nhất một kí tự là số';
         }
-        // Password should contain at least one special character
         if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
-            return 'Mật khẩu phải có ít một kí tự đặt biệt';
+            return 'Mật khẩu phải có ít nhất một kí tự đặc biệt';
         }
         return '';
     };
+
     const validatePhone = (value: string) => {
         const phoneRegex = /^0\d{9}$/;
-
         if (value.trim() === '') {
             return 'Vui lòng nhập số điện thoại';
         }
-
-
         if (!phoneRegex.test(value)) {
             return 'Số điện thoại phải gồm 10 chữ số bắt đầu từ số 0';
         }
-
         return '';
     };
+
     const validateEmail = (value: string) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
         if (value.trim() === '') {
             return 'Vui lòng nhập email công ty hoặc email của bạn';
         }
-
         if (!emailRegex.test(value)) {
             return 'Email không hợp lệ!';
         }
-
         return '';
     };
 
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         if (validate()) {
-            setSuccessMessage(true);
-            setFailureMessage(false);
+            try {
+                const response = await http.post('register', {
+                    username,
+                    password,
+                    fullName,
+                    phone,
+                    email,
+                    address: addressData,
+                });
+                if (response.status === 201) {
+                    setSuccessMessage(true);
+                    setFailureMessage(false);
+                } else {
+                    setSuccessMessage(false);
+                    setFailureMessage(true);
+                }
+            } catch (error) {
+                setSuccessMessage(false);
+                setFailureMessage(true);
+                console.log('Register Failed', error);
+            }
         } else {
             setSuccessMessage(false);
             setFailureMessage(true);
         }
+    };
+
+    const handleAddressChange = (address: AddressData) => {
+        setAddressData(address);
     };
 
     return (
@@ -152,7 +161,7 @@ const Register = () => {
                 onClose={() => setSuccessMessage(false)}
             >
                 <Alert className='alertSuccess' variant="outlined" severity="success">
-                    Tạo tài khoản thành công.
+                    Đăng ký thành công.
                 </Alert>
             </Snackbar>
             <Snackbar
@@ -163,7 +172,7 @@ const Register = () => {
                 onClose={() => setFailureMessage(false)}
             >
                 <Alert className='alertFail' variant="outlined" severity="error">
-                    Tạo tài khoản thất bại
+                    Đăng ký thất bại
                 </Alert>
             </Snackbar>
             <form onSubmit={handleSubmit} className='componentRegister'>
@@ -203,7 +212,7 @@ const Register = () => {
                     className='inputArea'
                     placeholder='Nhập họ và tên'
                     value={fullName}
-                    onChange={(e) => setfullName(e.target.value)}
+                    onChange={(e) => setFullName(e.target.value)}
                     error={!!errors.fullName}
                     helperText={errors.fullName}
                 />
@@ -233,7 +242,7 @@ const Register = () => {
                     className='inputArea'
                     placeholder='Nhập số điện thoại của công ty hoặc số điện thoại cá nhân'
                     value={phone}
-                    onChange={(e) => setphone(e.target.value)}
+                    onChange={(e) => setPhone(e.target.value)}
                     error={!!errors.phone}
                     helperText={errors.phone}
                 />
@@ -242,19 +251,15 @@ const Register = () => {
                     className='inputArea'
                     placeholder='Ví dụ: example@gmail.com'
                     value={email}
-                    onChange={(e) => setemail(e.target.value)}
+                    onChange={(e) => setEmail(e.target.value)}
                     error={!!errors.email}
                     helperText={errors.email}
                 />
                 <span className='titleInput'>Địa chỉ:</span>
-                <Address
-                    errors={errors}
-                    setAddressData={setAddressData}
-                    setAddressErrors={(addressErrors) => setErrors(prevErrors => ({ ...prevErrors, ...addressErrors }))}
-                />
+                <Address onChange={handleAddressChange} />
                 <div className='checkboxAgree'>
                     <FormControlLabel
-                        control={<Checkbox checked={termsAccepted} onChange={(e) => settermsAccepted(e.target.checked)} />}
+                        control={<Checkbox checked={termsAccepted} onChange={(e) => setTermsAccepted(e.target.checked)} />}
                         label="Tôi đồng ý với điều khoản sử dụng của dịch vụ."
                         style={{ color: errors.termsAccepted ? 'red' : 'inherit' }}
                     />

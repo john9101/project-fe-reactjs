@@ -15,10 +15,10 @@ export const getUser = async (req: Request, res: Response) => {
     }
 };
 
-export const createUser = async (req: Request, res: Response) => {
+export const register = async (req: Request, res: Response) => {
     try {
         const userData = req.body;
-        const newUser = await userService.createUser(userData);
+        const newUser = await userService.register(userData);
         return res.status(200).json(newUser);
     } catch (error) {
         return res.status(500).json({ message: "Internal Server Error" });

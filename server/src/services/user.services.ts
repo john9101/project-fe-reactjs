@@ -10,7 +10,7 @@ class InformationUserService {
         }
     }
 
-    async createUser(dataUser: any) {
+    async register(dataUser: any) {
         try {
             const user = new User(dataUser);
             return await user.save();
