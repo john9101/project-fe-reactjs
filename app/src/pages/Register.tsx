@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import '../assets/css/styleRegister.scss';
 import Link from '@mui/material/Link';
-import { Alert, Button, Checkbox, Fade, FormControlLabel, Radio, RadioGroup, Snackbar, TextField } from '@mui/material';
+import { Alert, Button, Checkbox, FormControlLabel, Radio, RadioGroup, TextField } from '@mui/material';
 import Address from '../components/common/Address';
 import ReplyIcon from '@mui/icons-material/Reply';
 import http from '../util/http';
@@ -38,18 +38,16 @@ const Register = () => {
         ward: null,
         specificAddress: '',
     });
-    const [successMessage, setSuccessMessage] = useState(false);
-    const [failureMessage, setFailureMessage] = useState(false);
 
+    const [alert, setAlert] = useState<{ type: 'success' | 'error' | null, message: string }>({ type: null, message: '' });
     useEffect(() => {
-        if (successMessage || failureMessage) {
+        if (alert.type) {
             const timer = setTimeout(() => {
-                setSuccessMessage(false);
-                setFailureMessage(false);
+                setAlert({ type: null, message: '' });
             }, 5000);
             return () => clearTimeout(timer);
         }
-    }, [successMessage, failureMessage]);
+    }, [alert]);
 
     const validate = () => {
         let tempErrors: Errors = {};
@@ -129,52 +127,30 @@ const Register = () => {
                     email,
                     address: addressData,
                 });
-                if (response.status === 201) {
-                    setSuccessMessage(true);
-                    setFailureMessage(false);
+                if (response.status === 201 || response.status === 200) {
+                    setAlert({ type: 'success', message: 'Đăng ký thành công.' });
                 } else {
-                    setSuccessMessage(false);
-                    setFailureMessage(true);
+                    setAlert({ type: 'error', message: 'Đăng ký thất bại.' });
                 }
             } catch (error) {
-                setSuccessMessage(false);
-                setFailureMessage(true);
+                setAlert({ type: 'error', message: 'Đăng ký thất bại.' });
                 console.log('Register Failed', error);
             }
         } else {
-            setSuccessMessage(false);
-            setFailureMessage(true);
+            setAlert({ type: 'error', message: 'Đăng ký thất bại.' });
         }
     };
 
     const handleAddressChange = (address: AddressData) => {
         setAddressData(address);
     };
-
     return (
         <div>
-            <Snackbar
-                className='showAlert'
-                open={successMessage}
-                autoHideDuration={5000}
-                TransitionComponent={Fade}
-                onClose={() => setSuccessMessage(false)}
-            >
-                <Alert className='alertSuccess' variant="outlined" severity="success">
-                    Đăng ký thành công.
+            {alert.type && (
+                <Alert severity={alert.type} className='showAlert'>
+                    {alert.message}
                 </Alert>
-            </Snackbar>
-            <Snackbar
-                className='showAlert'
-                open={failureMessage}
-                autoHideDuration={5000}
-                TransitionComponent={Fade}
-                onClose={() => setFailureMessage(false)}
-            >
-                <Alert className='alertFail' variant="outlined" severity="error">
-                    Đăng ký thất bại
-                </Alert>
-            </Snackbar>
+            )}
             <form onSubmit={handleSubmit} className='componentRegister'>
                 <Link className='backToLogin' href="/account/login"><ReplyIcon />Về trang đăng nhập</Link>
                 <span className='titleRegister'>Đăng ký</span>

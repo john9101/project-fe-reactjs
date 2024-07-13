@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import InputLabel from '@mui/material/InputLabel';
-import NativeSelect from '@mui/material/NativeSelect';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
 import { fetchProvinces, fetchDistricts, fetchWards } from '../../util/apiAddress';
 
@@ -23,8 +24,6 @@ interface Ward {
     WardName: string;
 }
 
-
-
 interface AddressData {
     province: string | null;
     district: string | null;
@@ -32,7 +31,7 @@ interface AddressData {
     specificAddress: string;
 }
 
-const ComboBox: React.FC<AddressProps> = ({ onChange }) => {
+const AddressSelect: React.FC<AddressProps> = ({ onChange }) => {
     const [provinces, setProvinces] = useState<Province[]>([]);
     const [districts, setDistricts] = useState<District[]>([]);
     const [wards, setWards] = useState<Ward[]>([]);
@@ -91,71 +90,62 @@ const ComboBox: React.FC<AddressProps> = ({ onChange }) => {
     }, [selectedProvince, selectedDistrict, selectedWard, specificAddress, onChange]);
 
     return (
-        <div className="comboBox">
-            <InputLabel className="selectAddress" variant="standard" htmlFor="province-native">
-                Tỉnh/Thành phố
-            </InputLabel>
-            <NativeSelect
-                className="optionSelect"
+        <div className="address-select">
+            <InputLabel htmlFor="province-native">Tỉnh/Thành phố</InputLabel>
+            <Select className="optionSelect"
                 value={selectedProvince || ''}
-                onChange={(event) => setSelectedProvince(event.target.value)}
+                onChange={(event) => setSelectedProvince(event.target.value as string)}
                 inputProps={{
                     name: 'province',
                     id: 'province-native',
                 }}
             >
-                <option className="option" value="">Chọn Tỉnh/Thành phố</option>
+                <MenuItem value="">Chọn Tỉnh/Thành phố</MenuItem>
                 {provinces.map((province) => (
-                    <option className="option" key={province.ProvinceID} value={province.ProvinceName}>
+                    <MenuItem key={province.ProvinceID} value={province.ProvinceName}>
                         {province.ProvinceName}
-                    </option>
+                    </MenuItem>
                 ))}
-            </NativeSelect>
+            </Select>
 
-            <InputLabel className="selectAddress" variant="standard" htmlFor="district-native">
-                Quận/Huyện
-            </InputLabel>
-            <NativeSelect
-                className="optionSelect"
+            <InputLabel htmlFor="district-native">Quận/Huyện</InputLabel>
+            <Select className="optionSelect"
                 value={selectedDistrict || ''}
-                onChange={(event) => setSelectedDistrict(event.target.value)}
+                onChange={(event) => setSelectedDistrict(event.target.value as string)}
                 inputProps={{
                     name: 'district',
                     id: 'district-native',
                 }}
                 disabled={!selectedProvince}
             >
-                <option className="option" value="">Chọn Quận/Huyện</option>
+                <MenuItem value="">Chọn Quận/Huyện</MenuItem>
                 {districts.map((district) => (
-                    <option className="option" key={district.DistrictID} value={district.DistrictName}>
+                    <MenuItem key={district.DistrictID} value={district.DistrictName}>
                         {district.DistrictName}
-                    </option>
+                    </MenuItem>
                 ))}
-            </NativeSelect>
+            </Select>
 
-            <InputLabel className="selectAddress" variant="standard" htmlFor="ward-native">
-                Phường/Xã
-            </InputLabel>
-            <NativeSelect
-                className="optionSelect"
+            <InputLabel htmlFor="ward-native">Phường/Xã</InputLabel>
+            <Select className="optionSelect"
                 value={selectedWard || ''}
-                onChange={(event) => setSelectedWard(event.target.value)}
+                onChange={(event) => setSelectedWard(event.target.value as string)}
                 inputProps={{
                     name: 'ward',
                     id: 'ward-native',
                 }}
                 disabled={!selectedDistrict}
             >
-                <option className="option" value="">Chọn Phường/Xã</option>
+                <MenuItem value="">Chọn Phường/Xã</MenuItem>
                 {wards.map((ward) => (
-                    <option className="option" key={ward.WardCode} value={ward.WardName}>
+                    <MenuItem key={ward.WardCode} value={ward.WardName}>
                         {ward.WardName}
-                    </option>
+                    </MenuItem>
                 ))}
-            </NativeSelect>
+            </Select>
 
             <TextField
-                className="inputArea"
+                className='inputArea'
                 id="outlined-basic"
                 label="Địa chỉ cụ thể"
                 sx={{ width: 300 }}
@@ -166,4 +156,4 @@ const ComboBox: React.FC<AddressProps> = ({ onChange }) => {
     );
 };
 
-export default ComboBox;
+export default AddressSelect;

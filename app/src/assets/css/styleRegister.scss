@@ -1,28 +1,17 @@
 @import './style.module.scss';
 
+
 .showAlert {
     position: fixed;
-    top: -85%;
-    left: 40%;
-
-    .alertSuccess {
-        background-color: var(--light);
-        color: var(--green);
-        font-size: 1.2rem;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .alertFail {
-        background-color: var(--light);
-        color: var(--red);
-        font-size: 1.2rem;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
+    top: 10px;
+    left: calc(50% - 150px);
+    z-index: 1000;
+    font-size: 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
+
 
 .componentRegister {
     position: absolute;
@@ -107,7 +96,11 @@
         color: var(--red);
     }
 
-    .inputAddress {
+    .comboBox {
+        width: 100%;
+    }
+
+    .address-select {
         width: 100%;
     }
 
