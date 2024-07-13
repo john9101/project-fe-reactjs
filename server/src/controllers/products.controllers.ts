@@ -83,7 +83,11 @@ export const getPagingProductsController = async (req: Request, res: Response)=>
             }
         }
 
-        const products = await productsService.getPagingProducts(queryProduct,skip,limit);
+        if (Boolean(req.query.sale) === true){
+            queryProduct.discountPercent = {$gt: 0}
+        }
+
+        const products = await productsService.getPagingProducts(queryProduct,skip,limit, req.query.sort as string);
         const total = await productsService.getTotalProducts(queryProduct)
 
         if(total > 0){

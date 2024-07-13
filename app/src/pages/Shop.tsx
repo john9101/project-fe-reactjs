@@ -2,7 +2,7 @@ import PriceRangeFilter from "../components/filter/PriceRangeFilter";
 import GenderFilter from "../components/filter/GenderFilter";
 import RatingFilter from "../components/filter/RatingFilter";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faMagnifyingGlass} from "@fortawesome/free-solid-svg-icons";
+import {faMagnifyingGlass,faArrowUpWideShort,faArrowDownWideShort} from "@fortawesome/free-solid-svg-icons";
 import {useDispatch, useSelector} from "react-redux";
 import {AppDispatch, RootState} from "../store/store";
 import React, {useEffect, useRef, useState} from "react";
@@ -15,6 +15,30 @@ import {
 import ProductCard from "../components/card/ProductCard";
 import {NavLink, useLocation, useNavigate} from "react-router-dom";
 import {Box} from "@mui/material";
+import {Dropdown} from "react-bootstrap";
+
+enum SortType{
+    asc = "asc",
+    desc = "desc"
+}
+
+type SortProduct = {
+    [key in SortType]: {
+        name: string,
+        icon: React.ReactElement
+    }
+}
+
+const sortProductData: SortProduct = {
+    [SortType.asc]: {
+        name: 'Giá từ thấp đến cao',
+        icon: <FontAwesomeIcon icon={faArrowUpWideShort} />
+    },
+    [SortType.desc]: {
+        name: 'Giá từ cao đến thấp',
+        icon: <FontAwesomeIcon icon={faArrowDownWideShort} />
+    }
+}
 
 interface QueryProduct{
     checkedPriceRanges: string[]
@@ -22,7 +46,10 @@ interface QueryProduct{
     checkedRatings: string[]
     searchedName: string
     directPage: number
+    sortedType: SortType
+    isSale: boolean
 }
+
 
 const Shop = () => {
     const navigate = useNavigate();
@@ -34,8 +61,6 @@ const Shop = () => {
     const products = productsList.products;
     const totalPages = productsList.totalPages
     const currentPage = productsList.currentPage;
-    const imagesCollection = products.flatMap(product => product.options.map(option => option.image));
-    const [minHeight, setMinHeight] = useState<number>(0);
 
     const inputSearchRef = useRef<HTMLInputElement>(null);
     const typedRef = useRef<Typed | null>(null)
@@ -45,7 +70,9 @@ const Shop = () => {
         checkedGenders: [],
         checkedRatings: [],
         searchedName: '',
-        directPage: 1
+        directPage: 1,
+        sortedType: SortType.asc,
+        isSale: false
     })
 
     useEffect(() => {
@@ -85,25 +112,6 @@ const Shop = () => {
     },[])
 
 
-    // useEffect(() => {
-    //     const loadImageHeights = async () => {
-    //         const imageHeightsPromises = imagesCollection.map(
-    //             (image) =>
-    //                 new Promise<number>((resolve) => {
-    //                     const img = new Image();
-    //                     img.src = image;
-    //                     img.onload = () => {
-    //                         resolve(img.naturalHeight);
-    //                     };
-    //                 })
-    //         );
-    //
-    //         const heights = await Promise.all(imageHeightsPromises);
-    //         setMinHeight(Math.min(...heights));
-    //     };
-    //     loadImageHeights();
-    // },[imagesCollection])
-
     const totalPagesArray = Array.from({length: totalPages}, (_, i) => i + 1)
 
     const handlePriceRangeChange = (newCheckedPriceRanges: string[]) => {
@@ -130,6 +138,23 @@ const Shop = () => {
         handleQueryProduct(newQueryProduct)
     }
 
+    const handleSortTypeChange = (newSortType: SortType) => {
+        const newQueryProduct = {...queryProduct, sortedType: newSortType};
+        setQueryProduct(newQueryProduct)
+        handleQueryProduct(newQueryProduct)
+    }
+
+    const handleSaleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        let newQueryProduct;
+        if(event.target.checked){
+            newQueryProduct = {...queryProduct, isSale: true}
+        }else{
+            newQueryProduct = {...queryProduct, isSale: false}
+        }
+        setQueryProduct(newQueryProduct)
+        handleQueryProduct(newQueryProduct)
+    }
+
     const handleQueryProduct = (newQueryProduct: QueryProduct) => {
         const params = new URLSearchParams();
         if (newQueryProduct.checkedPriceRanges.length) {
@@ -148,6 +173,12 @@ const Shop = () => {
             params.set('name', newQueryProduct.searchedName)
         }
 
+        params.set('sort', newQueryProduct.sortedType)
+
+        if (newQueryProduct.isSale){
+            params.set('sale', String(newQueryProduct.isSale))
+        }
+
         navigate(`/shop?${decodeURIComponent(params.toString())}`)
     }
 
@@ -162,45 +193,58 @@ const Shop = () => {
                 <div className="col-lg-9 col-md-12">
                     <div className="row pb-3">
                         <div className="col-12 pb-1 container">
-                            <div className="d-flex align-items-center justify-content-between mb-4 row" style={{gap: '0.8rem'}}>
-                                <form className='col-8'>
-                                    <div className="input-group">
-                                        <input
-                                            type="text"
-                                            className="form-control"
-                                            value={queryProduct.searchedName}
-                                            onChange={handleSearchNameChange}
-                                            ref={inputSearchRef}
-                                        />
-                                        {/*<div className="input-group-append">*/}
-                                        {/*<span className="input-group-text bg-transparent text-primary">*/}
-                                        {/*    <FontAwesomeIcon icon={faMagnifyingGlass} />*/}
-                                        {/*</span>*/}
-                                        {/*</div>*/}
-                                    </div>
-                                </form>
-                                <div className="position-relative mx-3 text-right">
+                            <div className="d-flex align-items-center mb-4 row" style={{rowGap: '0.8rem'}}>
+                                <div
+                                    className="d-flex align-items-center justify-content-center custom-control custom-checkbox btn border-secondary col-auto ml-3"
+                                    style={{paddingLeft: '2.5rem'}}
+                                >
+                                    <input type='checkbox' className='custom-control-input' id='sale' onChange={handleSaleChange}/>
+                                    <label htmlFor='sale' className='custom-control-label text-nowrap'>Giảm giá</label>
+                                </div>
+                                <Dropdown className='col'>
+                                    <Dropdown.Toggle>
+                                        <b>{sortProductData[queryProduct.sortedType].icon} Sắp xếp:</b> {sortProductData[queryProduct.sortedType].name}</Dropdown.Toggle>
+                                    <Dropdown.Menu>
+                                        {Object.keys(sortProductData).map(key => (
+                                            <Dropdown.Item onClick={() => handleSortTypeChange(key as SortType)}>
+                                                {sortProductData[key as SortType].icon} {sortProductData[key as SortType].name}
+                                            </Dropdown.Item>
+                                        ))}
+                                    </Dropdown.Menu>
+                                </Dropdown>
+                                <div className="text-right col-8">
                                     {
                                         !notFound &&
                                         (
                                             queryProduct.searchedName &&
-                                            <span style={{fontSize: '1.2em'}}><FontAwesomeIcon icon={faMagnifyingGlass}/> Tìm thấy {products.length} kết quả cho <span className='font-weight-bold'>"{queryProduct.searchedName}"</span></span>
+                                            <span style={{fontSize: '1rem'}}><FontAwesomeIcon
+                                                icon={faMagnifyingGlass}/> Tìm thấy {products.length} kết quả cho <span
+                                                className='font-weight-bold'>"{queryProduct.searchedName}"</span></span>
                                         )
                                     }
+                                </div>
+                                <div className="input-group col-8 col-12">
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        value={queryProduct.searchedName}
+                                        onChange={handleSearchNameChange}
+                                        ref={inputSearchRef}
+                                    />
                                 </div>
                             </div>
                         </div>
                         {
                             !notFound &&
                             products?.map(product => (
-                                <ProductCard key={product._id} product={product} minHeight={minHeight}/>
+                                <ProductCard key={product._id} product={product}/>
                             ))
                         }
 
                         {
                             !notFound &&
                             <div className="col-12 pb-1">
-                                <nav aria-label="Page navigation">
+                            <nav aria-label="Page navigation">
                                     <ul className="pagination justify-content-center mb-3">
                                         <li className={`page-item ${currentPage === 1 && 'disabled'}`}>
                                             <a className="page-link" href="#" aria-label="Previous">

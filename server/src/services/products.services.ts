@@ -1,10 +1,10 @@
-import { Product,IOption } from '../models/model'
+import {Product, IOption, IProduct} from '../models/model'
 class ProductService{
     async getTotalProducts(queryProduct: any){
         return await Product.countDocuments(queryProduct)
     }
 
-    async getPagingProducts(queryProduct: any,skip: number, limit: number){
+    async getPagingProducts(queryProduct: any,skip: number, limit: number, sort: string){
         // const products = await Product.find({... queryProduct, options: {$exists: true, $not: {$size: 0}}})
         //     .lean().populate("options category").select("-shortDescription -longDescription").skip(skip).limit(limit)
         //
@@ -20,7 +20,18 @@ class ProductService{
         //     };
         // });
 
-        return await Product.find(queryProduct).lean().populate("options category").select('-longDescription').skip(skip).limit(limit)
+        const products = await Product.find(queryProduct).lean().populate("options category").select('-longDescription').skip(skip).limit(limit).exec()
+        return products.sort((productFirst,productSecond)=>{
+            const uniformPriceFirst = productFirst.originalPrice * (1 - productFirst.discountPercent);
+            const uniformPriceSecond = productSecond.originalPrice * (1 - productSecond.discountPercent);
+            if (sort === 'asc'){
+                return uniformPriceFirst - uniformPriceSecond
+            }else if(sort === 'desc'){
+                return uniformPriceSecond - uniformPriceFirst
+            }else {
+                return 0
+            }
+        })
     }
 
 

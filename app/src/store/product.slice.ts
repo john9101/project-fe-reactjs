@@ -61,7 +61,7 @@ export const fetchProductDetail = createAsyncThunk(
 export const fetchNoQueryProductsList = createAsyncThunk(
     "products/fetchNoQueryProductsList",
     async (_,thunkAPI)=> {
-        const response = await http.get<ProductList>('products', {
+        const response = await http.get<ProductList>('products?sort=asc', {
             signal: thunkAPI.signal
         })
         return response.data;

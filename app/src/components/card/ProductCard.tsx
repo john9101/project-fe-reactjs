@@ -11,14 +11,13 @@ import {NavLink} from "react-router-dom";
 import {useState} from "react";
 import {Button, Modal} from "react-bootstrap";
 import ProductDetail from "../../pages/ProductDetail";
-// import '../../assets/css/styleShop.scss'
+import '../../assets/css/styleShop.scss'
 
 interface ProductCardProps {
     product: Product
-    minHeight: number
 }
 
-const ProductCard = ({product, minHeight}: ProductCardProps) => {
+const ProductCard = ({product}: ProductCardProps) => {
 
     const images = product?.options!.map(option => option.image)
 
@@ -48,7 +47,7 @@ const ProductCard = ({product, minHeight}: ProductCardProps) => {
                 <div className="card product-item border-0 mb-4">
                     <div
                         className="card-header product-img position-relative overflow-hidden bg-transparent border p-0"
-                        style={{height: `404px`}}
+                        style={{height: '100%', aspectRatio: 1}}
                         onMouseEnter={() => setIsHovered(true)}
                         onMouseLeave={() => setIsHovered(false)}
                     >
