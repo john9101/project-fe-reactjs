@@ -30,7 +30,7 @@ function CartItemsMini() {
                                     <h6>{item.product.name}</h6>
                                     <div className="cart-item-details-sub">
                                         <p>Loại: {item.selectedOption.name}</p>
-                                        <p>Size: {item.selectedSize}</p>
+                                        <p>Size: {item.selectedSize.name}</p>
                                     </div>
                                     <div className="cart-item-details-sub">
                                         <p>Số lượng: {item.quantity} </p>

@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { Modal } from "react-bootstrap";
+import React, {useEffect, useState} from 'react';
+import {Modal} from "react-bootstrap";
 import Button from "react-bootstrap/Button";
-import axios from "axios";
-import { Voucher } from "../../types/voucher.type";
+import {Voucher} from "../../types/voucher.type";
 import http from "../../util/http";
+import "./assets/css/voucherInput.css"
 
 interface VoucherCardProps {
-    onSelectVoucher: (code: string) => void;
+    onSelectVoucher: (code: string, discountPercent: number) => void;
 }
 
 const VoucherCard: React.FC<VoucherCardProps> = ({ onSelectVoucher }) => {
@@ -33,7 +33,7 @@ const VoucherCard: React.FC<VoucherCardProps> = ({ onSelectVoucher }) => {
     }, []);
 
     const handleSelectVoucher = (voucher: Voucher) => {
-        onSelectVoucher(voucher.code);
+        onSelectVoucher(voucher.code, voucher.discountPercent);
     };
 
     return (
@@ -50,20 +50,22 @@ const VoucherCard: React.FC<VoucherCardProps> = ({ onSelectVoucher }) => {
                     <div className="voucher-footer">
                         <div className="voucher-expiry">HSD: {new Date(voucher.endDate).toLocaleDateString()}</div>
                         <div className="voucher-condition">
-                            <a href="#" onClick={() => handleShow(voucher)}>Điều kiện</a>
+                            <a href="#" onClick={() => handleShow(voucher)} style={{color: "white"}}>Điều kiện</a>
                         </div>
                     </div>
                     <div className="voucher-icon custom-radio">
                         <input
                             type="radio"
                             name="voucher"
+                            className="btn-check input-radio-voucher"
+                            autoComplete="off"
                             onChange={() => handleSelectVoucher(voucher)}
                         />
                     </div>
                 </div>
             ))}
             <Modal show={show} onHide={handleClose} centered>
-                <Modal.Header style={{ display: 'flex', justifyContent: 'center', textAlign: 'center' }}>
+                <Modal.Header style={{display: 'flex', justifyContent: 'center', textAlign: 'center' }}>
                     <Modal.Title style={{ flex: 1, textAlign: 'center' }}>Điều kiện sử dụng voucher</Modal.Title>
                     <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={handleClose}>
                         <span aria-hidden="true">&times;</span>

@@ -7,8 +7,10 @@ export interface IOption{
             quantity: number
         }
     ]
-    price: number
-    option_name: string
+    name: string
+    description: string
+    productId: string
+    image: string
 }
 
 export interface IRequire{
@@ -109,7 +111,67 @@ const productSchema: Schema = new Schema({
     uniformGender: {
         type: String,
         require: true
+    },
+    initialHeightRange: {
+        min: {
+            type: Number,
+            require: true
+        },
+        max: {
+            type: Number,
+            require: true
+        }
+    },
+    initialWeightRange: {
+        min: {
+            type: Number,
+            require: true
+        },
+        max: {
+            type: Number,
+            require: true
+        }
+    },
+    sizeCharts: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'SizeChart',
+        }
+    ]
+})
+
+const measurementSchema: Schema = new Schema({
+    name: {
+        type: String,
+        require: true
     }
+})
+
+const sizeChartSchema: Schema = new Schema({
+    name: {
+        type: String,
+        require: true
+    },
+    productId: {
+        type: Schema.Types.ObjectId,
+        ref: 'Product',
+    },
+    initialUniformSpecs: [
+        {
+            measurement: {
+                type: Schema.Types.ObjectId,
+                ref: 'Measurement'
+            },
+            value: {
+                type: Number,
+                require: true
+            },
+            distanceToNext: {
+                type: Number,
+                require: true
+            }
+        }
+    ]
 })
 
 const userSchema: Schema = new Schema({
@@ -186,11 +248,11 @@ const contactSchema: Schema = new Schema({
         type: String,
         require: true
     },
-    message: {
+    message:{
         type: String,
         require: true
     }
-}, {versionKey: false});
+},  { versionKey: false })
 
 const voucherSchema: Schema = new Schema({
     code: {
@@ -253,10 +315,13 @@ const voucherSchema: Schema = new Schema({
     }
 });
 
+
 export const Category = mongoose.model('Category', categorySchema, 'categories')
 export const Option = mongoose.model('Option', optionSchema, 'options')
 export const Product = mongoose.model('Product', productSchema, 'products')
 export const User = mongoose.model('User', userSchema, 'users')
-export const Contact = mongoose.model("Contact", contactSchema, 'contacts')
 export const Require =mongoose.model<IRequire>("Require", requireSchema, 'requires')
-export const Voucher = mongoose.model('Voucher', voucherSchema, 'voucher')
+export const Contact = mongoose.model("Contact", contactSchema, 'contacts')
+export const Measurement = mongoose.model('Measurement', measurementSchema, 'measurements')
+export const SizeChart = mongoose.model("SizeChart", sizeChartSchema, 'size_charts')
+export const Voucher = mongoose.model('Voucher', voucherSchema, 'vouchers')

@@ -5,7 +5,7 @@ import React, {useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {AppDispatch, RootState} from "../../store/store";
 import Button from "react-bootstrap/Button";
-import {removeFromCart, updateCartItemQuantity, removeAllFromCart} from "../../store/cart.slice";
+import {removeAllFromCart, removeFromCart, updateCartItemQuantity} from "../../store/cart.slice";
 import ButtonQuantity from "../common/ButtonQuantity";
 import {Modal} from 'react-bootstrap';
 
@@ -56,7 +56,7 @@ export default function CartItemsList() {
     return (
         <>
             <div className="col-lg-8 table-responsive mb-5 table-cart"
-                 style={{maxHeight: "500px", overflowY: "auto", msOverflowStyle: "none"}}>
+                 style={{maxHeight: "600px", overflowY: "auto", msOverflowStyle: "none"}}>
                 <table className="table table-bordered text-center mb-0 fixed-header">
                     <thead className="bg-secondary text-dark">
                     <tr>
@@ -83,9 +83,11 @@ export default function CartItemsList() {
                                 </td>
                                 <td className="align-middle">{cartItem.selectedOption.name}</td>
                                 <td className="align-middle">{formatCurrency(cartItem.product.originalPrice * (1 - cartItem.product.discountPercent))}</td>
-                                <td className="align-middle">{cartItem.selectedSize}</td>
+                                <td className="align-middle">{cartItem.selectedSize.name}</td>
                                 <td className="align-middle">
-                                    <div className="input-group quantity mx-auto" style={{width: '100%'}}>
+                                    <div
+                                        className="input-group quantity mx-auto align-items-center justify-content-center"
+                                        style={{width: '100%'}}>
                                         <ButtonQuantity
                                             quantity={cartItem.quantity}
                                             setQuantity={(quantity) => handleQuantityChange(cartItem.id, quantity)}

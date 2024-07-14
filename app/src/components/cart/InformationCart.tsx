@@ -8,38 +8,46 @@ import {NavLink} from "react-router-dom";
 export default function InformationCart() {
     const cart = useSelector((state: RootState) => state.cart);
     const [voucherCode, setVoucherCode] = useState<string>("");
-
-    const totalPrice = useMemo(() => {
-        return cart.cartItems.reduce((total, cartItem) => {
-            return total + cartItem.product.originalPrice * cartItem.quantity * (1 - cartItem.product.discountPercent);
-        }, 0);
-    }, [cart.cartItems]);
-
-    const totalDiscount = useMemo(() => {
-        return cart.cartItems.reduce((total, cartItem) => {
-            return total + cartItem.product.originalPrice * cartItem.quantity * cartItem.product.discountPercent;
-        }, 0);
-    }, [cart.cartItems]);
+    const [voucherDiscount, setVoucherDiscount] = useState<number>(0);
 
     const totalPriceWithoutDiscount = useMemo(() => {
         return cart.cartItems.reduce((total, cartItem) => {
             return total + cartItem.product.originalPrice * cartItem.quantity;
         }, 0);
     }, [cart.cartItems]);
-    const handleApplyVoucher = (code: string) => {
+
+    const totalDiscountWithoutVoucher = useMemo(() => {
+        return cart.cartItems.reduce((total, cartItem) => {
+            return total + cartItem.product.originalPrice * cartItem.quantity * cartItem.product.discountPercent;
+        }, 0);
+    }, [cart.cartItems]);
+
+    const discountByVoucher = useMemo(() => {
+        return totalPriceWithoutDiscount * voucherDiscount;
+    }, [totalPriceWithoutDiscount, voucherDiscount]);
+    console.log(discountByVoucher)
+
+    const totalDiscount = useMemo(() => {
+        return totalDiscountWithoutVoucher + discountByVoucher;
+    }, [totalDiscountWithoutVoucher, discountByVoucher]);
+
+    const totalPrice = useMemo(() => {
+        return totalPriceWithoutDiscount - totalDiscount;
+    }, [totalPriceWithoutDiscount, totalDiscount]);
+
+
+    const handleApplyVoucher = (code: string, discount: number) => {
         setVoucherCode(code);
+        setVoucherDiscount(discount);
     };
+    console.log(voucherDiscount)
+
     return (
         <div className="col-lg-4">
-            <div className="voucher-container">
-                <VoucherCard onSelectVoucher={handleApplyVoucher}/>
-            </div>
+            <VoucherCard onSelectVoucher={handleApplyVoucher}/>
             <form className="mb-5" action="">
                 <div className="input-group">
-                    <input type="text" className="form-control p-4" placeholder="Mã giảm" value={voucherCode}/>
-                    <div className="input-group-append">
-                        <button className="btn btn-primary">Áp dụng giảm giá</button>
-                    </div>
+                    <input type="text" className="form-control p-4" placeholder="Mã giảm" value={voucherCode} aria-placeholder={"Mã giảm"}/>
                 </div>
             </form>
 
@@ -48,21 +56,10 @@ export default function InformationCart() {
                     <h4 className="font-weight-semi-bold m-0">Giỏ hàng</h4>
                 </div>
                 <div className="card-body">
+
                     <div className="d-flex justify-content-between mb-3 pt-1">
-                        <h6 className="font-weight-medium">Giá trước giảm giá</h6>
-                        <h6 className="font-weight-medium">{formatCurrency(totalPriceWithoutDiscount)}</h6>
-                    </div>
-                    <div className="d-flex justify-content-between mb-3 pt-1">
-                        <h6 className="font-weight-medium">Giảm giá</h6>
-                        <h6 className="font-weight-medium">{formatCurrency(totalDiscount)}</h6>
-                    </div>
-                    <div className="d-flex justify-content-between mb-3 pt-1">
-                        <h6 className="font-weight-medium">Giá sau giảm giá</h6>
+                        <h6 className="font-weight-medium">Tạm tính</h6>
                         <h6 className="font-weight-medium">{formatCurrency(totalPrice)}</h6>
-                    </div>
-                    <div className="d-flex justify-content-between">
-                        <h6 className="font-weight-medium">Phí giao hàng</h6>
-                        <h6 className="font-weight-medium">0</h6>
                     </div>
                 </div>
                 <div className="card-footer border-secondary bg-transparent">

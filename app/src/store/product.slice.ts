@@ -8,8 +8,14 @@ interface ProductSliceState {
     productDetail: {
         product: Product | null,
         quantityInStock: number,
-        selectedOption: Pick<Option, 'name' | 'description'>,
-        selectedSize: string | null
+        selectedOption: {
+            name: string,
+            description: string
+        } | null,
+        selectedSize: {
+            name: string,
+            index: number
+        } | null
     };
     status: 'idle' | 'loading' | 'succeeded' | 'failed';
     error: string | null;
@@ -20,10 +26,7 @@ const initialState: ProductSliceState = {
     productDetail: {
         product: null,
         quantityInStock: 0,
-        selectedOption: {
-            name: null,
-            description: null,
-        },
+        selectedOption: null,
         selectedSize: null
     },
     status: 'idle',
@@ -49,13 +52,14 @@ const productSlice = createSlice({
     name: "products",
     initialState,
     reducers: {
-        setSelectedSize: (state, action: PayloadAction<string | null>) => {
+        setSelectedSize: (state, action: PayloadAction<{name: string, index: number} | null>) => {
             const options = state.productDetail.product!.options
             if(action.payload) {
                 state.productDetail.selectedSize = action.payload
-                if(state.productDetail.selectedOption!.name){
+                console.log(state.productDetail.selectedSize)
+                if(state.productDetail.selectedOption){
                     const selectedOption = options.find(option => option.name === state.productDetail.selectedOption!.name)
-                    const selectedStock = selectedOption!.stocks.find(stock => stock.size === state.productDetail.selectedSize)
+                    const selectedStock = selectedOption!.stocks.find(stock => stock.size === action.payload!.name)
                     state.productDetail.quantityInStock = selectedStock?.quantity!
                 }
             }else{
@@ -64,18 +68,16 @@ const productSlice = createSlice({
             }
         },
         setSelectedOption: (state, action: PayloadAction<string | null>) =>{
-            console.log(1111)
             const options = state.productDetail.product!.options;
             if(action.payload){
-                state.productDetail.selectedOption!.name = action.payload;
-                const selectedOption = options.find(option => option.name === state.productDetail.selectedOption!.name)
-                state.productDetail.selectedOption!.description = selectedOption!.description!
+                const selectedOption = options.find(option => option.name === action.payload)
+                state.productDetail.selectedOption = {name: action.payload, description: selectedOption!.description!}
                 if(state.productDetail.selectedSize){
-                    const selectedStock = selectedOption!.stocks.find(stock => stock.size === state.productDetail.selectedSize)
+                    const selectedStock = selectedOption!.stocks.find(stock => stock.size === state.productDetail.selectedSize!.name)
                     state.productDetail.quantityInStock = selectedStock?.quantity!
                 }
             }else{
-                state.productDetail.selectedOption = {name: null, description: null}
+                state.productDetail.selectedOption = null
                 state.productDetail.quantityInStock = totalQuantityInStock(options)
             }
         }
