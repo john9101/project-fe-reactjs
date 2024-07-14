@@ -2,7 +2,9 @@ import React from 'react';
 
 function ThirdStep() {
     return (
-        <div></div>
+        <div>
+
+        </div>
     );
 }
 
