@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import '../assets/css/styleRegister.scss';
 import Link from '@mui/material/Link';
 import { Alert, Button, Checkbox, FormControlLabel, IconButton, InputAdornment, OutlinedInput, Radio, RadioGroup, TextField } from '@mui/material';
 import Address from '../components/common/Address';
 import ReplyIcon from '@mui/icons-material/Reply';
 import http from '../util/http';
-import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { Visibility, VisibilityOff, CheckCircleOutline } from '@mui/icons-material';
 
 interface Errors {
     username?: string;
@@ -46,31 +46,18 @@ const Register = () => {
     const [errors, setErrors] = useState<Errors>({});
     const [alert, setAlert] = useState<{ type: 'success' | 'error' | null, message: string }>({ type: null, message: '' });
 
-    useEffect(() => {
-        if (alert.type) {
-            const timer = setTimeout(() => {
-                setAlert({ type: null, message: '' });
-            }, 5000);
-            return () => clearTimeout(timer);
+    const validateUsername = (value: string) => {
+        if (value.length < 8) {
+            return 'Tên đăng nhập phải có ít nhất 8 kí tự';
         }
-    }, [alert]);
+        return value ? '' : 'Vui lòng nhập tên đăng nhập của bạn';
+    };
 
-    const validate = () => {
-        let tempErrors: Errors = {};
-        tempErrors.username = username ? '' : 'Vui lòng nhập tên đăng nhập của bạn';
-        tempErrors.password = passwordValidator(password);
-        tempErrors.rePassword = comparePassword(password, rePassword);
-        tempErrors.fullName = fullName ? '' : 'Vui lòng nhập họ và tên';
-        tempErrors.phone = validatePhone(phone);
-        tempErrors.email = validateEmail(email);
-        tempErrors.termsAccepted = termsAccepted ? '' : 'Bạn phải đồng ý với điều khoản của chúng tôi';
-        setErrors(tempErrors);
-        return Object.values(tempErrors).every(x => x === '');
+    const validateFullName = (value: string) => {
+        return value ? '' : 'Vui lòng nhập họ và tên';
     };
 
     const comparePassword = (password: string, rePassword: string) => {
-        const passwordError = passwordValidator(rePassword);
-        if (passwordError) return passwordError;
         if (password !== rePassword) {
             return 'Mật khẩu không khớp';
         }
@@ -121,6 +108,19 @@ const Register = () => {
         return '';
     };
 
+    const validate = () => {
+        let tempErrors: Errors = {};
+        tempErrors.username = validateUsername(username);
+        tempErrors.password = passwordValidator(password);
+        tempErrors.rePassword = comparePassword(password, rePassword);
+        tempErrors.fullName = validateFullName(fullName);
+        tempErrors.phone = validatePhone(phone);
+        tempErrors.email = validateEmail(email);
+        tempErrors.termsAccepted = termsAccepted ? '' : 'Bạn phải đồng ý với điều khoản của chúng tôi';
+        setErrors(tempErrors);
+        return Object.values(tempErrors).every(x => x === '');
+    };
+
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         if (validate()) {
@@ -167,7 +167,6 @@ const Register = () => {
         event.preventDefault();
     };
 
-
     return (
         <div>
             {alert.type && (
@@ -184,8 +183,18 @@ const Register = () => {
                     placeholder='Nhập tên đăng nhập của bạn'
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
+                    onBlur={() => setErrors((prevErrors) => ({ ...prevErrors, username: validateUsername(username) }))}
                     error={!!errors.username}
                     helperText={errors.username}
+                    InputProps={{
+                        endAdornment: (
+                            username && !errors.username ? (
+                                <InputAdornment position="end">
+                                    <CheckCircleOutline style={{ color: 'green' }} />
+                                </InputAdornment>
+                            ) : null
+                        )
+                    }}
                 />
                 <span className='titleInput'>Mật khẩu: <span className='note'> *</span></span>
                 <OutlinedInput
@@ -194,6 +203,7 @@ const Register = () => {
                     placeholder='Nhập mật khẩu'
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
+                    onBlur={() => setErrors((prevErrors) => ({ ...prevErrors, password: passwordValidator(password) }))}
                     error={!!errors.password}
                     endAdornment={
                         <InputAdornment position="end">
@@ -208,6 +218,7 @@ const Register = () => {
                         </InputAdornment>
                     }
                 />
+                {errors.password && <span className='errorAlert'>{errors.password}</span>}
                 <span className='titleInput'>Nhập lại mật khẩu: <span className='note'> *</span></span>
                 <OutlinedInput
                     className='inputArea'
@@ -215,6 +226,7 @@ const Register = () => {
                     placeholder='Nhập lại mật khẩu'
                     value={rePassword}
                     onChange={(e) => setRePassword(e.target.value)}
+                    onBlur={() => setErrors((prevErrors) => ({ ...prevErrors, rePassword: comparePassword(password, rePassword) }))}
                     error={!!errors.rePassword}
                     endAdornment={
                         <InputAdornment position="end">
@@ -229,14 +241,25 @@ const Register = () => {
                         </InputAdornment>
                     }
                 />
+                {errors.rePassword && <span className='errorAlert'>{errors.rePassword}</span>}
                 <span className='titleInput'>Họ và tên người đại diện: <span className='note'> *</span></span>
                 <TextField
                     className='inputArea'
                     placeholder='Nhập họ và tên'
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
+                    onBlur={() => setErrors((prevErrors) => ({ ...prevErrors, fullName: validateFullName(fullName) }))}
                     error={!!errors.fullName}
                     helperText={errors.fullName}
+                    InputProps={{
+                        endAdornment: (
+                            fullName && !errors.fullName ? (
+                                <InputAdornment position="end">
+                                    <CheckCircleOutline style={{ color: 'green' }} />
+                                </InputAdornment>
+                            ) : null
+                        )
+                    }}
                 />
                 <div className='chooseArea'>
                     <div className="chooseDOB">
@@ -246,7 +269,6 @@ const Register = () => {
                             type='date'
                             value={dob}
                             onChange={(e) => setDOB(e.target.value)}
-
                         />
                     </div>
                     <div className="chooseGender">
@@ -274,8 +296,18 @@ const Register = () => {
                     placeholder='Nhập số điện thoại của công ty hoặc số điện thoại cá nhân'
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
+                    onBlur={() => setErrors((prevErrors) => ({ ...prevErrors, phone: validatePhone(phone) }))}
                     error={!!errors.phone}
                     helperText={errors.phone}
+                    InputProps={{
+                        endAdornment: (
+                            phone && !errors.phone ? (
+                                <InputAdornment position="end">
+                                    <CheckCircleOutline style={{ color: 'green' }} />
+                                </InputAdornment>
+                            ) : null
+                        )
+                    }}
                 />
                 <span className='titleInput'>Email: <span className='note'> *</span></span>
                 <TextField
@@ -283,8 +315,18 @@ const Register = () => {
                     placeholder='Ví dụ: example@gmail.com'
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
+                    onBlur={() => setErrors((prevErrors) => ({ ...prevErrors, email: validateEmail(email) }))}
                     error={!!errors.email}
                     helperText={errors.email}
+                    InputProps={{
+                        endAdornment: (
+                            email && !errors.email ? (
+                                <InputAdornment position="end">
+                                    <CheckCircleOutline style={{ color: 'green' }} />
+                                </InputAdornment>
+                            ) : null
+                        )
+                    }}
                 />
                 <span className='titleInput'>Địa chỉ:</span>
                 <Address onChange={handleAddressChange} />
@@ -295,6 +337,9 @@ const Register = () => {
                         label="Tôi đồng ý với điều khoản sử dụng của dịch vụ."
                         style={{ color: errors.termsAccepted ? 'red' : 'inherit' }}
                     />
+                    {errors.termsAccepted && (
+                        <span style={{ color: 'red' }}>{errors.termsAccepted}</span>
+                    )}
                 </div>
                 <Button className='btnRegister' type='submit' variant='contained'>
                     Đăng ký

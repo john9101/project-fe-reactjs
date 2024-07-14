@@ -124,4 +124,23 @@
     .labelAgree {
         margin-right: 0px;
     }
+
+    .iconShow {
+        margin-right: 10px;
+    }
+
+    .errorAlert {
+        width: 100%;
+        color: var(--red);
+        font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+        font-weight: 400;
+        font-size: 0.75rem;
+        line-height: 1.66;
+        letter-spacing: 0.03333em;
+        text-align: left;
+        padding-top: 3px;
+        padding-right: 14px;
+        padding-bottom: 0;
+        padding-left: 14px;
+    }
 }
