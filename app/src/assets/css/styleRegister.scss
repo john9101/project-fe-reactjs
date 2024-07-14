@@ -144,3 +144,25 @@
         padding-left: 14px;
     }
 }
+
+.titleDialog {
+    width: 100%;
+    text-align: center;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--green);
+}
+
+.footerButton {
+    width: 100%;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.imageThankyou {
+    width: 400px;
+    height: 400px;
+}

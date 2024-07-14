@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import '../assets/css/styleRegister.scss';
 import Link from '@mui/material/Link';
-import { Alert, Button, Checkbox, FormControlLabel, IconButton, InputAdornment, OutlinedInput, Radio, RadioGroup, TextField } from '@mui/material';
+import { Alert, Button, Checkbox, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControlLabel, IconButton, InputAdornment, OutlinedInput, Radio, RadioGroup, TextField } from '@mui/material';
 import Address from '../components/common/Address';
 import ReplyIcon from '@mui/icons-material/Reply';
 import http from '../util/http';
 import { Visibility, VisibilityOff, CheckCircleOutline } from '@mui/icons-material';
+import { useNavigate } from 'react-router-dom';
+import thankyou from '../assets/img/thankyou.gif';
 
 interface Errors {
     username?: string;
@@ -45,6 +47,8 @@ const Register = () => {
 
     const [errors, setErrors] = useState<Errors>({});
     const [alert, setAlert] = useState<{ type: 'success' | 'error' | null, message: string }>({ type: null, message: '' });
+    const [open, setOpen] = useState(false);
+    const navigate = useNavigate();
 
     const validateUsername = (value: string) => {
         if (value.length < 8) {
@@ -139,6 +143,7 @@ const Register = () => {
                 });
                 if (response.status === 201 || response.status === 200) {
                     setAlert({ type: 'success', message: 'Đăng ký thành công.' });
+                    setOpen(true);
                 } else {
                     setAlert({ type: 'error', message: 'Đăng ký thất bại.' });
                 }
@@ -149,6 +154,7 @@ const Register = () => {
         } else {
             setAlert({ type: 'error', message: 'Đăng ký thất bại.' });
         }
+
     };
 
     const handleAddressChange = (address: AddressData) => {
@@ -165,6 +171,18 @@ const Register = () => {
     const handleClickShowRePassword = () => setShowRePassword((show) => !show);
     const handleMouseDownRePassword = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
+    };
+
+    const handleClose = () => {
+
+    };
+
+    const handleRedirectToLogin = () => {
+        navigate('/account/login');
+    };
+
+    const handleRedirectToHome = () => {
+        navigate('/');
     };
 
     return (
@@ -345,6 +363,23 @@ const Register = () => {
                     Đăng ký
                 </Button>
             </form>
+            <Dialog open={open} onClose={handleClose}>
+                <DialogTitle className='titleDialog'>Đăng ký thành công</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        <img src={thankyou} alt="Thank you" className='imageThankyou' />
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions className='footerButton'>
+                    <Button variant="contained" onClick={handleRedirectToLogin} color="primary">
+                        Về trang đăng nhập
+                    </Button>
+                    <Button variant="contained" onClick={handleRedirectToHome} color="primary">
+                        Về trang chủ
+                    </Button>
+                </DialogActions>
+            </Dialog>
+
         </div>
     );
 };
