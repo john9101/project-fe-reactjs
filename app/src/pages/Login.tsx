@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import TextField from '@mui/material/TextField';
-import { Button, Alert, Snackbar, Fade } from '@mui/material';
+import { Button, Alert, Snackbar, Fade, InputAdornment, IconButton, OutlinedInput } from '@mui/material';
 import Link from '@mui/material/Link';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/UserContext';
 import '../assets/css/styleLogin.scss';
 import http from '../util/http';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 interface Errors {
     username?: string;
@@ -70,6 +71,12 @@ const Login: React.FC = () => {
         }
     };
 
+    const [showPassword, setShowPassword] = useState(false);
+    const handleClickShowPassword = () => setShowPassword((show) => !show);
+    const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault();
+    };
+
     return (
         <div>
             <Snackbar
@@ -96,7 +103,7 @@ const Login: React.FC = () => {
             </Snackbar>
             <form className='componentLogin' onSubmit={handleSubmit}>
                 <span className='titleLogin'>Đăng nhập</span>
-                <span className='titleInput'>Tên đăng nhập:</span>
+                <span className='titleInput'>Tên đăng nhập: <span className='note'> *</span></span>
                 <TextField
                     className='inputArea'
                     placeholder='Nhập tên đăng nhập của bạn'
@@ -105,15 +112,26 @@ const Login: React.FC = () => {
                     error={!!errors.username}
                     helperText={errors.username}
                 />
-                <span className='titleInput'>Mật khẩu:</span>
-                <TextField
+                <span className='titleInput'>Mật khẩu: <span className='note'> *</span></span>
+                <OutlinedInput
                     className='inputArea'
-                    type='password'
+                    type={showPassword ? 'text' : 'password'}
                     placeholder='Nhập mật khẩu'
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     error={!!errors.password}
-                    helperText={errors.password}
+                    endAdornment={
+                        <InputAdornment position="end">
+                            <IconButton
+                                aria-label="toggle password visibility"
+                                onClick={handleClickShowPassword}
+                                onMouseDown={handleMouseDownPassword}
+                                edge="end"
+                            >
+                                {showPassword ? <VisibilityOff /> : <Visibility />}
+                            </IconButton>
+                        </InputAdornment>
+                    }
                 />
                 <div className="forgotPassArea">
                     <Link href="/account/forgot-password" underline="none" className='forgotPassword'>

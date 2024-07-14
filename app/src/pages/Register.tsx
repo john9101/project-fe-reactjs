@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import '../assets/css/styleRegister.scss';
 import Link from '@mui/material/Link';
-import { Alert, Button, Checkbox, FormControlLabel, Radio, RadioGroup, TextField } from '@mui/material';
+import { Alert, Button, Checkbox, FormControlLabel, IconButton, InputAdornment, OutlinedInput, Radio, RadioGroup, TextField } from '@mui/material';
 import Address from '../components/common/Address';
 import ReplyIcon from '@mui/icons-material/Reply';
 import http from '../util/http';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 interface Errors {
     username?: string;
@@ -28,18 +29,23 @@ const Register = () => {
     const [password, setPassword] = useState('');
     const [rePassword, setRePassword] = useState('');
     const [fullName, setFullName] = useState('');
+    const [dob, setDOB] = useState('');
+    const [gender, setGender] = useState('');
+    const [nameCompany, setNameCompany] = useState('');
     const [phone, setPhone] = useState('');
     const [email, setEmail] = useState('');
-    const [termsAccepted, setTermsAccepted] = useState(false);
-    const [errors, setErrors] = useState<Errors>({});
     const [addressData, setAddressData] = useState<AddressData>({
         province: null,
         district: null,
         ward: null,
         specificAddress: '',
     });
+    const [avatar, setAvatar] = useState('');
+    const [termsAccepted, setTermsAccepted] = useState(false);
 
+    const [errors, setErrors] = useState<Errors>({});
     const [alert, setAlert] = useState<{ type: 'success' | 'error' | null, message: string }>({ type: null, message: '' });
+
     useEffect(() => {
         if (alert.type) {
             const timer = setTimeout(() => {
@@ -123,9 +129,13 @@ const Register = () => {
                     username,
                     password,
                     fullName,
+                    dob,
+                    gender,
+                    nameCompany,
                     phone,
                     email,
                     address: addressData,
+                    avatar,
                 });
                 if (response.status === 201 || response.status === 200) {
                     setAlert({ type: 'success', message: 'Đăng ký thành công.' });
@@ -144,6 +154,20 @@ const Register = () => {
     const handleAddressChange = (address: AddressData) => {
         setAddressData(address);
     };
+
+    const [showPassword, setShowPassword] = useState(false);
+    const handleClickShowPassword = () => setShowPassword((show) => !show);
+    const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault();
+    };
+
+    const [showRePassword, setShowRePassword] = useState(false);
+    const handleClickShowRePassword = () => setShowRePassword((show) => !show);
+    const handleMouseDownRePassword = (event: React.MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault();
+    };
+
+
     return (
         <div>
             {alert.type && (
@@ -154,7 +178,7 @@ const Register = () => {
             <form onSubmit={handleSubmit} className='componentRegister'>
                 <Link className='backToLogin' href="/account/login"><ReplyIcon />Về trang đăng nhập</Link>
                 <span className='titleRegister'>Đăng ký</span>
-                <span className='titleInput'>Tên đăng nhập:</span>
+                <span className='titleInput'>Tên đăng nhập: <span className='note'> *</span></span>
                 <TextField
                     className='inputArea'
                     placeholder='Nhập tên đăng nhập của bạn'
@@ -163,27 +187,49 @@ const Register = () => {
                     error={!!errors.username}
                     helperText={errors.username}
                 />
-                <span className='titleInput'>Mật khẩu:</span>
-                <TextField
+                <span className='titleInput'>Mật khẩu: <span className='note'> *</span></span>
+                <OutlinedInput
                     className='inputArea'
-                    type='password'
+                    type={showPassword ? 'text' : 'password'}
                     placeholder='Nhập mật khẩu'
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     error={!!errors.password}
-                    helperText={errors.password}
+                    endAdornment={
+                        <InputAdornment position="end">
+                            <IconButton
+                                aria-label="toggle password visibility"
+                                onClick={handleClickShowPassword}
+                                onMouseDown={handleMouseDownPassword}
+                                edge="end"
+                            >
+                                {showPassword ? <VisibilityOff /> : <Visibility />}
+                            </IconButton>
+                        </InputAdornment>
+                    }
                 />
-                <span className='titleInput'>Nhập lại mật khẩu: </span>
-                <TextField
+                <span className='titleInput'>Nhập lại mật khẩu: <span className='note'> *</span></span>
+                <OutlinedInput
                     className='inputArea'
-                    type='password'
+                    type={showRePassword ? 'text' : 'password'}
                     placeholder='Nhập lại mật khẩu'
                     value={rePassword}
                     onChange={(e) => setRePassword(e.target.value)}
                     error={!!errors.rePassword}
-                    helperText={errors.rePassword}
+                    endAdornment={
+                        <InputAdornment position="end">
+                            <IconButton
+                                aria-label="toggle password visibility"
+                                onClick={handleClickShowRePassword}
+                                onMouseDown={handleMouseDownRePassword}
+                                edge="end"
+                            >
+                                {showRePassword ? <VisibilityOff /> : <Visibility />}
+                            </IconButton>
+                        </InputAdornment>
+                    }
                 />
-                <span className='titleInput'>Họ và tên người đại diện:</span>
+                <span className='titleInput'>Họ và tên người đại diện: <span className='note'> *</span></span>
                 <TextField
                     className='inputArea'
                     placeholder='Nhập họ và tên'
@@ -198,13 +244,20 @@ const Register = () => {
                         <TextField
                             className='inputArea'
                             type='date'
+                            value={dob}
+                            onChange={(e) => setDOB(e.target.value)}
+
                         />
                     </div>
                     <div className="chooseGender">
                         <span className='titleInput'>Giới tính: </span>
-                        <RadioGroup className='groupGender'>
-                            <FormControlLabel value="female" control={<Radio />} label="Nam" />
-                            <FormControlLabel value="male" control={<Radio />} label="Nữ" />
+                        <RadioGroup
+                            className='groupGender'
+                            value={gender}
+                            onChange={(e) => setGender(e.target.value)}
+                        >
+                            <FormControlLabel value="1" control={<Radio />} label="Nữ" />
+                            <FormControlLabel value="0" control={<Radio />} label="Nam" />
                         </RadioGroup>
                     </div>
                 </div>
@@ -212,8 +265,10 @@ const Register = () => {
                 <TextField
                     className='inputArea'
                     placeholder='Nhập tên công ty của bạn'
+                    value={nameCompany}
+                    onChange={(e) => setNameCompany(e.target.value)}
                 />
-                <span className='titleInput'>Số điện thoại:</span>
+                <span className='titleInput'>Số điện thoại: <span className='note'> *</span></span>
                 <TextField
                     className='inputArea'
                     placeholder='Nhập số điện thoại của công ty hoặc số điện thoại cá nhân'
@@ -222,7 +277,7 @@ const Register = () => {
                     error={!!errors.phone}
                     helperText={errors.phone}
                 />
-                <span className='titleInput'>Email:</span>
+                <span className='titleInput'>Email: <span className='note'> *</span></span>
                 <TextField
                     className='inputArea'
                     placeholder='Ví dụ: example@gmail.com'
@@ -235,6 +290,7 @@ const Register = () => {
                 <Address onChange={handleAddressChange} />
                 <div className='checkboxAgree'>
                     <FormControlLabel
+                        className='labelAgree'
                         control={<Checkbox checked={termsAccepted} onChange={(e) => setTermsAccepted(e.target.checked)} />}
                         label="Tôi đồng ý với điều khoản sử dụng của dịch vụ."
                         style={{ color: errors.termsAccepted ? 'red' : 'inherit' }}
