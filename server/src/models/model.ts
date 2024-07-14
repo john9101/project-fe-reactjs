@@ -13,6 +13,30 @@ export interface IOption{
     image: string
 }
 
+export interface IProduct{
+    name: string;
+    rating: number;
+    shortDescription: string;
+    longDescription: string;
+    options: Array<mongoose.Types.ObjectId>;
+    category: mongoose.Types.ObjectId;
+    originalPrice: number;
+    discountPercent: number;
+    uniformGender: string;
+    initialHeightRange: {
+        min: string,
+        max: string
+    };
+    initialWeightRange: {
+        min: string,
+        max: string
+    };
+    sizeCharts: mongoose.Types.ObjectId;
+    description: string
+    productId: string
+    image: string
+}
+
 export interface IRequire{
     fullName: string
     email: string
@@ -139,6 +163,12 @@ const productSchema: Schema = new Schema({
         }
     ]
 })
+
+productSchema.virtual('uniformPrice').get(function (this: IProduct) {
+    return this.originalPrice * (1 - this.discountPercent)
+})
+productSchema.set('toJSON', {virtuals: true})
+productSchema.set('toObject', {virtuals: true})
 
 const measurementSchema: Schema = new Schema({
     name: {
@@ -318,7 +348,7 @@ const voucherSchema: Schema = new Schema({
 
 export const Category = mongoose.model('Category', categorySchema, 'categories')
 export const Option = mongoose.model('Option', optionSchema, 'options')
-export const Product = mongoose.model('Product', productSchema, 'products')
+export const Product = mongoose.model<IProduct>('Product', productSchema, 'products')
 export const User = mongoose.model('User', userSchema, 'users')
 export const Require =mongoose.model<IRequire>("Require", requireSchema, 'requires')
 export const Contact = mongoose.model("Contact", contactSchema, 'contacts')

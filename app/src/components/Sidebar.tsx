@@ -1,13 +1,13 @@
-import ColorFilter from "./filter/ColorFilter";
-import PriceFilter from "./filter/PriceFilter";
-import SizeFilter from "./filter/SizeFilter";
+import GenderFilter from "./filter/GenderFilter";
+import PriceRangeFilter from "./filter/PriceRangeFilter";
+import RatingFilter from "./filter/RatingFilter";
 
 const Sidebar = () => {
     return (
         <div className="col-lg-3 col-md-12">
-            <PriceFilter/>
-            <ColorFilter/>
-            <SizeFilter/>
+            {/*<PriceRangeFilter/>*/}
+            {/*<GenderFilter/>*/}
+            {/*<RatingFilter/>*/}
         </div>
     )
 }
