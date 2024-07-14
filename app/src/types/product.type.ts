@@ -1,5 +1,7 @@
 import {Option} from "./option.type";
 import {Category} from "./category.type";
+import {SizeChart} from "./sizeChart.type";
+import {BodyMetricRange} from "./bodyMetricRange.type";
 
 export interface Product {
     _id: string
@@ -12,4 +14,7 @@ export interface Product {
     originalPrice: number
     discountPercent: number
     uniformGender: string
+    initialHeightRange: BodyMetricRange
+    initialWeightRange: BodyMetricRange
+    sizeCharts: SizeChart[]
 }

@@ -7,8 +7,31 @@ export interface IOption{
             quantity: number
         }
     ]
-    price: number
-    option_name: string
+    name: string
+    description: string
+    productId: string
+    image: string
+}
+
+export interface IProduct{
+    name: string;
+    rating: number;
+    shortDescription: string;
+    longDescription: string;
+    options: Array<mongoose.Types.ObjectId>;
+    category: mongoose.Types.ObjectId;
+    originalPrice: number;
+    discountPercent: number;
+    uniformGender: string;
+    initialHeightRange: {
+        min: string,
+        max: string
+    };
+    initialWeightRange: {
+        min: string,
+        max: string
+    };
+    sizeCharts: mongoose.Types.ObjectId;
 }
 
 export interface IRequire{
@@ -62,6 +85,7 @@ const optionSchema: Schema = new Schema({
     },
     productId: {
         type: Schema.Types.ObjectId,
+        ref: "Product",
         required: true
     },
     description: {
@@ -80,6 +104,9 @@ const productSchema: Schema = new Schema({
     name: {
         type: String,
         require: true
+    },
+    rating: {
+        type: Number
     },
     category: {
         type: Schema.Types.ObjectId,
@@ -109,7 +136,73 @@ const productSchema: Schema = new Schema({
     uniformGender: {
         type: String,
         require: true
+    },
+    initialHeightRange: {
+        min: {
+            type: Number,
+            require: true
+        },
+        max: {
+            type: Number,
+            require: true
+        }
+    },
+    initialWeightRange: {
+        min: {
+            type: Number,
+            require: true
+        },
+        max: {
+            type: Number,
+            require: true
+        }
+    },
+    sizeCharts: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'SizeChart',
+        }
+    ]
+})
+
+productSchema.virtual('uniformPrice').get(function (this: IProduct) {
+    return this.originalPrice * (1 - this.discountPercent)
+})
+productSchema.set('toJSON', {virtuals: true})
+productSchema.set('toObject', {virtuals: true})
+
+const measurementSchema: Schema = new Schema({
+    name: {
+        type: String,
+        require: true
     }
+})
+
+const sizeChartSchema: Schema = new Schema({
+    name: {
+        type: String,
+        require: true
+    },
+    productId: {
+        type: Schema.Types.ObjectId,
+        ref: 'Product',
+    },
+    initialUniformSpecs: [
+        {
+            measurement: {
+                type: Schema.Types.ObjectId,
+                ref: 'Measurement'
+            },
+            value: {
+                type: Number,
+                require: true
+            },
+            distanceToNext: {
+                type: Number,
+                require: true
+            }
+        }
+    ]
 })
 
 const userSchema: Schema = new Schema({
@@ -194,7 +287,9 @@ const contactSchema: Schema = new Schema({
 
 export const Category = mongoose.model('Category', categorySchema, 'categories')
 export const Option = mongoose.model('Option', optionSchema, 'options')
-export const Product = mongoose.model('Product', productSchema, 'products')
+export const Product = mongoose.model<IProduct>('Product', productSchema, 'products')
 export const User = mongoose.model('User', userSchema, 'users')
 export const Require =mongoose.model<IRequire>("Require", requireSchema, 'requires')
 export const Contact = mongoose.model("Contact", contactSchema, 'contacts')
+export const Measurement = mongoose.model('Measurement', measurementSchema, 'measurements')
+export const SizeChart = mongoose.model("SizeChart", sizeChartSchema, 'size_charts')

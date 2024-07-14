@@ -6530,13 +6530,16 @@ a.close.disabled {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 12%;
+  //width: 8%;
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
   color: #fff;
   text-align: center;
   opacity: 0.5;
   transition: opacity 0.15s ease;
-  font-size: 2.4rem;
+  font-size: 1.5rem;
   transform: translateY(-50%);
+  cursor: pointer;
 }
 
 @media (prefers-reduced-motion: reduce) {
