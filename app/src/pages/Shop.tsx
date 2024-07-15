@@ -2,7 +2,7 @@ import PriceRangeFilter from "../components/filter/PriceRangeFilter";
 import GenderFilter from "../components/filter/GenderFilter";
 import RatingFilter from "../components/filter/RatingFilter";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faMagnifyingGlass,faArrowUpWideShort,faArrowDownWideShort} from "@fortawesome/free-solid-svg-icons";
+import {faMagnifyingGlass, faArrowUpWideShort, faArrowDownWideShort} from "@fortawesome/free-solid-svg-icons";
 import {useDispatch, useSelector} from "react-redux";
 import {AppDispatch, RootState} from "../store/store";
 import React, {useEffect, useRef, useState} from "react";
@@ -17,7 +17,7 @@ import {NavLink, useLocation, useNavigate} from "react-router-dom";
 import {Box} from "@mui/material";
 import {Dropdown} from "react-bootstrap";
 
-enum SortType{
+enum SortType {
     asc = "asc",
     desc = "desc"
 }
@@ -32,15 +32,15 @@ type SortProduct = {
 const sortProductData: SortProduct = {
     [SortType.asc]: {
         name: 'Giá từ thấp đến cao',
-        icon: <FontAwesomeIcon icon={faArrowUpWideShort} />
+        icon: <FontAwesomeIcon icon={faArrowUpWideShort}/>
     },
     [SortType.desc]: {
         name: 'Giá từ cao đến thấp',
-        icon: <FontAwesomeIcon icon={faArrowDownWideShort} />
+        icon: <FontAwesomeIcon icon={faArrowDownWideShort}/>
     }
 }
 
-interface QueryProduct{
+interface QueryProduct {
     checkedPriceRanges: string[]
     checkedGenders: string[]
     checkedRatings: string[]
@@ -76,12 +76,12 @@ const Shop = () => {
     })
 
     useEffect(() => {
-        if(location.search === ''){
+        if (location.search === '') {
             const noQueryProductsListPromise = dispatch(fetchNoQueryProductsList())
             return () => {
                 noQueryProductsListPromise.abort();
             }
-        }else{
+        } else {
             console.log(location.search)
             const queryFilterSearchProductsListPromise = dispatch(fetchQueryFilterSearchProductsList(location.search))
             return () => {
@@ -92,7 +92,7 @@ const Shop = () => {
 
     useEffect(() => {
         console.log(typedRef.current === null)
-        if (inputSearchRef.current){
+        if (inputSearchRef.current) {
             typedRef.current = new Typed(inputSearchRef.current, {
                 strings: [
                     'Bạn đang muốn tìm kiếm đồng phục',
@@ -109,7 +109,7 @@ const Shop = () => {
         return () => {
             typedRef.current?.destroy()
         }
-    },[])
+    }, [])
 
 
     const totalPagesArray = Array.from({length: totalPages}, (_, i) => i + 1)
@@ -146,9 +146,9 @@ const Shop = () => {
 
     const handleSaleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         let newQueryProduct;
-        if(event.target.checked){
+        if (event.target.checked) {
             newQueryProduct = {...queryProduct, isSale: true}
-        }else{
+        } else {
             newQueryProduct = {...queryProduct, isSale: false}
         }
         setQueryProduct(newQueryProduct)
@@ -169,13 +169,13 @@ const Shop = () => {
             params.set("ratings", newQueryProduct.checkedRatings.join(','))
         }
 
-        if (newQueryProduct.searchedName){
+        if (newQueryProduct.searchedName) {
             params.set('name', newQueryProduct.searchedName)
         }
 
         params.set('sort', newQueryProduct.sortedType)
 
-        if (newQueryProduct.isSale){
+        if (newQueryProduct.isSale) {
             params.set('sale', String(newQueryProduct.isSale))
         }
 
@@ -198,12 +198,14 @@ const Shop = () => {
                                     className="d-flex align-items-center justify-content-center custom-control custom-checkbox btn border-secondary col-auto ml-3"
                                     style={{paddingLeft: '2.5rem'}}
                                 >
-                                    <input type='checkbox' className='custom-control-input' id='sale' onChange={handleSaleChange}/>
+                                    <input type='checkbox' className='custom-control-input' id='sale'
+                                           onChange={handleSaleChange}/>
                                     <label htmlFor='sale' className='custom-control-label text-nowrap'>Giảm giá</label>
                                 </div>
                                 <Dropdown className='col'>
                                     <Dropdown.Toggle>
-                                        <b>{sortProductData[queryProduct.sortedType].icon} Sắp xếp:</b> {sortProductData[queryProduct.sortedType].name}</Dropdown.Toggle>
+                                        <b>{sortProductData[queryProduct.sortedType].icon} Sắp
+                                            xếp:</b> {sortProductData[queryProduct.sortedType].name}</Dropdown.Toggle>
                                     <Dropdown.Menu>
                                         {Object.keys(sortProductData).map(key => (
                                             <Dropdown.Item onClick={() => handleSortTypeChange(key as SortType)}>
@@ -244,7 +246,7 @@ const Shop = () => {
                         {
                             !notFound &&
                             <div className="col-12 pb-1">
-                            <nav aria-label="Page navigation">
+                                <nav aria-label="Page navigation">
                                     <ul className="pagination justify-content-center mb-3">
                                         <li className={`page-item ${currentPage === 1 && 'disabled'}`}>
                                             <a className="page-link" href="#" aria-label="Previous">
@@ -281,7 +283,8 @@ const Shop = () => {
                             }>
                                 <img src={noResults} style={{width: '20rem'}}/>
                                 <p style={{fontSize: '1.2rem'}} className='font-weight-semi-bold'>{notFound.message}</p>
-                                <p>Hãy cố gắng thay đổi các tùy chọn trong bộ lọc hoặc từ khóa tìm kiếm để có kết quả tốt hơn</p>
+                                <p>Hãy cố gắng thay đổi các tùy chọn trong bộ lọc hoặc từ khóa tìm kiếm để có kết quả
+                                    tốt hơn</p>
                             </Box>
                         }
                     </div>
