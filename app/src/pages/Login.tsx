@@ -53,10 +53,9 @@ const Login: React.FC = () => {
         if (validate()) {
             try {
                 const response = await http.post('login', { username, password });
-                const user = response.data;
-                localStorage.setItem('user', JSON.stringify(user.user));
-                console.log(user.user);
+                const user = response.data.user;
                 login(user);
+                localStorage.setItem('user', JSON.stringify(user));  // Save user data to localStorage
                 setSuccessMessage(true);
                 setFailureMessage(false);
                 navigate('/');

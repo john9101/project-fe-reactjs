@@ -1,7 +1,7 @@
 import { NavLink, useLocation } from "react-router-dom";
 import Logo from "./Logo";
 import HomeCarosel from "../carousel/HomeCarousel";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import CategoryList from "./CategoriesList";
 import { useAuth } from "../../context/UserContext";
 import defaultAvatar from '../../assets/img/default-avatar.jpg';
@@ -18,6 +18,14 @@ const Navbar: React.FC = () => {
     const { isAuthenticated, user } = authState;
     const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
+    useEffect(() => {
+        const storedUser = localStorage.getItem('user');
+        if (storedUser) {
+            const parsedUser = JSON.parse(storedUser);
+            authState.user = parsedUser;
+        }
+    },);
+
     const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorElUser(event.currentTarget);
     };
@@ -27,17 +35,16 @@ const Navbar: React.FC = () => {
     };
 
     const handleLogout = () => {
-        handleCloseUserMenu();
         logout();
+        handleCloseUserMenu();
     };
 
     const settings = [
-        { label: 'Tài khoản của tôi', path: '/account' },
+        { label: 'Profile', path: `/personal/${user?._id}` },
         { label: 'Đơn hàng của tôi', path: '/orders' },
         { label: 'Nhận xét của tôi', path: '/reviews' },
         { label: 'Sản phẩm đã xem', path: '/viewed-products' },
-        { label: 'Đổi mật khẩu', path: '/change-password' },
-        { label: 'Đăng xuất', action: handleLogout }
+        { label: 'Logout', action: handleLogout }
     ];
 
     return (
@@ -58,12 +65,15 @@ const Navbar: React.FC = () => {
                             </div>
                             <div className="navbar-nav ml-auto py-0">
                                 {isAuthenticated && user ? (
-                                    <div className="nav-item">
-                                        <Tooltip title="Open settings">
-                                            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                                                <Avatar alt={user.fullName} src={user.avatar || defaultAvatar} />
-                                            </IconButton>
-                                        </Tooltip>
+                                    <div className="nav-item" >
+                                        <div style={{ display: 'flex', alignItems: 'center', columnGap: '5px', cursor: 'pointer' }} onClick={handleOpenUserMenu}>
+                                            <span>{user.fullName}</span>
+                                            <Tooltip title="Open settings">
+                                                <IconButton sx={{ p: 0 }}>
+                                                    <Avatar alt={user.fullName} src={user.avatar || defaultAvatar} />
+                                                </IconButton>
+                                            </Tooltip>
+                                        </div>
                                         <Menu
                                             sx={{ mt: '45px' }}
                                             id="menu-appbar"
@@ -82,9 +92,13 @@ const Navbar: React.FC = () => {
                                         >
                                             {settings.map((setting, index) => (
                                                 <MenuItem key={index} onClick={setting.action || handleCloseUserMenu}>
-                                                    <NavLink to={setting.path || '#'} style={{ textDecoration: 'none', color: 'inherit' }}>
-                                                        <Typography textAlign="center">{setting.label}</Typography>
-                                                    </NavLink>
+                                                    {setting.path ? (
+                                                        <NavLink to={setting.path} style={{ textDecoration: 'none', color: 'inherit', width: '100%', textAlign: 'left' }}>
+                                                            <Typography textAlign="left">{setting.label}</Typography>
+                                                        </NavLink>
+                                                    ) : (
+                                                        <Typography textAlign="left">{setting.label}</Typography>
+                                                    )}
                                                 </MenuItem>
                                             ))}
                                         </Menu>

@@ -6,8 +6,8 @@ export interface User {
     gender: string;
     phone: string;
     email: string;
-    address: string;
     companyName: string;
     avatar: string;
     dob: String;
+    address: string;
 }
