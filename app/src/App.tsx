@@ -11,10 +11,11 @@ import FormLayout from './layout/FormLayout';
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import Favourite from "./pages/Favourite";
+import Shop from "./pages/Shop";
+import CartDetail from "./pages/CartDetail";
 
 const Home = lazy(() => import('./pages/Home'));
 const ContactUs = lazy(() => import('./pages/ContactUs'));
-const CartDetail = lazy(() => import('./pages/cart/CartDetail'));
 const Login = lazy(() => import('./pages/Login'));
 const Register = lazy(() => import('./pages/Register'));
 const ForgotPassword = lazy(() => import('./pages/ForgotPassword'));

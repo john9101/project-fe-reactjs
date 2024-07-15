@@ -341,8 +341,6 @@ const ProductDetail = ({productId: productIdFromProp}: ProductDetailProps) => {
     const [isFavourite, setIsFavourite] = useState<boolean>(false);
 
     useEffect(() => {
-        console.log(favouriteProducts);
-        console.log(product)
         const exists = favouriteProducts.some(favProduct => favProduct._id == productId);
         setIsFavourite(exists);
     }, [favouriteProducts, product]);

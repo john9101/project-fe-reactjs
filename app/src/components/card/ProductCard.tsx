@@ -2,22 +2,39 @@ import {Product} from "../../types/product.type";
 import {formatCurrency} from "../../util/formatCurrency";
 import Slider from "react-slick";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCartShopping,faEye as faEyeSolid} from "@fortawesome/free-solid-svg-icons";
+import {faCartShopping, faEye as faEyeSolid} from "@fortawesome/free-solid-svg-icons";
 import {faEye as faEyeRegular} from '@fortawesome/free-regular-svg-icons'
 import Tooltip from '@mui/material/Tooltip';
 import Chip from '@mui/material/Chip';
 import StarIcon from '@mui/icons-material/Star';
 import {NavLink} from "react-router-dom";
 import {useState} from "react";
-import {Button, Modal} from "react-bootstrap";
+import {Modal} from "react-bootstrap";
 import ProductDetail from "../../pages/ProductDetail";
 import '../../assets/css/styleShop.scss'
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import {useDispatch, useSelector} from "react-redux";
+import {RootState} from "../../store/store";
+import {addToFavourite, removeFromFavourite} from "../../store/favourite.slice";
+
 
 interface ProductCardProps {
     product: Product
 }
 
 const ProductCard = ({product}: ProductCardProps) => {
+    const dispatch = useDispatch();
+    const isFavourite = useSelector((state: RootState) => {
+        return state.favourite.products.some((favProduct) => favProduct._id === product._id);
+    });
+    const handleAddToFavourite = () => {
+        if (isFavourite) {
+            dispatch(removeFromFavourite(product._id));
+        } else {
+            dispatch(addToFavourite(product));
+        }
+    };
 
     const images = product?.options!.map(option => option.image)
 
@@ -86,6 +103,27 @@ const ProductCard = ({product}: ProductCardProps) => {
                                 fontFamily: 'var(--primary)'
                             }}
                         />
+                        <Tooltip title={isFavourite ? "Bỏ yêu thích" : "Thêm vào yêu thích"} placement="top" className={"bg-light"}>
+                            {isFavourite ? (
+                                <FavoriteIcon
+                                    style={{cursor: 'pointer', color: '#C07973', fontSize: '2rem'}}
+                                    onClick={handleAddToFavourite}
+                                    className='position-absolute rounded-circle p-1'                                    sx={{
+                                        bottom: 10,
+                                        right: 10,
+                                    }}
+                                />
+                            ) : (
+                                <FavoriteBorderIcon
+                                    style={{cursor: 'pointer',fontSize: '2rem'}}
+                                    onClick={handleAddToFavourite}
+                                    className='position-absolute rounded-circle p-1'                                    sx={{
+                                        bottom: 10,
+                                        right: 10,
+                                    }}
+                                />
+                            )}
+                        </Tooltip>
                     </div>
                     <div className="card-body border-left border-right text-center p-0 pt-4 pb-3 pl-2 pr-2">
                         <h6 className="text-truncate mb-3">{product.name}</h6>
@@ -101,6 +139,7 @@ const ProductCard = ({product}: ProductCardProps) => {
                     <div className="card-footer d-flex justify-content-between bg-light border">
                         <NavLink to={`/products/${product._id}`} className="btn btn-sm text-dark p-0"><FontAwesomeIcon
                             icon={faEyeSolid} className='text-primary mr-1'/>Xem chi tiết</NavLink>
+
                         <span className="btn btn-sm text-dark p-0" onClick={handleShowQuickSeeModal}>
                             <FontAwesomeIcon icon={faCartShopping} className='text-primary mr-1'/> Thêm vào giỏ hàng
                         </span>
