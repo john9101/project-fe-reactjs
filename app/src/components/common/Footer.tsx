@@ -9,7 +9,7 @@ import {
     faEnvelope,
     faHouse,
     faLocationDot,
-    faPhone
+    faPhone, faUserTie
 } from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import styled from "styled-components";
@@ -42,12 +42,10 @@ const Footer = () => {
                                 <NavLink className="text-dark mb-2" to="/">
                                     <StyledFontAwesomeIcon icon={faHouse}/>Trang chủ
                                 </NavLink>
-                                <NavLink className="text-dark mb-2" to="#"><i
-                                    className="fa fa-angle-right mr-2"></i> Tất cả sản phẩm</NavLink>
                                 <NavLink className="text-dark mb-2" to="/cart">
                                     <StyledFontAwesomeIcon icon={faCartShopping}/>Giỏ hàng</NavLink>
-                                <NavLink className="text-dark mb-2" to="/user"><i
-                                    className="fa fa-angle-right mr-2"></i>Trang cá nhân</NavLink>
+                                <NavLink className="text-dark mb-2" to="/user"><StyledFontAwesomeIcon icon={faUserTie}/>Trang
+                                    cá nhân</NavLink>
                                 <NavLink className="text-dark mb-2" to="/contact-us">
                                     <StyledFontAwesomeIcon icon={faAddressCard}/>Liên hệ</NavLink>
                             </div>

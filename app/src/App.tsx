@@ -13,6 +13,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import Favourite from "./pages/Favourite";
 import Shop from "./pages/Shop";
 import CartDetail from "./pages/CartDetail";
+import PageNotFound from "./pages/PageNotFound";
 
 const Home = lazy(() => import('./pages/Home'));
 const ContactUs = lazy(() => import('./pages/ContactUs'));
@@ -37,6 +38,7 @@ function App() {
                             <Route path="about-us" element={<AboutUs />} />
                             <Route path="shop" element={<Shop/>}/>
                             <Route path="favourite" element={<Favourite />} />
+                            <Route path="404" element={<PageNotFound />} />
                         </Route>
                         <Route path="account" element={<FormLayout />}>
                             <Route path="login" element={<Login />} />
