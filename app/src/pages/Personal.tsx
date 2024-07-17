@@ -110,7 +110,7 @@ const Personal: React.FC = () => {
                     InputProps={{ readOnly: true }}
                 />
                 <div className='footerButton'>
-                    <Button className='btnUpdateInformation' type='submit' variant='contained' disabled>
+                    <Button className='btnUpdateInformation' type='submit' variant='contained'>
                         Chỉnh sửa thông tin
                     </Button>
                 </div>
