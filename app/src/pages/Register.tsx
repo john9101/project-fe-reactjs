@@ -23,7 +23,7 @@ interface AddressData {
     province: string | null;
     district: string | null;
     ward: string | null;
-    specificAddress: string;
+    specific: string;
 }
 
 const Register = () => {
@@ -40,7 +40,7 @@ const Register = () => {
         province: null,
         district: null,
         ward: null,
-        specificAddress: '',
+        specific: '',
     });
     const [avatar,] = useState('');
     const [termsAccepted, setTermsAccepted] = useState(false);
@@ -120,7 +120,7 @@ const Register = () => {
         tempErrors.fullName = validateFullName(fullName);
         tempErrors.phone = validatePhone(phone);
         tempErrors.email = validateEmail(email);
-        tempErrors.termsAccepted = termsAccepted ? '' : 'Bạn phải đồng ý với điều khoản của chúng tôi';
+        tempErrors.termsAccepted = termsAccepted ? '' : '*';
         setErrors(tempErrors);
         return Object.values(tempErrors).every(x => x === '');
     };
@@ -351,9 +351,12 @@ const Register = () => {
                 <div className='checkboxAgree'>
                     <FormControlLabel
                         className='labelAgree'
-                        control={<Checkbox checked={termsAccepted} onChange={(e) => setTermsAccepted(e.target.checked)} />}
+                        control={<Checkbox checked={termsAccepted} onChange={(e) => setTermsAccepted(e.target.checked)}
+                            style={{ display: 'flex', flexDirection: 'column' }} />}
                         label="Tôi đồng ý với điều khoản sử dụng của dịch vụ."
-                        style={{ color: errors.termsAccepted ? 'red' : 'inherit' }}
+                        style={{
+                            color: errors.termsAccepted ? 'red' : 'inherit',
+                        }}
                     />
                     {errors.termsAccepted && (
                         <span style={{ color: 'red' }}>{errors.termsAccepted}</span>

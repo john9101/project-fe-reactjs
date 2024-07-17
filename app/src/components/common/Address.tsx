@@ -28,7 +28,7 @@ interface AddressData {
     province: string | null;
     district: string | null;
     ward: string | null;
-    specificAddress: string;
+    specific: string;
 }
 
 const AddressSelect: React.FC<AddressProps> = ({ onChange }) => {
@@ -38,7 +38,7 @@ const AddressSelect: React.FC<AddressProps> = ({ onChange }) => {
     const [selectedProvince, setSelectedProvince] = useState<string | null>(null);
     const [selectedDistrict, setSelectedDistrict] = useState<string | null>(null);
     const [selectedWard, setSelectedWard] = useState<string | null>(null);
-    const [specificAddress, setSpecificAddress] = useState<string>('');
+    const [specific, setspecific] = useState<string>('');
 
     useEffect(() => {
         const getProvinces = async () => {
@@ -84,10 +84,10 @@ const AddressSelect: React.FC<AddressProps> = ({ onChange }) => {
                 province: selectedProvince,
                 district: selectedDistrict,
                 ward: selectedWard,
-                specificAddress,
+                specific,
             });
         }
-    }, [selectedProvince, selectedDistrict, selectedWard, specificAddress, onChange]);
+    }, [selectedProvince, selectedDistrict, selectedWard, specific, onChange]);
 
     return (
         <div className="address-select">
@@ -149,8 +149,8 @@ const AddressSelect: React.FC<AddressProps> = ({ onChange }) => {
                 id="outlined-basic"
                 label="Địa chỉ cụ thể"
                 sx={{ width: 300 }}
-                value={specificAddress}
-                onChange={(e) => setSpecificAddress(e.target.value)}
+                value={specific}
+                onChange={(e) => setspecific(e.target.value)}
             />
         </div>
     );

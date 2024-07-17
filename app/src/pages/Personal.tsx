@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Button, FormControlLabel, Radio, RadioGroup, TextField } from '@mui/material';
+import AddressSelect from '../components/common/Address';
 import '../assets/css/stylePersonal.scss';
 
 const Personal: React.FC = () => {
@@ -9,18 +10,44 @@ const Personal: React.FC = () => {
         gender: '',
         companyName: '',
         phone: '',
-        email: ''
+        email: '',
+        address: {
+            province: '',
+            district: '',
+            ward: '',
+            specific: ''
+        }
     });
 
     useEffect(() => {
         const storedUserData = localStorage.getItem('user');
         if (storedUserData) {
-            setUserData(JSON.parse(storedUserData));
+            const parsedData = JSON.parse(storedUserData);
+            setUserData({
+                fullName: parsedData.fullName || '',
+                dob: parsedData.dob || '',
+                gender: parsedData.gender || '',
+                companyName: parsedData.companyName || '',
+                phone: parsedData.phone || '',
+                email: parsedData.email || '',
+                address: {
+                    province: parsedData.address.province || '',
+                    district: parsedData.address.district || '',
+                    ward: parsedData.address.ward || '',
+                    specific: parsedData.address.specific || ''
+                }
+            });
         }
     }, []);
 
     const handleSubmit = (e: React.FormEvent) => {
-       
+        e.preventDefault();
+        localStorage.setItem('user', JSON.stringify(userData));
+    };
+
+    const formatAddress = (address: any) => {
+        const { specific, ward, district, province } = address;
+        return [specific, ward, district, province].filter(part => part).join(' - ');
     };
 
     return (
@@ -77,10 +104,24 @@ const Personal: React.FC = () => {
                     value={userData.email}
                     onChange={(e) => setUserData({ ...userData, email: e.target.value })}
                 />
-                {/* Thêm component Address */}
                 <span className='titleInput'>Địa chỉ:</span>
-                {/* Add Address component here if needed */}
-
+                <TextField
+                    className='inputArea'
+                    placeholder='Địa chỉ'
+                    value={formatAddress(userData.address)}
+                    onChange={(e) => {
+                        const addressParts = e.target.value.split(' - ');
+                        setUserData({
+                            ...userData,
+                            address: {
+                                specific: addressParts[0] || '',
+                                ward: addressParts[1] || '',
+                                district: addressParts[2] || '',
+                                province: addressParts[3] || ''
+                            }
+                        });
+                    }}
+                />
                 <div className='footerButton'>
                     <Button className='btnUpdateInformation' type='submit' variant='contained'>
                         Chỉnh sửa thông tin
@@ -89,6 +130,6 @@ const Personal: React.FC = () => {
             </form>
         </div>
     );
-}
+};
 
 export default Personal;
