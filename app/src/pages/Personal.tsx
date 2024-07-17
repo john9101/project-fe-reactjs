@@ -1,58 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import { Button, FormControlLabel, Radio, RadioGroup, TextField } from '@mui/material';
 import '../assets/css/stylePersonal.scss';
-// import Address, { AddressData } from '../components/common/Address';
-
-const convertDateFormat = (dateStr: string) => {
-    const [day, month, year] = dateStr.split('/');
-    return `${year}-${month}-${day}`;
-};
-
-interface UserData {
-    fullName: string;
-    dob: string;
-    gender: string;
-    companyName: string;
-    phone: string;
-    email: string;
-    // address: AddressData;
-}
 
 const Personal: React.FC = () => {
-    const [userData, setUserData] = useState<UserData>({
+    const [userData, setUserData] = useState({
         fullName: '',
         dob: '',
         gender: '',
         companyName: '',
         phone: '',
-        email: '',
-        // address: { ... }
+        email: ''
     });
 
     useEffect(() => {
         const storedUserData = localStorage.getItem('user');
         if (storedUserData) {
-            const user = JSON.parse(storedUserData);
-            setUserData({
-                fullName: user.fullName || '',
-                dob: user.dob ? convertDateFormat(user.dob) : '',
-                gender: user.gender || '',
-                companyName: user.companyName || '',
-                phone: user.phone || '',
-                email: user.email || '',
-                // address: user.address || { ... }
-            });
+            setUserData(JSON.parse(storedUserData));
         }
     }, []);
 
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        // Handle form submission
+    const handleSubmit = (e: React.FormEvent) => {
+       
     };
 
     return (
         <div className='pagePersonal'>
-            <div className='btnLogoutArea'><Button>Đăng xuất</Button></div>
             <span className='titlePersonalPage'>Trang thông tin cá nhân</span>
             <form onSubmit={handleSubmit} className='componentPersonal'>
                 <span className='titleInput'>Họ và tên:</span>
@@ -107,12 +79,8 @@ const Personal: React.FC = () => {
                 />
                 {/* Thêm component Address */}
                 <span className='titleInput'>Địa chỉ:</span>
-                {/* <Address
-                    errors={{}}
-                    setAddressData={handleAddressDataChange}
-                    setAddressErrors={() => { }}
-                    addressData={userData.address}
-                /> */}
+                {/* Add Address component here if needed */}
+
                 <div className='footerButton'>
                     <Button className='btnUpdateInformation' type='submit' variant='contained'>
                         Chỉnh sửa thông tin

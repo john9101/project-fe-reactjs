@@ -33,7 +33,7 @@ const Register = () => {
     const [fullName, setFullName] = useState('');
     const [dob, setDOB] = useState('');
     const [gender, setGender] = useState('');
-    const [nameCompany, setNameCompany] = useState('');
+    const [companyName, setCompanyName] = useState('');
     const [phone, setPhone] = useState('');
     const [email, setEmail] = useState('');
     const [addressData, setAddressData] = useState<AddressData>({
@@ -42,7 +42,7 @@ const Register = () => {
         ward: null,
         specificAddress: '',
     });
-    const [avatar, setAvatar] = useState('');
+    const [avatar,] = useState('');
     const [termsAccepted, setTermsAccepted] = useState(false);
 
     const [errors, setErrors] = useState<Errors>({});
@@ -135,7 +135,7 @@ const Register = () => {
                     fullName,
                     dob,
                     gender,
-                    nameCompany,
+                    companyName,
                     phone,
                     email,
                     address: addressData,
@@ -305,8 +305,8 @@ const Register = () => {
                 <TextField
                     className='inputArea'
                     placeholder='Nhập tên công ty của bạn'
-                    value={nameCompany}
-                    onChange={(e) => setNameCompany(e.target.value)}
+                    value={companyName}
+                    onChange={(e) => setCompanyName(e.target.value)}
                 />
                 <span className='titleInput'>Số điện thoại: <span className='note'> *</span></span>
                 <TextField
