@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Button, FormControlLabel, Radio, RadioGroup, TextField } from '@mui/material';
-import AddressSelect from '../components/common/Address';
 import '../assets/css/stylePersonal.scss';
 
 const Personal: React.FC = () => {
@@ -59,7 +58,7 @@ const Personal: React.FC = () => {
                     className='inputArea'
                     placeholder='Nhập họ và tên'
                     value={userData.fullName}
-                    onChange={(e) => setUserData({ ...userData, fullName: e.target.value })}
+                    InputProps={{ readOnly: true }}
                 />
                 <div className='chooseArea'>
                     <div className="chooseDOB">
@@ -68,7 +67,7 @@ const Personal: React.FC = () => {
                             className='inputArea'
                             type='date'
                             value={userData.dob}
-                            onChange={(e) => setUserData({ ...userData, dob: e.target.value })}
+                            InputProps={{ readOnly: true }}
                         />
                     </div>
                     <div className="chooseGender">
@@ -76,10 +75,9 @@ const Personal: React.FC = () => {
                         <RadioGroup
                             className='groupGender'
                             value={userData.gender}
-                            onChange={(e) => setUserData({ ...userData, gender: e.target.value })}
                         >
-                            <FormControlLabel value="0" control={<Radio />} label="Nữ" />
-                            <FormControlLabel value="1" control={<Radio />} label="Nam" />
+                            <FormControlLabel value="1" control={<Radio disabled />} label="Nam" />
+                            <FormControlLabel value="0" control={<Radio disabled />} label="Nữ" />
                         </RadioGroup>
                     </div>
                 </div>
@@ -88,42 +86,31 @@ const Personal: React.FC = () => {
                     className='inputArea'
                     placeholder='Nhập tên công ty của bạn'
                     value={userData.companyName}
-                    onChange={(e) => setUserData({ ...userData, companyName: e.target.value })}
+                    InputProps={{ readOnly: true }}
                 />
                 <span className='titleInput'>Số điện thoại:</span>
                 <TextField
                     className='inputArea'
                     placeholder='Nhập số điện thoại của công ty hoặc số điện thoại cá nhân'
                     value={userData.phone}
-                    onChange={(e) => setUserData({ ...userData, phone: e.target.value })}
+                    InputProps={{ readOnly: true }}
                 />
                 <span className='titleInput'>Email:</span>
                 <TextField
                     className='inputArea'
                     placeholder='Ví dụ: example@gmail.com'
                     value={userData.email}
-                    onChange={(e) => setUserData({ ...userData, email: e.target.value })}
+                    InputProps={{ readOnly: true }}
                 />
                 <span className='titleInput'>Địa chỉ:</span>
                 <TextField
                     className='inputArea'
                     placeholder='Địa chỉ'
                     value={formatAddress(userData.address)}
-                    onChange={(e) => {
-                        const addressParts = e.target.value.split(' - ');
-                        setUserData({
-                            ...userData,
-                            address: {
-                                specific: addressParts[0] || '',
-                                ward: addressParts[1] || '',
-                                district: addressParts[2] || '',
-                                province: addressParts[3] || ''
-                            }
-                        });
-                    }}
+                    InputProps={{ readOnly: true }}
                 />
                 <div className='footerButton'>
-                    <Button className='btnUpdateInformation' type='submit' variant='contained'>
+                    <Button className='btnUpdateInformation' type='submit' variant='contained' disabled>
                         Chỉnh sửa thông tin
                     </Button>
                 </div>

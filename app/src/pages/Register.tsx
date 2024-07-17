@@ -296,8 +296,8 @@ const Register = () => {
                             value={gender}
                             onChange={(e) => setGender(e.target.value)}
                         >
-                            <FormControlLabel value="1" control={<Radio />} label="Nữ" />
-                            <FormControlLabel value="0" control={<Radio />} label="Nam" />
+                            <FormControlLabel value="1" control={<Radio />} label="Nam" />
+                            <FormControlLabel value="0" control={<Radio />} label="Nữ" />
                         </RadioGroup>
                     </div>
                 </div>

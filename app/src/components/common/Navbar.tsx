@@ -1,4 +1,4 @@
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import Logo from "./Logo";
 import HomeCarosel from "../carousel/HomeCarousel";
 import React, { useState, useEffect } from "react";
@@ -14,6 +14,7 @@ import Typography from '@mui/material/Typography';
 
 const Navbar: React.FC = () => {
     const location = useLocation();
+    const navigate = useNavigate();
     const { authState, logout } = useAuth();
     const { isAuthenticated, user } = authState;
     const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
@@ -24,7 +25,7 @@ const Navbar: React.FC = () => {
             const parsedUser = JSON.parse(storedUser);
             authState.user = parsedUser;
         }
-    },);
+    }, []);
 
     const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorElUser(event.currentTarget);
@@ -37,6 +38,7 @@ const Navbar: React.FC = () => {
     const handleLogout = () => {
         logout();
         handleCloseUserMenu();
+        navigate('/');
     };
 
     const settings = [
@@ -93,7 +95,8 @@ const Navbar: React.FC = () => {
                                             {settings.map((setting, index) => (
                                                 <MenuItem key={index} onClick={setting.action || handleCloseUserMenu}>
                                                     {setting.path ? (
-                                                        <NavLink to={setting.path} style={{ textDecoration: 'none', color: 'inherit', width: '100%', textAlign: 'left' }}>
+                                                        <NavLink onClick={setting.action || handleCloseUserMenu}
+                                                            to={setting.path} style={{ textDecoration: 'none', color: 'inherit', width: '100%', textAlign: 'left' }}>
                                                             <Typography textAlign="left">{setting.label}</Typography>
                                                         </NavLink>
                                                     ) : (
