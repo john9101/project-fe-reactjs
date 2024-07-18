@@ -1,36 +1,31 @@
-import {Filter} from "../../util/filter";
-import {useState} from "react";
+import {UniformGenderFilterConstant} from "../../constants/uniformGenderFilter.constant";
 
-const genderFilterData: Filter = {
-    unisex: 'Đồng phục cho cả nam và nữ',
-    male: 'Đồng phục cho nam',
-    female: 'Đồng phục cho nữ'
+interface UniformGenderFilterProps{
+    handleUniformGenderChange: (newCheckedUniformGenders: string[]) => void
+    checkedUniformGenders: string[]
 }
 
-interface GenderFilterProps{
-    handleGenderChange: (newCheckedGenders: string[]) => void
-}
-
-const GenderFilter = ({handleGenderChange}: GenderFilterProps) => {
-
-    const [checkedGenders, setCheckedGenders] = useState<string[]>([]);
-    const genderFilterKeys = Object.keys(genderFilterData);
-
-    const onGenderFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+const UniformGenderFilter = ({handleUniformGenderChange, checkedUniformGenders}: UniformGenderFilterProps) => {
+    const onUniformGenderFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { value, checked } = event.target;
-        const newCheckedGenders = checked ? [...checkedGenders, value] : checkedGenders.filter(gender => gender !== value);
-        setCheckedGenders(newCheckedGenders);
-        handleGenderChange(newCheckedGenders)
+        const newCheckedUniformGenders = checked ? [...checkedUniformGenders, value] : checkedUniformGenders.filter(uniformGender => uniformGender !== value);
+        handleUniformGenderChange(newCheckedUniformGenders)
     }
 
     return (
         <div className="border-bottom mb-4 pb-4">
             <h5 className="font-weight-semi-bold mb-4">Lọc theo giới tính</h5>
             <form>
-                {genderFilterKeys.map(key => (
+                {Object.entries(UniformGenderFilterConstant).map(([key, value]) => (
                     <div className="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                        <input type="checkbox" className="custom-control-input" id={`uniform-${key}`} value={key} onChange={onGenderFilterChange}/>
-                        <label className="custom-control-label" htmlFor={`uniform-${key}`}>{genderFilterData[key]}</label>
+                        <input type="checkbox"
+                               className="custom-control-input"
+                               id={`uniform-${key}`}
+                               value={key}
+                               onChange={onUniformGenderFilterChange}
+                               checked={checkedUniformGenders.includes(key)}
+                        />
+                        <label className="custom-control-label" htmlFor={`uniform-${key}`}>{value}</label>
                     </div>
                 ))}
             </form>
@@ -38,4 +33,4 @@ const GenderFilter = ({handleGenderChange}: GenderFilterProps) => {
     )
 }
 
-export default GenderFilter;
+export default UniformGenderFilter;
