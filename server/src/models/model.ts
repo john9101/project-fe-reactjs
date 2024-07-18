@@ -162,14 +162,16 @@ const productSchema: Schema = new Schema({
             type: Schema.Types.ObjectId,
             ref: 'SizeChart',
         }
-    ]
+    ],
+    views: {
+        type: Number,
+        require: true
+    },
+    createdAt: {
+        type: Schema.Types.Date,
+        require: true
+    }
 })
-
-productSchema.virtual('uniformPrice').get(function (this: IProduct) {
-    return this.originalPrice * (1 - this.discountPercent)
-})
-productSchema.set('toJSON', {virtuals: true})
-productSchema.set('toObject', {virtuals: true})
 
 const measurementSchema: Schema = new Schema({
     name: {
