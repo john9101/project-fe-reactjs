@@ -5,19 +5,18 @@ import React, { useState, useEffect } from "react";
 import CategoryList from "./CategoriesList";
 import { useAuth } from "../../context/UserContext";
 import defaultAvatar from '../../assets/img/default-avatar.jpg';
-import Tooltip from '@mui/material/Tooltip';
-import IconButton from '@mui/material/IconButton';
 import Avatar from '@mui/material/Avatar';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
+import { Collapse, List, ListItemButton, ListItemText } from "@mui/material";
+import { ExpandLess, ExpandMore } from "@mui/icons-material";
 
 const Navbar: React.FC = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const { authState, logout } = useAuth();
     const { isAuthenticated, user } = authState;
-    const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+    const [, setAnchorElUser] = useState<null | HTMLElement>(null);
+    const [open, setOpen] = useState(false);
 
     useEffect(() => {
         const storedUser = localStorage.getItem('user');
@@ -25,10 +24,10 @@ const Navbar: React.FC = () => {
             const parsedUser = JSON.parse(storedUser);
             authState.user = parsedUser;
         }
-    },);
+    });
 
-    const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
-        setAnchorElUser(event.currentTarget);
+    const handleClick = () => {
+        setOpen(!open);
     };
 
     const handleCloseUserMenu = () => {
@@ -39,6 +38,13 @@ const Navbar: React.FC = () => {
         logout();
         handleCloseUserMenu();
         navigate('/');
+    };
+
+    const handleListItemClick = (action?: () => void) => {
+        if (action) {
+            action();
+        }
+        setOpen(false); // Đóng danh sách khi click vào ListItemButton
     };
 
     const settings = [
@@ -65,52 +71,48 @@ const Navbar: React.FC = () => {
                                 <NavLink to="/about-us" className="nav-item nav-link">Giới thiệu</NavLink>
                                 <NavLink to="/contact-us" className="nav-item nav-link">Liên hệ</NavLink>
                             </div>
-                            <div className="navbar-nav ml-auto py-0">
+                            <div>
                                 {isAuthenticated && user ? (
-                                    <div className="nav-item" >
-                                        <div style={{ display: 'flex', alignItems: 'center', columnGap: '5px', cursor: 'pointer' }} onClick={handleOpenUserMenu}>
+                                    <List
+                                        component="nav"
+                                        aria-labelledby="nested-list-subheader"
+                                    >
+                                        <ListItemButton onClick={handleClick} style={{ display: 'flex', columnGap: '5px' }}>
                                             <span>{user.fullName}</span>
-                                            <Tooltip title="Open settings">
-                                                <IconButton sx={{ p: 0 }}>
-                                                    <Avatar alt={user.fullName} src={user.avatar || defaultAvatar} />
-                                                </IconButton>
-                                            </Tooltip>
-                                        </div>
-                                        <Menu
-                                            sx={{ mt: '45px' }}
-                                            id="menu-appbar"
-                                            anchorEl={anchorElUser}
-                                            anchorOrigin={{
-                                                vertical: 'top',
-                                                horizontal: 'right',
-                                            }}
-                                            keepMounted
-                                            transformOrigin={{
-                                                vertical: 'top',
-                                                horizontal: 'right',
-                                            }}
-                                            open={Boolean(anchorElUser)}
-                                            onClose={handleCloseUserMenu}
-                                        >
-                                            {settings.map((setting, index) => (
-                                                <MenuItem key={index} onClick={setting.action || handleCloseUserMenu}>
-                                                    {setting.path ? (
-                                                        <NavLink onClick={setting.action || handleCloseUserMenu}
-                                                            to={setting.path} style={{ textDecoration: 'none', color: 'inherit', width: '100%', textAlign: 'left' }}>
-                                                            <Typography textAlign="left">{setting.label}</Typography>
-                                                        </NavLink>
-                                                    ) : (
-                                                        <Typography textAlign="left">{setting.label}</Typography>
-                                                    )}
-                                                </MenuItem>
-                                            ))}
-                                        </Menu>
-                                    </div>
+                                            <Avatar alt={user.fullName} src={user.avatar || defaultAvatar} />
+                                            <ListItemText />
+                                            {open ? <ExpandLess /> : <ExpandMore />}
+                                        </ListItemButton>
+                                        <Collapse in={open} timeout="auto" unmountOnExit>
+                                            <List component="div" disablePadding style={{ position: 'absolute', zIndex: '999', width: '100%' }}>
+                                                {settings.map((item, index) => (
+                                                    <ListItemButton
+                                                        key={index}
+                                                        style={{ borderBottom: '1px solid #d3ebff', backgroundColor: 'white' }}
+                                                        onClick={() => handleListItemClick(item.action)}
+                                                    >
+                                                        <ListItemText>
+                                                            {item.path ? (
+                                                                <NavLink
+                                                                    to={item.path}
+                                                                    style={{ textDecoration: 'none', color: 'inherit', width: '100%', textAlign: 'left' }}
+                                                                >
+                                                                    <Typography textAlign="left">{item.label}</Typography>
+                                                                </NavLink>
+                                                            ) : (
+                                                                <Typography textAlign="left">{item.label}</Typography>
+                                                            )}
+                                                        </ListItemText>
+                                                    </ListItemButton>
+                                                ))}
+                                            </List>
+                                        </Collapse>
+                                    </List>
                                 ) : (
-                                    <>
+                                    <div style={{ display: 'flex' }}>
                                         <NavLink to="/account/login" className="nav-item nav-link">Đăng nhập</NavLink>
                                         <NavLink to="/account/register" className="nav-item nav-link">Đăng ký</NavLink>
-                                    </>
+                                    </div>
                                 )}
                             </div>
                         </div>

@@ -42,7 +42,7 @@ const CategoriesList: React.FC = () => {
             <Collapse in={open} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding style={{ position: 'absolute' }}>
                     {categories.map((category, index) => (
-                        <ListItemButton key={index} sx={{ pl: 4 }} style={{ borderBottom: '1px solid #d3ebff' }}>
+                        <ListItemButton key={index} sx={{ pl: 4 }} style={{ borderBottom: '1px solid #d3ebff', backgroundColor: 'white' }}>
                             <ListItemText primary={category} />
                         </ListItemButton>
                     ))}
