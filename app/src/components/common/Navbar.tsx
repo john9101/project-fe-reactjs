@@ -25,7 +25,7 @@ const Navbar: React.FC = () => {
             const parsedUser = JSON.parse(storedUser);
             authState.user = parsedUser;
         }
-    }, []);
+    },);
 
     const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorElUser(event.currentTarget);

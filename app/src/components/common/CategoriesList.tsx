@@ -1,20 +1,26 @@
-import * as React from 'react';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
-import { Button } from '@mui/material';
-import '../../assets/css/style.module.scss'
-import { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import List from '@mui/material/List';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemText from '@mui/material/ListItemText';
+import Collapse from '@mui/material/Collapse';
+import ExpandLess from '@mui/icons-material/ExpandLess';
+import ExpandMore from '@mui/icons-material/ExpandMore';
 import http from '../../util/http';
 import { Category } from '../../types/category.type';
-const MenuPopupState: React.FC = () => {
+
+const CategoriesList: React.FC = () => {
+    const [open, setOpen] = useState(false);
     const [categories, setCategories] = useState<string[]>([]);
+
+    const handleClick = () => {
+        setOpen(!open);
+    };
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await http.get<Category[]>(`categories`)
-                setCategories(response.data.map(category => category.name))
+                const response = await http.get<Category[]>(`categories`);
+                setCategories(response.data.map((category) => category.name));
             } catch (error) {
                 console.error('Error fetching categories:', error);
             }
@@ -23,52 +29,27 @@ const MenuPopupState: React.FC = () => {
         fetchData();
     }, []);
 
-    const styleCategoriesList = {
-        top: '5px',
-        width: '360px',
-        background: 'var(--primary)',
-        color: 'var(--light)',
-        '&:hover': {
-            background: '#c17a74 ',
-        }
-    }
-    const styleMenuCategories = {
-        padding: '0'
-    }
-    const styleMenuCategoriesItem = {
-        width: '360px',
-        padding: '8px 16px',
-        borderBottom: '1px solid #d3ebff',
-        '&:hover': {
-            backgroundColor: 'var(--primary)',
-            color: 'white',
-        }
-    }
     return (
-        <PopupState variant="popover" popupId="demo-popup-menu">
-            {(popupState) => (
-                <React.Fragment>
-                    <Button variant='contained' {...bindTrigger(popupState)}
-                        sx={{ maxWidth: 360, height: 50, ...styleCategoriesList }}
-                        className="col-lg-4 CategoriesList">
-                        Categories
-                    </Button>
-                    <Menu {...bindMenu(popupState)} className="MenuCategories" sx={{ ...styleMenuCategories }}>
-                        {categories.map((category, index) => (
-                            <MenuItem
-                                key={index}
-                                onClick={popupState.close}
-                                className="MenuCategoriesItem"
-                                sx={{ maxWidth: 360, ...styleMenuCategoriesItem }}
-                            >
-                                {category}
-                            </MenuItem>
-                        ))}
-                    </Menu>
-                </React.Fragment>
-            )}
-        </PopupState>
+        <List
+            sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
+            component="nav"
+            aria-labelledby="nested-list-subheader"
+        >
+            <ListItemButton onClick={handleClick} style={{ backgroundColor: 'var(--primary)', color: 'white' }}>
+                <ListItemText primary="Categories" style={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', }} />
+                {open ? <ExpandLess /> : <ExpandMore />}
+            </ListItemButton>
+            <Collapse in={open} timeout="auto" unmountOnExit>
+                <List component="div" disablePadding style={{ position: 'absolute' }}>
+                    {categories.map((category, index) => (
+                        <ListItemButton key={index} sx={{ pl: 4 }} style={{ borderBottom: '1px solid #d3ebff' }}>
+                            <ListItemText primary={category} />
+                        </ListItemButton>
+                    ))}
+                </List>
+            </Collapse>
+        </List>
     );
-}
+};
 
-export default MenuPopupState;
+export default CategoriesList;
