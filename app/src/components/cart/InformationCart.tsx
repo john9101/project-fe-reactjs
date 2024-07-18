@@ -67,7 +67,7 @@ export default function InformationCart() {
                         <h5 className="font-weight-bold">Tổng tiền</h5>
                         <h5 className="font-weight-bold">{formatCurrency(totalPrice)}</h5>
                     </div>
-                    <NavLink to={"/check-out"}>
+                    <NavLink to={"/check-out"} state={{totalPrice: totalPrice, voucherCode: voucherCode, totalDiscount: totalDiscount}}>
                         <button className="btn btn-block btn-primary my-3 py-3">
                             Đặt hàng
                         </button>
