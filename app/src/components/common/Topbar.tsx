@@ -1,14 +1,27 @@
-import { Link } from "react-router-dom";
+import {Link, useLocation, useNavigate} from "react-router-dom";
 import { faFacebookF, faInstagram, faLinkedinIn, faTwitter, faYoutube } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart, faMagnifyingGlass, faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import Logo from "./Logo";
 import {useSelector} from "react-redux";
 import {RootState} from "../../store/store";
-import {useEffect} from "react";
+import React, {FormEvent, useState} from "react";
 
 const Topbar = () => {
     const totalItems = useSelector((state: RootState) => state.cart.totalItem);
+    const {search} = useLocation()
+    const params = new URLSearchParams(search);
+    const [keyword, setKeyword] = useState<string | null>(params.get('keyword'));
+    const navigate = useNavigate();
+
+    const handleSearchWithKeyword = (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault()
+        if(keyword){
+            params.set("keyword", keyword);
+            navigate(`/search?${decodeURIComponent(params.toString())}`)
+        }
+    }
+
     return (
         <div className="container-fluid">
             <div className="row bg-secondary py-2 px-xl-5">
@@ -48,19 +61,21 @@ const Topbar = () => {
                     </Link>
                 </div>
                 <div className="col-lg-6 col-6 text-left">
-                    <form action="">
+                    <form onSubmit={handleSearchWithKeyword}>
                         <div className="input-group">
-                            <input type="text" className="form-control" placeholder="Tìm kiếm sản phẩm" />
-                            <div className="input-group-append">
-                                <span className="input-group-text bg-transparent text-primary">
-                                    <FontAwesomeIcon icon={faMagnifyingGlass} size="1x" color="#000" />                            </span>
-                            </div>
+                            <input type="text" className="form-control" value={keyword!} onChange={event => setKeyword(event.target.value)} placeholder="Nhập tên đồng phục cần tìm" />
+                            <button type='submit' className="input-group-append p-0 border-secondary bg-transparent" style={{outline: 'none'}}>
+                                <span className="input-group-text bg-transparent h-100">
+                                    <FontAwesomeIcon icon={faMagnifyingGlass} className='text-primary' size="1x" color="#000" />
+                                </span>
+                            </button>
                         </div>
                     </form>
                 </div>
                 <div className="col-lg-3 col-6 text-right">
                     <Link to="#" className="btn border">
-                        <FontAwesomeIcon icon={faHeart} className="text-primary" />                        <span className="badge">0</span>
+                        <FontAwesomeIcon icon={faHeart} className="text-primary" />
+                        <span className="badge">0</span>
                     </Link>
                     <Link to={"/cart"} className="btn border">
                         <FontAwesomeIcon icon={faShoppingCart} className="text-primary" />
