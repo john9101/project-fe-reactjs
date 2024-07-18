@@ -236,7 +236,7 @@
 	 * Enumeration for width.
 	 * @public
 	 * @readonly
-	 * @enum {String}
+	 * @constants {String}
 	 */
 	Owl.Width = {
 		Default: 'default',
@@ -248,7 +248,7 @@
 	 * Enumeration for types.
 	 * @public
 	 * @readonly
-	 * @enum {String}
+	 * @constants {String}
 	 */
 	Owl.Type = {
 		Event: 'event',

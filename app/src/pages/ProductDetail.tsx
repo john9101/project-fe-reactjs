@@ -189,16 +189,16 @@ const ProductDetail = ({productId: productIdFromProp}:ProductDetailProps)=> {
 
     const NextArrowCustom = () =>{
         return (
-            <div className="carousel-control-prev" onClick={handlePreviousSlide}>
-                <FontAwesomeIcon icon={faCircleChevronLeft} className="custom-arrow-icon" />
+            <div className="carousel-control-prev bg-dark" style={{borderRadius: '50%', boxShadow: 'rgba(0, 0, 0, 0.24) 0 3px 8px'}} onClick={handlePreviousSlide}>
+                <FontAwesomeIcon icon={faCircleChevronLeft} className="custom-arrow-icon text-primary" />
             </div>
         )
     }
 
     const PreviousArrowCustom = () =>{
         return (
-            <div className="carousel-control-next" onClick={handleNextSlide}>
-                <FontAwesomeIcon icon={faCircleChevronRight} className="custom-arrow-icon"/>
+            <div className="carousel-control-next bg-dark" style={{borderRadius: '50%', boxShadow: 'rgba(0, 0, 0, 0.24) 0 3px 8px'}} onClick={handleNextSlide}>
+                <FontAwesomeIcon icon={faCircleChevronRight} className="custom-arrow-icon text-primary"/>
             </div>
         )
     }
