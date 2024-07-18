@@ -19,7 +19,9 @@ const RatingFilter = ({handleRatingChange, checkedRatings}: RatingFilterProps) =
             <h5 className="font-weight-semi-bold mb-4">Lọc theo đánh giá</h5>
             <form>
                 {Object.entries(RatingFilterConstant).map(([key, value], index) => (
-                    <div className="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                    <div
+                        key={key}
+                        className="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
                         <input type="checkbox"
                                className="custom-control-input"
                                id={`rating-${key}`} value={key}

@@ -1,9 +1,9 @@
 import * as React from 'react';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
-import { Button } from '@mui/material';
-import '../../assets/css/style.module.scss'
+// import Menu from '@mui/material/Menu';
+// import MenuItem from '@mui/material/MenuItem';
+// import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
+// import { Button } from '@mui/material';
+// import '../../assets/css/style.module.scss'
 // import { useEffect, useState } from 'react';
 // import http from '../../util/http';
 // import { Category } from '../../types/category.type';
@@ -14,7 +14,7 @@ import {fetchCategoriesList} from "../../store/category.slice";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faAngleDown} from "@fortawesome/free-solid-svg-icons"
 import {NavLink, useLocation} from "react-router-dom";
-const MenuPopupState = () => {
+const CategoriesMenu = () => {
     // const [categories, setCategories] = useState<string[]>([]);
     //
     // useEffect(() => {
@@ -98,8 +98,8 @@ const MenuPopupState = () => {
                 id="navbar-vertical" style={location.pathname !== '/' ? {width: 'calc(100% - 30px)', zIndex: 1} :  {}}>
                 <div className="navbar-nav w-100 overflow-hidden" style={{height: "410px"}}>
                     {
-                        categoriesList.map((category, index) => (
-                            <NavLink to={`/category/${category._id}`} className="nav-item nav-link">{category.name}</NavLink>
+                        categoriesList.map(category => (
+                            <NavLink key={category._id} to={`/category/${category._id}`} className="nav-item nav-link">{category.name}</NavLink>
                         ))
                     }
                 </div>
@@ -108,4 +108,4 @@ const MenuPopupState = () => {
     );
 }
 
-export default MenuPopupState;
+export default CategoriesMenu;

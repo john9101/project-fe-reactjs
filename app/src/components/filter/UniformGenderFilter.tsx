@@ -17,7 +17,9 @@ const UniformGenderFilter = ({handleUniformGenderChange, checkedUniformGenders}:
             <h5 className="font-weight-semi-bold mb-4">Lọc theo giới tính</h5>
             <form>
                 {Object.entries(UniformGenderFilterConstant).map(([key, value]) => (
-                    <div className="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                    <div
+                        key={key}
+                        className="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
                         <input type="checkbox"
                                className="custom-control-input"
                                id={`uniform-${key}`}

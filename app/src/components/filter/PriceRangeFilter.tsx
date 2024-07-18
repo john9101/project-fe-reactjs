@@ -17,7 +17,9 @@ const PriceRangeFilter = ({handlePriceRangeChange, checkedPriceRanges}: PriceRan
             <h5 className="font-weight-semi-bold mb-4">Lọc theo khoảng giá</h5>
             <form>
                 {Object.entries(PriceRangeFilterConstant).map(([key, value]) => (
-                    <div className="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                    <div
+                        key={key}
+                        className="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
                         <input type="checkbox"
                                className="custom-control-input"
                                id={`price-range-${key}`}

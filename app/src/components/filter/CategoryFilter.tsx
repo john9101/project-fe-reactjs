@@ -18,8 +18,9 @@ const CategoryFilter = ({handleCategoryChange, categoriesList, checkedCategories
             <h5 className="font-weight-semi-bold mb-4">Lọc theo danh mục</h5>
             <form>
                 {
-                    categoriesList.map((category, index) => (
+                    categoriesList.map(category => (
                         <div
+                            key={category._id}
                             className="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
                             <input type="checkbox"
                                    className="custom-control-input"

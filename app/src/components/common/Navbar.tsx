@@ -2,14 +2,14 @@ import {NavLink, useLocation} from "react-router-dom";
 import Logo from "./Logo";
 import HomeCarosel from "../carousel/HomeCarousel";
 import React from "react";
-import CategoryList from "./CategoriesList";
+import CategoriesMenu from "./CategoriesMenu";
 
 const Navbar = () => {
     const location = useLocation();
     return (
         <div className="container-fluid">
             <div className="row border-top px-xl-5">
-                <CategoryList/>
+                <CategoriesMenu/>
                 <div className="col-lg-9">
                     <nav className="navbar navbar-expand-lg bg-light navbar-light py-3 py-lg-0 px-0">
                         <NavLink to="/" className="d-lg-none">

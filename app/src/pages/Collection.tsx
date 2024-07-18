@@ -108,7 +108,9 @@ const Collection = () => {
                 dispatch(fetchCategoriesList())
                     .unwrap()
                     .then(categoriesData =>{
-                        setDestBreadcrumb(categoriesData.find(category => categoryId! === category._id)!.name)
+                        if(categoriesData.length){
+                            setDestBreadcrumb(categoriesData.find(category => categoryId! === category._id)?.name!)
+                        }
                     })
             }else {
                 setDestBreadcrumb(categoriesList.find(category => categoryId! === category._id)!.name)
@@ -295,8 +297,8 @@ const Collection = () => {
                                         <Dropdown.Menu>
                                             {
                                                 Object.values(sortTypeConstant)
-                                                    .map(sortTypeValue => (
-                                                        <Dropdown.Item onClick={() => handleSortTypeChange(sortTypeValue!.serverValue)}>
+                                                    .map((sortTypeValue, sortTypeIndex) => (
+                                                        <Dropdown.Item onClick={() => handleSortTypeChange(sortTypeValue!.serverValue)} key={sortTypeIndex}>
                                                             <FontAwesomeIcon icon={sortTypeValue!.iconDefinition}/> {sortTypeValue!.label}
                                                         </Dropdown.Item>
                                                     ))
@@ -360,10 +362,9 @@ const Collection = () => {
                                             {
                                                 Array
                                                     .from({length: totalPages}, (_, index) => index + 1)
-                                                    .map(page => (
-                                                        <li className={`page-item ${page === currentPage && 'active'}`}>
-                                                            <NavLink className="page-link"
-                                                                     to={`${pathname}?${decodeURIComponent(collectionParamsURLWithPage(page).toString())}`}>{page}</NavLink>
+                                                    .map((page, index) => (
+                                                        <li key={index} className={`page-item ${page === currentPage && 'active'}`}>
+                                                            <NavLink className="page-link" to={`${pathname}?${decodeURIComponent(collectionParamsURLWithPage(page).toString())}`}>{page}</NavLink>
                                                         </li>
                                                     ))
                                             }
