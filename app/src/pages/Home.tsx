@@ -1,6 +1,8 @@
 import React from 'react'
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCheck,faTruckFast,faRightLeft,faPhoneVolume} from "@fortawesome/free-solid-svg-icons"
+import FeatureProductsSection from "../components/common/FeatureProductsSection";
+import {FeatureProductsDecorateConstant} from "../constants/featureProductsDecorate.constant";
 
 const Home = () => {
     return (
@@ -39,30 +41,9 @@ const Home = () => {
                     </div>
                 </div>
             </div>
-            <div className="container-fluid pt-5">
-                <div className="text-center mb-4">
-                    <h2 className="section-title px-5"><span className="px-2">Sản phẩm đang giảm giá</span></h2>
-                </div>
-                <div className="row px-xl-5 pb-3">
-
-                </div>
-            </div>
-            <div className="container-fluid pt-5">
-                <div className="text-center mb-4">
-                    <h2 className="section-title px-5"><span className="px-2">Sản phẩm bán chạy</span></h2>
-                </div>
-                <div className="row px-xl-5 pb-3">
-
-                </div>
-            </div>
-            <div className="container-fluid pt-5">
-                <div className="text-center mb-4">
-                    <h2 className="section-title px-5"><span className="px-2">Sản phẩm mới</span></h2>
-                </div>
-                <div className="row px-xl-5 pb-3">
-
-                </div>
-            </div>
+            {Object.keys(FeatureProductsDecorateConstant).map((decorateKey, index)=> (
+                <FeatureProductsSection key={index} decorateKey={decorateKey}/>
+            ))}
         </>
     )
 }
