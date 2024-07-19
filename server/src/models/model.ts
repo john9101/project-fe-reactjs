@@ -32,6 +32,8 @@ export interface IProduct{
         max: string
     };
     sizeCharts: mongoose.Types.ObjectId;
+    views: number;
+    createdAt: Schema.Types.Date
 }
 
 export interface IRequire{
