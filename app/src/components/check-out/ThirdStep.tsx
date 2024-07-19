@@ -52,15 +52,15 @@ function ThirdStep({checkoutFormData, totalPrice, voucherCode, totalDiscount}: T
                         <div className="row d-flex justify-content-center align-items-center h-100">
                             <div className="col-12">
                                 <div className="card" style={{borderRadius: "10px"}}>
-                                    <div className="card-header px-4 py-5">
+                                    <div className="card-header py-4">
                                         <h5 className="text-muted mb-0">
                                             Cảm ơn bạn <span
-                                            style={{color: "#a8729a"}}>{checkoutFormData.fullName}</span> đã đặt hàng!
+                                            className={"text-primary"}>{checkoutFormData.fullName}</span> đã đặt hàng!
                                         </h5>
                                     </div>
                                     <div className="card-body p-4">
                                         <div className="d-flex justify-content-between align-items-center mb-4">
-                                            <p className="lead fw-normal mb-0" style={{color: "#a8729a"}}>Chi tiết đơn
+                                            <p className="lead fw-normal mb-0 text-primary">Chi tiết đặt
                                                 hàng</p>
                                             <p className="small text-muted mb-0">Mã giảm giá
                                                 : {voucherCode ? voucherCode : 'không'}</p>
@@ -106,7 +106,7 @@ function ThirdStep({checkoutFormData, totalPrice, voucherCode, totalDiscount}: T
                                             );
                                         })}
                                         <div className="d-flex justify-content-between align-items-center mb-4">
-                                            <p className="lead fw-normal mb-0" style={{color: "#a8729a"}}>Chi tiết người
+                                            <p className="lead fw-normal mb-0 text-primary">Chi tiết người
                                                 nhận</p>
                                         </div>
                                         <div className="d-flex justify-content-between pt-2">
@@ -155,7 +155,7 @@ function ThirdStep({checkoutFormData, totalPrice, voucherCode, totalDiscount}: T
                                     <div className="card-footer  bg-primary">
                                         <h5 className="d-flex align-items-center justify-content-end text-white text-uppercase mb-0">
                                             Tổng tiền: <span
-                                            className="h2 mb-0 ms-2">{formatCurrency(totalPrice)}</span>
+                                            className="h2 mb-0 ms-2 ml-2">{formatCurrency(totalPrice)}</span>
                                         </h5>
                                     </div>
                                 </div>
