@@ -31,13 +31,8 @@ interface AddressData {
 }
 
 interface Errors {
-  username?: string;
-  password?: string;
-  rePassword?: string;
-  fullName?: string;
   phone?: string;
   email?: string;
-  termsAccepted?: string;
 }
 
 const EditDialog: React.FC<EditDialogProps> = ({ open, onClose }) => {
@@ -54,7 +49,7 @@ const EditDialog: React.FC<EditDialogProps> = ({ open, onClose }) => {
         ward: '',
         specific: ''
     },
-    avatar: '' // New field for avatar URL
+    avatar: ''
   });
   const [fullName, setFullName] = useState('');
   const [dob, setDOB] = useState('');
@@ -70,11 +65,9 @@ const EditDialog: React.FC<EditDialogProps> = ({ open, onClose }) => {
   });
   const [errors, setErrors] = useState<Errors>({});
 
-  const validateFullName = (value: string) => value ? '' : 'Vui lòng nhập họ và tên';
 
   const validatePhone = (value: string) => {
     const phoneRegex = /^0\d{9}$/;
-    if (value.trim() === '') return 'Vui lòng nhập số điện thoại';
     if (!phoneRegex.test(value)) return 'Số điện thoại phải gồm 10 chữ số bắt đầu từ số 0';
     return '';
   };
@@ -94,7 +87,7 @@ const EditDialog: React.FC<EditDialogProps> = ({ open, onClose }) => {
     reader.onload = () => {
       setUserData(prevState => ({
         ...prevState,
-        avatar: reader.result as string // Convert file to base64 URL
+        avatar: reader.result as string
       }));
     };
     reader.readAsDataURL(file);
@@ -127,25 +120,13 @@ const EditDialog: React.FC<EditDialogProps> = ({ open, onClose }) => {
             </IconButton>
           </div>
         </div>
-        <span className='titleInput' style={{ marginBottom: '10px' }}>Họ và tên người đại diện: <span className='note'> *</span></span>
+        <span className='titleInput' style={{ marginBottom: '10px' }}>Họ và tên người đại diện: </span>
         <TextField
           style={{ marginBottom: '10px' }}
           className='inputArea'
           placeholder='Nhập họ và tên'
           value={fullName}
           onChange={(e) => setFullName(e.target.value)}
-          onBlur={() => setErrors((prevErrors) => ({ ...prevErrors, fullName: validateFullName(fullName) }))}
-          error={!!errors.fullName}
-          helperText={errors.fullName}
-          InputProps={{
-            endAdornment: (
-              fullName && !errors.fullName ? (
-                <InputAdornment position="end">
-                  <CheckCircleOutline style={{ color: 'green' }} />
-                </InputAdornment>
-              ) : null
-            )
-          }}
         />
         <div className='chooseArea'
           style={{ display: 'flex', margin: '10px 0px', justifyContent: 'space-between' }}>
@@ -182,7 +163,7 @@ const EditDialog: React.FC<EditDialogProps> = ({ open, onClose }) => {
           value={companyName}
           onChange={(e) => setCompanyName(e.target.value)}
         />
-        <span className='titleInput' style={{ marginBottom: '10px' }}>Số điện thoại: <span className='note'> *</span></span>
+        <span className='titleInput' style={{ marginBottom: '10px' }}>Số điện thoại: </span>
         <TextField
           style={{ marginBottom: '10px' }}
           className='inputArea'
@@ -202,7 +183,7 @@ const EditDialog: React.FC<EditDialogProps> = ({ open, onClose }) => {
             )
           }}
         />
-        <span className='titleInput' style={{ marginBottom: '10px' }}>Email: <span className='note'> *</span></span>
+        <span className='titleInput' style={{ marginBottom: '10px' }}>Email: </span>
         <TextField
           style={{ marginBottom: '10px' }}
           className='inputArea'
