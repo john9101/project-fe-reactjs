@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button, FormControlLabel, Radio, RadioGroup, TextField } from '@mui/material';
 import '../assets/css/stylePersonal.scss';
+import EditDialog from '../components/common/DialogUpdate';
 
 const Personal: React.FC = () => {
     const [userData, setUserData] = useState({
@@ -17,6 +18,7 @@ const Personal: React.FC = () => {
             specific: ''
         }
     });
+    const [isDialogOpen, setDialogOpen] = useState(false);
 
     useEffect(() => {
         const storedUserData = localStorage.getItem('user');
@@ -110,11 +112,16 @@ const Personal: React.FC = () => {
                     InputProps={{ readOnly: true }}
                 />
                 <div className='footerButton'>
-                    <Button className='btnUpdateInformation' type='submit' variant='contained'>
+                    <Button 
+                    className='btnUpdateInformation' 
+                    type='submit' 
+                    variant='contained'
+                    onClick={() => setDialogOpen(true)}>
                         Chỉnh sửa thông tin
                     </Button>
                 </div>
             </form>
+            <EditDialog open={isDialogOpen} onClose={() => setDialogOpen(false)} />
         </div>
     );
 };

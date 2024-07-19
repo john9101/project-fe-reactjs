@@ -92,7 +92,7 @@ const AddressSelect: React.FC<AddressProps> = ({ onChange }) => {
     return (
         <div className="address-select">
             <InputLabel htmlFor="province-native">Tỉnh/Thành phố</InputLabel>
-            <Select className="optionSelect"
+            <Select className="optionSelect" style={{width: '100%', marginBottom: '20px'}}
                 value={selectedProvince || ''}
                 onChange={(event) => setSelectedProvince(event.target.value as string)}
                 inputProps={{
@@ -109,7 +109,7 @@ const AddressSelect: React.FC<AddressProps> = ({ onChange }) => {
             </Select>
 
             <InputLabel htmlFor="district-native">Quận/Huyện</InputLabel>
-            <Select className="optionSelect"
+            <Select className="optionSelect" style={{width: '100%', marginBottom: '20px'}}
                 value={selectedDistrict || ''}
                 onChange={(event) => setSelectedDistrict(event.target.value as string)}
                 inputProps={{
@@ -127,7 +127,7 @@ const AddressSelect: React.FC<AddressProps> = ({ onChange }) => {
             </Select>
 
             <InputLabel htmlFor="ward-native">Phường/Xã</InputLabel>
-            <Select className="optionSelect"
+            <Select className="optionSelect" style={{width: '100%', marginBottom: '20px'}}
                 value={selectedWard || ''}
                 onChange={(event) => setSelectedWard(event.target.value as string)}
                 inputProps={{
@@ -145,6 +145,7 @@ const AddressSelect: React.FC<AddressProps> = ({ onChange }) => {
             </Select>
 
             <TextField
+                style={{width: '100%'}}
                 className='inputArea'
                 id="outlined-basic"
                 label="Địa chỉ cụ thể"
