@@ -4,8 +4,8 @@
 .idea/*
 app/yarn.lock
 server/yarn.lock
-package-lock.json
-app/package-lock.json
+server/package-lock.json
+#app/package-lock.json
 # dependencies
 app/node_modules
 app/node_modules/
