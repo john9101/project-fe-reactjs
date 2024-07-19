@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/img-redundant-alt */
 import React from 'react'
 import { NavLink } from 'react-router-dom'
 import imageCarousel1 from '../../assets/img/carousel-1.jpg'
