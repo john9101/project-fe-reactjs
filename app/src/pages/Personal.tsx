@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Button, FormControlLabel, Radio, RadioGroup, TextField } from '@mui/material';
+import { Button, FormControlLabel, Radio, RadioGroup, TextField, Avatar } from '@mui/material';
 import '../assets/css/stylePersonal.scss';
 import EditDialog from '../components/common/DialogUpdate';
+import DefaultAvatar from '../assets/img/default-avatar.jpg'
 
 const Personal: React.FC = () => {
     const [userData, setUserData] = useState({
@@ -16,7 +17,8 @@ const Personal: React.FC = () => {
             district: '',
             ward: '',
             specific: ''
-        }
+        },
+        avatar: '' 
     });
     const [isDialogOpen, setDialogOpen] = useState(false);
 
@@ -36,7 +38,8 @@ const Personal: React.FC = () => {
                     district: parsedData.address.district || '',
                     ward: parsedData.address.ward || '',
                     specific: parsedData.address.specific || ''
-                }
+                },
+                avatar: parsedData.avatar || '' 
             });
         }
     }, []);
@@ -55,6 +58,13 @@ const Personal: React.FC = () => {
         <div className='pagePersonal'>
             <span className='titlePersonalPage'>Trang thông tin cá nhân</span>
             <form onSubmit={handleSubmit} className='componentPersonal'>
+                <div style={{width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                <Avatar
+                    alt="Remy Sharp"
+                    src={userData.avatar || DefaultAvatar}
+                    sx={{ width: 200, height: 200 }}
+                />
+                </div>
                 <span className='titleInput'>Họ và tên:</span>
                 <TextField
                     className='inputArea'

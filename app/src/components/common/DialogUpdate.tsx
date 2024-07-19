@@ -9,21 +9,27 @@ import {
   RadioGroup,
   FormControlLabel,
   Radio,
-  InputAdornment
+  InputAdornment,
+  Avatar,
+  IconButton
 } from '@mui/material';
-import { CheckCircleOutline } from '@mui/icons-material';
+import { CheckCircleOutline, AddCircleOutline } from '@mui/icons-material';
+import { useDropzone } from 'react-dropzone';
 import Address from './Address';
+import DefaultAvatar from '../../assets/img/default-avatar.jpg';
 
 interface EditDialogProps {
   open: boolean;
   onClose: () => void;
 }
+
 interface AddressData {
   province: string | null;
   district: string | null;
   ward: string | null;
   specific: string;
 }
+
 interface Errors {
   username?: string;
   password?: string;
@@ -33,7 +39,23 @@ interface Errors {
   email?: string;
   termsAccepted?: string;
 }
+
 const EditDialog: React.FC<EditDialogProps> = ({ open, onClose }) => {
+  const [userData, setUserData] = useState({
+    fullName: '',
+    dob: '',
+    gender: '',
+    companyName: '',
+    phone: '',
+    email: '',
+    address: {
+        province: '',
+        district: '',
+        ward: '',
+        specific: ''
+    },
+    avatar: '' // New field for avatar URL
+  });
   const [fullName, setFullName] = useState('');
   const [dob, setDOB] = useState('');
   const [gender, setGender] = useState('');
@@ -66,10 +88,45 @@ const EditDialog: React.FC<EditDialogProps> = ({ open, onClose }) => {
 
   const handleAddressChange = (address: AddressData) => setAddressData(address);
 
+  const onDrop = (acceptedFiles: any) => {
+    const file = acceptedFiles[0];
+    const reader = new FileReader();
+    reader.onload = () => {
+      setUserData(prevState => ({
+        ...prevState,
+        avatar: reader.result as string // Convert file to base64 URL
+      }));
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const { getRootProps, getInputProps } = useDropzone({
+    onDrop,
+    accept: { 'image/*': [] }  
+  });
+
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="md">
       <DialogTitle style={{ textAlign: 'center' }}>Chỉnh sửa thông tin cá nhân</DialogTitle>
       <DialogContent style={{ display: 'flex', flexDirection: 'column' }}>
+        <div className='avatarSection' style={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative' }}>
+          <div {...getRootProps({ className: 'dropzone' })} style={{ position: 'relative', backgroundColor: '#C0C0C0', borderRadius: '5%' }}>
+            <input {...getInputProps()} />
+            <Avatar
+              alt="User Avatar"
+              src={userData.avatar || DefaultAvatar} 
+              sx={{ width: 200, height: 200, cursor: 'pointer' }}
+            />
+            <IconButton
+              color="primary"
+              aria-label="add avatar"
+              component="span"
+              style={{ position: 'absolute', bottom: 0, right: 0 }}
+            >
+              <AddCircleOutline style={{ fontSize: 40, color: 'green' }} />
+            </IconButton>
+          </div>
+        </div>
         <span className='titleInput' style={{ marginBottom: '10px' }}>Họ và tên người đại diện: <span className='note'> *</span></span>
         <TextField
           style={{ marginBottom: '10px' }}
@@ -91,9 +148,9 @@ const EditDialog: React.FC<EditDialogProps> = ({ open, onClose }) => {
           }}
         />
         <div className='chooseArea'
-        style={{display: 'flex', margin: '10px 0px', justifyContent: 'space-between'}}>
+          style={{ display: 'flex', margin: '10px 0px', justifyContent: 'space-between' }}>
           <div className="chooseDOB"
-          style={{display: 'flex', flexDirection: 'column', flexBasis: '40%'}}>
+            style={{ display: 'flex', flexDirection: 'column', flexBasis: '40%' }}>
             <span className='titleInput' style={{ marginBottom: '10px' }}>Ngày sinh:</span>
             <TextField
               style={{ marginBottom: '10px' }}
@@ -104,10 +161,10 @@ const EditDialog: React.FC<EditDialogProps> = ({ open, onClose }) => {
             />
           </div>
           <div className="chooseGender"
-          style={{display: 'flex', flexDirection: 'column', flexBasis: '40%'}}>
+            style={{ display: 'flex', flexDirection: 'column', flexBasis: '40%' }}>
             <span className='titleInput' style={{ marginBottom: '10px' }}>Giới tính: </span>
             <RadioGroup
-            style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: '0px 50px'}}
+              style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: '0px 50px' }}
               className='groupGender'
               value={gender}
               onChange={(e) => setGender(e.target.value)}
