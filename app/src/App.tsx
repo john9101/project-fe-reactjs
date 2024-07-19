@@ -12,6 +12,8 @@ import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import PageNotFound from "./pages/PageNotFound";
 import {PathNamesConstant} from "./constants/pathNames.constant";
+import { AuthProvider } from './context/UserContext'; // Import AuthProvider
+
 
 const Home = lazy(() => import('./pages/Home'));
 const ContactUs = lazy(() => import('./pages/ContactUs'));
@@ -22,6 +24,7 @@ const ForgotPassword = lazy(() => import('./pages/ForgotPassword'));
 const AboutUs = lazy(() => import('./pages/AboutUs'));
 const ProductDetail = lazy(() => import('./pages/ProductDetail'));
 const Collection = lazy(() => import('./pages/Collection'));
+const Personal = lazy(() => import('./pages/Personal'));
 
 function App() {
     const collectionPaths = [
@@ -46,6 +49,7 @@ function App() {
                             {collectionPaths.map((path, index) => (
                                 <Route key={index} path={path} element={<Collection />} />
                             ))}
+                            <Route path='personal/:userId' element={<Personal />} />
                         </Route>
                         <Route path={PathNamesConstant.account} element={<FormLayout />}>
                             <Route path={PathNamesConstant.login} element={<Login />} />

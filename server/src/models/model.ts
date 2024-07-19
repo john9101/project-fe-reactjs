@@ -1,6 +1,6 @@
-import mongoose, {Schema} from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
-export interface IOption{
+export interface IOption {
     stocks: [
         {
             size: string,
@@ -35,8 +35,14 @@ export interface IProduct{
     views: number;
     createdAt: Schema.Types.Date
 }
+export interface IAddress {
+    province: string;
+    district: string;
+    ward: string;
+    specific: string;
+}
 
-export interface IRequire{
+export interface IRequire {
     fullName: string
     email: string
     phone: string
@@ -45,7 +51,7 @@ export interface IRequire{
     sendDate?: string
 }
 
-export interface IUser{
+export interface IUser {
     username: string,
     password: string,
     fullName: string,
@@ -181,6 +187,21 @@ const measurementSchema: Schema = new Schema({
         require: true
     }
 })
+const addressSchema: Schema = new Schema({
+    province: {
+        type: String,
+
+    },
+    district: {
+        type: String,
+    },
+    ward: {
+        type: String,
+    },
+    specific: {
+        type: String,
+    }
+});
 
 const sizeChartSchema: Schema = new Schema({
     name: {
@@ -212,37 +233,41 @@ const sizeChartSchema: Schema = new Schema({
 const userSchema: Schema = new Schema({
     username: {
         type: String,
-        require: true
+        required: true
     },
     password: {
         type: String,
-        require: true
+        required: true
     },
     fullName: {
         type: String,
-        require: true
+        required: true
+    },
+    dob: {
+        type: String,
     },
     gender: {
         type: String,
+
     },
     phone: {
         type: String,
+        required: true
     },
     email: {
         type: String,
-        require: true
+        required: true
     },
     address: {
-        type: String,
-        require: true
+        type: addressSchema,
     },
     companyName: {
-        type: String
+        type: String,
     },
     avatar: {
-        type: String
+        type: String,
     }
-})
+});
 
 const requireSchema: Schema = new Schema({
     fullName: {
@@ -271,11 +296,11 @@ const requireSchema: Schema = new Schema({
     versionKey: false
 })
 const contactSchema: Schema = new Schema({
-    username:{
+    username: {
         type: String,
         require: true
     },
-    email:{
+    email: {
         type: String,
         require: true
     },
@@ -283,17 +308,17 @@ const contactSchema: Schema = new Schema({
         type: String,
         require: true
     },
-    message:{
+    message: {
         type: String,
         require: true
     }
-},  { versionKey: false })
+}, { versionKey: false })
 
 export const Category = mongoose.model('Category', categorySchema, 'categories')
 export const Option = mongoose.model('Option', optionSchema, 'options')
 export const Product = mongoose.model<IProduct>('Product', productSchema, 'products')
 export const User = mongoose.model('User', userSchema, 'users')
-export const Require =mongoose.model<IRequire>("Require", requireSchema, 'requires')
+export const Require = mongoose.model<IRequire>("Require", requireSchema, 'requires')
 export const Contact = mongoose.model("Contact", contactSchema, 'contacts')
 export const Measurement = mongoose.model('Measurement', measurementSchema, 'measurements')
 export const SizeChart = mongoose.model("SizeChart", sizeChartSchema, 'size_charts')
