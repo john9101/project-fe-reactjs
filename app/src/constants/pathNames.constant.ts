@@ -14,4 +14,5 @@ export enum PathNamesConstant {
     register = 'register',
     logout = 'logout',
     forgotPassword = 'forgot-password',
+    wishlist = '/wishlist',
 }

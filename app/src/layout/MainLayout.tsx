@@ -5,6 +5,7 @@ import {useEffect, useState} from "react";
 import Navbar from "../components/common/Navbar";
 import BreadcrumbsSection from "../components/common/BreadcrumbsSection";
 import {PathNamesConstant} from "../constants/pathNames.constant";
+import BackToTopButton from "../components/common/BackToTopButton";
 
 const MainLayout = () => {
     const [destBreadcrumb, setDestBreadcrumb] = useState<string | null>(null);
@@ -17,6 +18,10 @@ const MainLayout = () => {
             setDestBreadcrumb("Giới thiệu")
         }else if(pathname.includes(PathNamesConstant.contactUs)){
             setDestBreadcrumb("Liên hệ")
+        }else if(pathname.includes(PathNamesConstant.cart)){
+            setDestBreadcrumb("Giỏ hàng")
+        }else if(pathname.includes(PathNamesConstant.wishlist)){
+            setDestBreadcrumb("Đồng phục yêu thích")
         }
     }, [pathname])
 
@@ -27,11 +32,12 @@ const MainLayout = () => {
             {
                 pathname !== PathNamesConstant.home && !pathname.includes(PathNamesConstant.feature) &&
                 !pathname.includes(PathNamesConstant.category) && !pathname.includes(PathNamesConstant.shop) &&
-                !pathname.includes(PathNamesConstant.search) &&
+                !pathname.includes(PathNamesConstant.search) && !pathname.includes(PathNamesConstant.checkout) &&
                 <BreadcrumbsSection destBreadcrumb={destBreadcrumb!}/>
             }
             <Outlet/>
             <Footer/>
+            <BackToTopButton/>
         </>
     )
 }

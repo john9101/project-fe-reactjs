@@ -6,10 +6,10 @@ import ProductCard from "../card/ProductCard";
 import Slider, {Settings} from "react-slick";
 import '../../assets/css/styleHome.scss'
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faChevronLeft, faChevronRight, faVestPatches} from "@fortawesome/free-solid-svg-icons";
+import {faChevronLeft, faChevronRight, faVestPatches, faCircleChevronRight} from "@fortawesome/free-solid-svg-icons";
 import {NavLink} from "react-router-dom";
 import {Product} from "../../types/product.type";
-import {FeatureProductsDecorateConstant,} from "../../constants/featureProductsDecorate.constant";
+import {FeatureProductsDecorateConstant} from "../../constants/featureProductsDecorate.constant";
 
 interface FeatureProductsSectionProps {
     decorateKey: string
@@ -102,7 +102,7 @@ const FeatureProductsSection = ({decorateKey}: FeatureProductsSectionProps) => {
 
     return (
         <div className="container-fluid pt-5">
-            <div className="mb-4 d-flex px-xl-5 justify-content-between align-items-end">
+            <div className="mb-4 d-flex px-xl-5 justify-content-between align-items-center flex-wrap">
                 <h2 className='text-uppercase d-flex align-items-baseline text-white py-3 px-4'
                     style={{
                         borderRadius: '2rem',
@@ -114,7 +114,17 @@ const FeatureProductsSection = ({decorateKey}: FeatureProductsSectionProps) => {
                     <FontAwesomeIcon icon={faVestPatches} style={{fontSize: '1.4rem'}}/>
                     <span style={{fontWeight: 900}}>{destBreadcrumb}</span>
                 </h2>
-                <NavLink to={`${path}`} state={{resetCollection: true}} className='font-weight-bold' style={{fontSize: '1.2rem'}}>Xem thêm</NavLink>
+                <NavLink to={`${path}`} state={{resetCollection: true}}
+                         className='text-uppercase d-flex align-items-center text-white py-2 px-2 text-primary text-decoration-none'
+                         style={{
+                             borderRadius: '2rem',
+                             backgroundColor: `black`,
+                         }}
+                >
+                    <span className='mx-2' style={{fontWeight: 900, fontSize: '1.2rem'}}>Xem thêm</span>
+                    <FontAwesomeIcon icon={faCircleChevronRight} style={{fontSize: '2.2rem'}}/>
+                </NavLink>
+
             </div>
             <div className='slider-container feature'>
                 <Slider ref={sliderRef} {...settings} className="px-xl-5 pb-3">

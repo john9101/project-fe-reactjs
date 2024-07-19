@@ -10770,7 +10770,14 @@ a.text-dark:focus {
   right: 30px;
   bottom: 30px;
   z-index: 11;
+  border: none;
+  transition: opacity 0.3s;
   animation: action 1s infinite alternate;
+}
+
+.back-to-top.visible {
+  display: block;
+  opacity: 1;
 }
 
 @keyframes action {

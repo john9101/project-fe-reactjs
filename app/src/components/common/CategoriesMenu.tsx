@@ -14,6 +14,7 @@ import {fetchCategoriesList} from "../../store/category.slice";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faAngleDown} from "@fortawesome/free-solid-svg-icons"
 import {NavLink, useLocation} from "react-router-dom";
+import {PathNamesConstant} from "../../constants/pathNames.constant";
 const CategoriesMenu = () => {
     // const [categories, setCategories] = useState<string[]>([]);
     //
@@ -88,18 +89,17 @@ const CategoriesMenu = () => {
         // </PopupState>
         <div className="col-lg-3 d-none d-lg-block">
             <a className={`btn shadow-none d-flex align-items-center justify-content-between bg-primary text-white w-100`}
-               data-toggle="collapse" href="#navbar-vertical"
-               style={{height: '65px', marginTop: '-1px', padding: '0 30px'}}>
+               data-toggle="collapse" href="#navbar-vertical" style={{height: '65px', marginTop: '-1px', padding: '0 30px'}}>
                 <h6 className="m-0 font-weight-bold">Danh mục</h6>
-                <FontAwesomeIcon icon={faAngleDown}/>
+                <FontAwesomeIcon className='text-dark' icon={faAngleDown}/>
             </a>
             <nav
-                className={`collapse ${location.pathname === '/' ? 'show' : 'position-absolute'} navbar navbar-vertical navbar-light align-items-start p-0 border border-top-0 border-bottom-0 bg-light`}
-                id="navbar-vertical" style={location.pathname !== '/' ? {width: 'calc(100% - 30px)', zIndex: 1} :  {}}>
+                className={`collapse ${location.pathname === PathNamesConstant.home ? 'show' : 'position-absolute'} navbar navbar-vertical navbar-light align-items-start p-0 border border-top-0 border-bottom-0 bg-light`}
+                id="navbar-vertical" style={location.pathname !== PathNamesConstant.home ? {width: 'calc(100% - 30px)', zIndex: 1} :  {}}>
                 <div className="navbar-nav w-100 overflow-hidden" style={{height: "410px"}}>
                     {
                         categoriesList.map(category => (
-                            <NavLink key={category._id} to={`/category/${category._id}`} className="nav-item nav-link">{category.name}</NavLink>
+                            <NavLink key={category._id} to={`${PathNamesConstant.category}/${category._id}`} className="nav-item nav-link">{category.name}</NavLink>
                         ))
                     }
                 </div>

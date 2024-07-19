@@ -47,7 +47,6 @@ const Collection = () => {
 
     const inputSearchRef = useRef<HTMLInputElement>(null);
     const typedRef = useRef<Typed | null>(null)
-    console.log(pathname)
     const isSearchPath = pathname.includes(PathNamesConstant.search);
     const isCategoryPath = pathname.includes(PathNamesConstant.category);
     const isShopPath = pathname.includes(PathNamesConstant.shop);

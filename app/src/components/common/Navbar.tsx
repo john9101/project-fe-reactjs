@@ -1,6 +1,6 @@
 import {NavLink, useLocation} from "react-router-dom";
 import Logo from "./Logo";
-import HomeCarousel from "../carousel/HomeCarousel";
+import Banner from "./Banner";
 import React from "react";
 import CategoriesMenu from "./CategoriesMenu";
 import {PathNamesConstant} from "../../constants/pathNames.constant";
@@ -13,7 +13,7 @@ const Navbar = () => {
                 <CategoriesMenu/>
                 <div className="col-lg-9">
                     <nav className="navbar navbar-expand-lg bg-light navbar-light py-3 py-lg-0 px-0">
-                        <NavLink to="/" className="d-lg-none">
+                        <NavLink to={PathNamesConstant.home} className="d-lg-none">
                             <Logo/>
                         </NavLink>
                         <button type="button" className="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
@@ -32,7 +32,7 @@ const Navbar = () => {
                             </div>
                         </div>
                     </nav>
-                    {location.pathname === PathNamesConstant.home && <HomeCarousel/>}
+                    {location.pathname === PathNamesConstant.home && <Banner/>}
                 </div>
             </div>
         </div>
