@@ -6530,13 +6530,16 @@ a.close.disabled {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 12%;
+  //width: 8%;
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
   color: #fff;
   text-align: center;
-  opacity: 0.5;
+  opacity: 0.6;
   transition: opacity 0.15s ease;
-  font-size: 2.4rem;
+  font-size: 1.5rem;
   transform: translateY(-50%);
+  cursor: pointer;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -10704,7 +10707,7 @@ a.text-dark:focus {
 .section-title {
   position: relative;
   display: inline-block;
-  letter-spacing: 1px;
+  letter-spacing: -0.5px;
   font-weight: bold;
   color: #1C1C1C;
 }
@@ -10767,7 +10770,14 @@ a.text-dark:focus {
   right: 30px;
   bottom: 30px;
   z-index: 11;
+  border: none;
+  transition: opacity 0.3s;
   animation: action 1s infinite alternate;
+}
+
+.back-to-top.visible {
+  display: block;
+  opacity: 1;
 }
 
 @keyframes action {

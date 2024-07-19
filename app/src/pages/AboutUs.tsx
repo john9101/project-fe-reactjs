@@ -27,12 +27,12 @@ const AboutUs = () => {
                         />
                         <CardContent className='CardContent'>
                             <Typography gutterBottom variant="h4" component="div" className='content TitleContent'>
-                                Công ty Bán Đồng Phục E-Shopper Bán Đồng Phục chất lượng, uy tín
+                                Công ty Bán Đồng Phục Uniform YOUNG'S STYLE Bán Đồng Phục chất lượng, uy tín
                             </Typography>
                             <ul className='listContent' >
                                 <li>
                                     <Typography variant="h6" color="text.secondary" className='content feedbackContent'>
-                                        Lựa chọn mẫu đồng phục phù hợp với doanh nghiệp là một quyết định không dễ đối với doanh nghiệp chưa từng Bán Đồng Phục. Đồng Phục E-Shopper là Nhà cung cấp và sản xuất trực tiếp đa dạng đồng phục rất hân hạnh được tư vấn đến Quý doanh nghiệp những lời khuyên tốt nhất cho bộ đồng phục của mình, nhằm giảm được chi phí mua Đồng Phục, mà lại hài lòng về sản phẩm.
+                                        Lựa chọn mẫu đồng phục phù hợp với doanh nghiệp là một quyết định không dễ đối với doanh nghiệp chưa từng Bán Đồng Phục. Đồng Phục Uniform YOUNG'S STYLE là Nhà cung cấp và sản xuất trực tiếp đa dạng đồng phục rất hân hạnh được tư vấn đến Quý doanh nghiệp những lời khuyên tốt nhất cho bộ đồng phục của mình, nhằm giảm được chi phí mua Đồng Phục, mà lại hài lòng về sản phẩm.
                                     </Typography>
                                 </li>
                                 <li>
@@ -68,10 +68,10 @@ const AboutUs = () => {
                             </Typography>
                             <ul className="listContent">
                                 <li><Typography gutterBottom variant="h6" component="div" className='content feedbackContent'>
-                                    Công Ty TNHH Đồng Phục E-Shopper với kinh nghiệm trong ngành đồng phục trên 10 năm, đã dần khẳng định mình là đơn vị chuyên sản xuất trực tiếp các loại đồng phục đa dạng mẫu mã như: đồng phục áo thun, đồng phục công ty, áo bảo hộ lao động, đồng phục áo lớp, đồng phục công sở, đồng phục văn phòng, đồng phục teambuilding…
+                                    Công Ty TNHH Đồng Phục Uniform YOUNG'S STYLE với kinh nghiệm trong ngành đồng phục trên 10 năm, đã dần khẳng định mình là đơn vị chuyên sản xuất trực tiếp các loại đồng phục đa dạng mẫu mã như: đồng phục áo thun, đồng phục công ty, áo bảo hộ lao động, đồng phục áo lớp, đồng phục công sở, đồng phục văn phòng, đồng phục teambuilding…
                                 </Typography></li>
                                 <li><Typography gutterBottom variant="h6" component="div" className='content feedbackContent'>
-                                    Đồng Phục E-Shopper cam kết sản phẩm đồng phục làm ra đạt chất lượng cao và giá cả phải chăng và đã đem đến sự tín nhiệm của khách hàng trên toàn quốc.
+                                    Đồng Phục Uniform YOUNG'S STYLE cam kết sản phẩm đồng phục làm ra đạt chất lượng cao và giá cả phải chăng và đã đem đến sự tín nhiệm của khách hàng trên toàn quốc.
                                 </Typography></li>
                             </ul>
                         </CardContent>
@@ -87,10 +87,10 @@ const AboutUs = () => {
                         />
                         <CardContent className='CardContent'>
                             <Typography gutterBottom variant="h4" component="div" className='content TitleContent'>
-                                Lợi ích khi mua Đồng Phục tại E-Shopper
+                                Lợi ích khi mua Đồng Phục tại Uniform YOUNG'S STYLE
                             </Typography>
                             <Typography variant="h6" color="text.secondary" className='content feedbackContent'>
-                                Đến với Đồng Phục E-Shopper, bạn sẽ nhận được:
+                                Đến với Đồng Phục Uniform YOUNG'S STYLE, bạn sẽ nhận được:
                             </Typography>
                             <ul className='listContent' >
                                 <li>
@@ -115,7 +115,7 @@ const AboutUs = () => {
                                 </li>
                                 <li>
                                     <Typography variant="h6" color="text.secondary" className='content feedbackContent'>
-                                        Đối với đơn hàng đồng phục từ 100 cái trở lên, E-shopper hỗ trợ may miễn phí áo đồng phục mẫu
+                                        Đối với đơn hàng đồng phục từ 100 cái trở lên, Uniform YOUNG'S STYLE hỗ trợ may miễn phí áo đồng phục mẫu
                                     </Typography>
                                 </li>
                                 <li>
@@ -147,17 +147,17 @@ const AboutUs = () => {
                             <ul className='listContent' >
                                 <li>
                                     <Typography variant="h6" color="text.secondary" className='content feedbackContent'>
-                                        Tiền thân là 1 xưởng may gia đình hoạt động trong lĩnh vực may mặc và thiết kế đồng phục, Đồng Phục E-Shopper với nhiều năm kinh nghiệm trong việc tư vấn, thiết kế, đã cho ra đời những bộ đồng phục hoàn hảo từ mẫu mã đến chất liệu. Được biết đến là một địa chỉ Bán Đồng Phục uy tín, giá rẻ, Đồng phục E-Shopper đã cung cấp đa dạng các mặt hàng đồng phục cho mọi ngành nghề trên toàn quốc như: đồng phục áo thun, đồng phục bảo hộ lao động cho công nhân, đồng phục tạp dề, đồng phục văn phòng, đồng phục nhà hàng, đồng phục khách sạn, mũ nón đồng phục, túi vải tote bag….
+                                        Tiền thân là 1 xưởng may gia đình hoạt động trong lĩnh vực may mặc và thiết kế đồng phục, Đồng Phục Uniform YOUNG'S STYLE với nhiều năm kinh nghiệm trong việc tư vấn, thiết kế, đã cho ra đời những bộ đồng phục hoàn hảo từ mẫu mã đến chất liệu. Được biết đến là một địa chỉ Bán Đồng Phục uy tín, giá rẻ, Đồng phục Uniform YOUNG'S STYLE đã cung cấp đa dạng các mặt hàng đồng phục cho mọi ngành nghề trên toàn quốc như: đồng phục áo thun, đồng phục bảo hộ lao động cho công nhân, đồng phục tạp dề, đồng phục văn phòng, đồng phục nhà hàng, đồng phục khách sạn, mũ nón đồng phục, túi vải tote bag….
                                     </Typography>
                                 </li>
                                 <li>
                                     <Typography variant="h6" color="text.secondary" className='content feedbackContent'>
-                                        Với hệ thống nhà xưởng, các trang thiết bị máy móc hiện đại, tiên tiến nhất được nhập khẩu trực tiếp từ nước ngoài và cùng một đội thiết kế sáng tạo, các công nhân may tay nghề cao, chuyên nghiệp, Đồng phục E-Shopper sẽ mang lại cho khách hàng những sản phẩm đồng phục chất lượng nhất.
+                                        Với hệ thống nhà xưởng, các trang thiết bị máy móc hiện đại, tiên tiến nhất được nhập khẩu trực tiếp từ nước ngoài và cùng một đội thiết kế sáng tạo, các công nhân may tay nghề cao, chuyên nghiệp, Đồng phục Uniform YOUNG'S STYLE sẽ mang lại cho khách hàng những sản phẩm đồng phục chất lượng nhất.
                                     </Typography>
                                 </li>
                                 <li>
                                     <Typography variant="h6" color="text.secondary" className='content feedbackContent'>
-                                        Mọi thông tin chi tiết vui lòng liên hệ với Bán Đồng Phục E-Shopper để được tư vấn
+                                        Mọi thông tin chi tiết vui lòng liên hệ với Bán Đồng Phục Uniform YOUNG'S STYLE để được tư vấn
                                     </Typography>
                                 </li>
                             </ul>

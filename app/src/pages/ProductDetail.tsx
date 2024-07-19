@@ -95,12 +95,13 @@ const ProductDetailTabPanel = (props: TabPanelProps) =>{
         </div>
     )
 }
+
 interface ProductDetailProps{
     productId?: string
 }
 
 const ProductDetail = ({productId: productIdFromProp}:ProductDetailProps)=> {
-    const {productId: productIdFromParam} = useParams()
+    const {uniformId: productIdFromParam} = useParams()
     const productId = productIdFromProp || productIdFromParam
     const dispatch = useDispatch<AppDispatch>();
     const productDetail = useSelector((state: RootState) => state.products.productDetail!);
@@ -188,16 +189,16 @@ const ProductDetail = ({productId: productIdFromProp}:ProductDetailProps)=> {
 
     const NextArrowCustom = () =>{
         return (
-            <div className="carousel-control-prev" onClick={handlePreviousSlide}>
-                <FontAwesomeIcon icon={faCircleChevronLeft} className="custom-arrow-icon" />
+            <div className="carousel-control-prev bg-dark" style={{borderRadius: '50%', boxShadow: 'rgba(0, 0, 0, 0.24) 0 3px 8px'}} onClick={handlePreviousSlide}>
+                <FontAwesomeIcon icon={faCircleChevronLeft} className="custom-arrow-icon text-primary" />
             </div>
         )
     }
 
     const PreviousArrowCustom = () =>{
         return (
-            <div className="carousel-control-next" onClick={handleNextSlide}>
-                <FontAwesomeIcon icon={faCircleChevronRight} className="custom-arrow-icon"/>
+            <div className="carousel-control-next bg-dark" style={{borderRadius: '50%', boxShadow: 'rgba(0, 0, 0, 0.24) 0 3px 8px'}} onClick={handleNextSlide}>
+                <FontAwesomeIcon icon={faCircleChevronRight} className="custom-arrow-icon text-primary"/>
             </div>
         )
     }
@@ -522,7 +523,8 @@ const ProductDetail = ({productId: productIdFromProp}:ProductDetailProps)=> {
                 <Form onSubmit={handleSubmitRequireForm(onSubmitSendRequire)}>
                     <Modal.Body>
                         <Form.Group className="mb-3" controlId='fullName'>
-                            <Form.Label className='font-weight-semi-bold'>Họ và tên người đại diện <span className='text-danger'>*</span></Form.Label>
+                            <Form.Label className='font-weight-semi-bold'>Họ và tên người đại diện <span
+                                className='text-danger'>*</span></Form.Label>
                             <Form.Control
                                 type="text"
                                 placeholder="Nhập họ và tên của người đại diện"
@@ -535,7 +537,8 @@ const ProductDetail = ({productId: productIdFromProp}:ProductDetailProps)=> {
                             </Form.Control.Feedback>
                         </Form.Group>
                         <Form.Group className="mb-3" controlId='email'>
-                            <Form.Label className='font-weight-semi-bold'>Địa chỉ email <span className='text-danger'>*</span></Form.Label>
+                            <Form.Label className='font-weight-semi-bold'>Địa chỉ email <span
+                                className='text-danger'>*</span></Form.Label>
                             <Form.Control
                                 type="text"
                                 placeholder="Nhập email của cá nhân hoặc công ty"
@@ -548,7 +551,8 @@ const ProductDetail = ({productId: productIdFromProp}:ProductDetailProps)=> {
                             </Form.Control.Feedback>
                         </Form.Group>
                         <Form.Group className="mb-3" controlId='phone'>
-                            <Form.Label className='font-weight-semi-bold'>Số điện thoại <span className='text-danger'>*</span></Form.Label>
+                            <Form.Label className='font-weight-semi-bold'>Số điện thoại <span
+                                className='text-danger'>*</span></Form.Label>
                             <Form.Control
                                 type="text"
                                 placeholder="Nhập số điện thoại của cá nhân hoặc công ty"
@@ -570,7 +574,8 @@ const ProductDetail = ({productId: productIdFromProp}:ProductDetailProps)=> {
                             />
                         </Form.Group>
                         <Form.Group className="mb-3" controlId='content'>
-                            <Form.Label className='font-weight-semi-bold'>Nội dung yêu cầu <span className='text-danger'>*</span></Form.Label>
+                            <Form.Label className='font-weight-semi-bold'>Nội dung yêu cầu <span
+                                className='text-danger'>*</span></Form.Label>
                             <Form.Control
                                 as="textarea"
                                 rows={6}
@@ -599,7 +604,7 @@ const ProductDetail = ({productId: productIdFromProp}:ProductDetailProps)=> {
                     <Modal.Body>
                         <div className='d-flex flex-column text-center align-items-center'>
                             <div className='d-flex flex-column align-items-center mb-3'>
-                                <AssignmentTurnedInIcon className='text-success' style={{fontSize: '12rem'}} />
+                                <AssignmentTurnedInIcon className='text-success' style={{fontSize: '12rem'}}/>
                                 <strong style={{fontSize: '1.8rem'}}>Gửi yêu cầu thành công</strong>
                             </div>
                             <span style={{fontSize: '1.1rem'}}>Cảm ơn bạn đã gửi yêu cầu cho chúng tôi. Chúng tôi sẽ cố gắng phản hồi sớm nhất trong vòng 24h. Vui lòng bạn chú ý điện thoại hoặc email để nhận được phản hồi từ chúng tôi</span>

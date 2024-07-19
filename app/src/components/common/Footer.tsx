@@ -1,18 +1,21 @@
-import {Link, NavLink} from "react-router-dom";
+import {NavLink} from "react-router-dom";
 import Logo from "./Logo";
 import Certificate from '../../assets/img/bocongthuong.png'
 import NetworkTrust from '../../assets/img/tinnhiemmang.png'
 import React from "react";
 import {
-    faAddressCard,
     faCartShopping,
     faEnvelope,
     faHouse,
     faLocationDot,
-    faPhone
+    faPhone,
+    faEnvelopeOpenText,
+    faCircleInfo,
+    faVestPatches
 } from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import styled from "styled-components";
+import {PathNamesConstant} from "../../constants/pathNames.constant";
 
 const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
     margin-right: 5px;
@@ -38,18 +41,21 @@ const Footer = () => {
                     <div className="row">
                         <div className="col-md-4 mb-5 text-left">
                             <h5 className="font-weight-bold text-dark mb-4">Liên kết </h5>
-                            <div className="d-flex flex-column justify-content-start ">
-                                <NavLink className="text-dark mb-2" to="/home">
+                            <div className="d-flex flex-column justify-content-start">
+                                <NavLink className="text-dark mb-2" to={PathNamesConstant.home}>
                                     <StyledFontAwesomeIcon icon={faHouse}/>Trang chủ
                                 </NavLink>
-                                <NavLink className="text-dark mb-2" to="#"><i
-                                    className="fa fa-angle-right mr-2"></i> Tất cả sản phẩm</NavLink>
-                                <NavLink className="text-dark mb-2" to="/cart">
+                                <NavLink className="text-dark mb-2" to={PathNamesConstant.shop} state={{resetCollection: true}}>
+                                    <StyledFontAwesomeIcon icon={faVestPatches} /> Tất cả đồng phục
+                                </NavLink>
+                                <NavLink className="text-dark mb-2" to={PathNamesConstant.cart}>
                                     <StyledFontAwesomeIcon icon={faCartShopping}/>Giỏ hàng</NavLink>
-                                <NavLink className="text-dark mb-2" to="/user"><i
-                                    className="fa fa-angle-right mr-2"></i>Trang cá nhân</NavLink>
-                                <NavLink className="text-dark mb-2" to="/contact-us">
-                                    <StyledFontAwesomeIcon icon={faAddressCard}/>Liên hệ</NavLink>
+                                <NavLink className="text-dark mb-2" to={PathNamesConstant.aboutUs}>
+                                    <StyledFontAwesomeIcon icon={faCircleInfo} /> Giới thiệu
+                                </NavLink>
+                                <NavLink className="text-dark mb-2" to={PathNamesConstant.contactUs}>
+                                    <StyledFontAwesomeIcon icon={faEnvelopeOpenText}/>Liên hệ
+                                </NavLink>
                             </div>
                         </div>
 
