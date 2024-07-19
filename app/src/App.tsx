@@ -35,32 +35,34 @@ function App() {
     ];
 
     return (
-        <BrowserRouter>
-            <ToastContainer/>
-            <div className="App">
-                <Suspense fallback={<CircularProgress color="success" />}>
-                    <Routes>
-                        <Route path="/" element={<MainLayout />}>
-                            <Route index element={<Home />} />
-                            <Route path={PathNamesConstant.cart} element={<CartDetail />} />
-                            <Route path={PathNamesConstant.contactUs} element={<ContactUs />} />
-                            <Route path={PathNamesConstant.aboutUs} element={<AboutUs/>}/>
-                            <Route path={`${PathNamesConstant.uniform}/:uniformId`} element={<ProductDetail/>} />
-                            {collectionPaths.map((path, index) => (
-                                <Route key={index} path={path} element={<Collection />} />
-                            ))}
-                            <Route path='personal/:userId' element={<Personal />} />
-                        </Route>
-                        <Route path={PathNamesConstant.account} element={<FormLayout />}>
-                            <Route path={PathNamesConstant.login} element={<Login />} />
-                            <Route path={PathNamesConstant.register} element={<Register />} />
-                            <Route path={PathNamesConstant.forgotPassword} element={<ForgotPassword />} />
-                        </Route>
-                        <Route path="*" element={<PageNotFound />} />
-                    </Routes>
-                </Suspense>
-            </div>
-        </BrowserRouter>
+        <AuthProvider>
+            <BrowserRouter>
+                <ToastContainer/>
+                <div className="App">
+                    <Suspense fallback={<CircularProgress color="success" />}>
+                        <Routes>
+                            <Route path="/" element={<MainLayout />}>
+                                <Route index element={<Home />} />
+                                <Route path={PathNamesConstant.cart} element={<CartDetail />} />
+                                <Route path={PathNamesConstant.contactUs} element={<ContactUs />} />
+                                <Route path={PathNamesConstant.aboutUs} element={<AboutUs/>}/>
+                                <Route path={`${PathNamesConstant.uniform}/:uniformId`} element={<ProductDetail/>} />
+                                {collectionPaths.map((path, index) => (
+                                    <Route key={index} path={path} element={<Collection />} />
+                                ))}
+                                <Route path='personal/:userId' element={<Personal />} />
+                            </Route>
+                            <Route path={PathNamesConstant.account} element={<FormLayout />}>
+                                <Route path={PathNamesConstant.login} element={<Login />} />
+                                <Route path={PathNamesConstant.register} element={<Register />} />
+                                <Route path={PathNamesConstant.forgotPassword} element={<ForgotPassword />} />
+                            </Route>
+                            <Route path="*" element={<PageNotFound />} />
+                        </Routes>
+                    </Suspense>
+                </div>
+            </BrowserRouter>
+        </AuthProvider>
     );
 }
 

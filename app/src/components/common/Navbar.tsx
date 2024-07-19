@@ -1,9 +1,14 @@
-import {NavLink, useLocation} from "react-router-dom";
+import {NavLink, useLocation, useNavigate} from "react-router-dom";
 import Logo from "./Logo";
 import Banner from "./Banner";
-import React from "react";
+import React, {useEffect, useState} from "react";
 import CategoriesMenu from "./CategoriesMenu";
 import {PathNamesConstant} from "../../constants/pathNames.constant";
+import {useAuth} from "../../context/UserContext";
+import {Avatar, Collapse, List, ListItemButton, ListItemText} from "@mui/material";
+import {ExpandLess, ExpandMore} from "@mui/icons-material";
+import Typography from "@mui/material/Typography";
+import defaultAvatar from '../../assets/img/default-avatar.jpg'
 
 const Navbar = () => {
     const location = useLocation();
