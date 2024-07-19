@@ -1,12 +1,13 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose, {Schema} from "mongoose";
 
-export interface IOption {
+export interface IOption{
     stocks: [
         {
             size: string,
             quantity: number
         }
     ]
+    price: number
     name: string
     description: string
     productId: string
@@ -314,6 +315,68 @@ const contactSchema: Schema = new Schema({
     }
 }, { versionKey: false })
 
+const voucherSchema: Schema = new Schema({
+    code: {
+        type: String,
+        require: true
+    },
+    voucherType: {
+        type: String,
+        require: true
+    },
+    description: {
+        type: String,
+        require: true
+    },
+    maxValueDiscount: {
+        type: Number,
+        require: true
+    },
+    discountPercent: {
+        type: Number,
+        require: true
+    },
+    startDate: {
+        type: Date,
+        require: true
+    },
+    endDate: {
+        type: Date,
+        require: true
+    },
+    usageLimit: {
+        type: Number,
+        require: true
+    },
+    minPriceApply: {
+        type: Number,
+        require: true
+    },
+    status: {
+        type: Number,
+        require: true
+    },
+    createdDate: {
+        type: Date,
+        require: true
+    },
+    updatedDate: {
+        type: Date,
+        require: true
+    },
+    userRestrictions: [
+        {
+            type: Number,
+            require: true,
+        }
+    ],
+    usageCount: {
+        type: Number,
+        require: true
+    }
+});
+
+
 export const Category = mongoose.model('Category', categorySchema, 'categories')
 export const Option = mongoose.model('Option', optionSchema, 'options')
 export const Product = mongoose.model<IProduct>('Product', productSchema, 'products')
@@ -322,3 +385,4 @@ export const Require = mongoose.model<IRequire>("Require", requireSchema, 'requi
 export const Contact = mongoose.model("Contact", contactSchema, 'contacts')
 export const Measurement = mongoose.model('Measurement', measurementSchema, 'measurements')
 export const SizeChart = mongoose.model("SizeChart", sizeChartSchema, 'size_charts')
+export const Voucher = mongoose.model('Voucher', voucherSchema, 'vouchers')

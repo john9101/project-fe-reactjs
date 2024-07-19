@@ -11,7 +11,6 @@ const initialState: CartState = {
     cartItems: localStorage.getItem("cartItem") ? JSON.parse(localStorage.getItem("cartItem")!) : [],
     totalPrice: localStorage.getItem("totalPrice") ? Number(localStorage.getItem("totalPrice")) : 0,
     totalItem: localStorage.getItem("totalItem") ? Number(localStorage.getItem("totalItem")) : 0
-
 };
 
 const cartSlide = createSlice({
@@ -20,12 +19,13 @@ const cartSlide = createSlice({
     reducers: {
         addToCart: (state, action: PayloadAction<CartItem>) => {
             const cartItem = action.payload;
-            const isExist = state.cartItems.find(item => item.product._id === cartItem.product._id && item.selectedOption === cartItem.selectedOption && item.selectedSize === cartItem.selectedSize);
+            console.log(cartItem)
+            const isExist = state.cartItems.find(item => item.product._id === cartItem.product._id && item.selectedOption.name === cartItem.selectedOption.name && item.selectedSize.name === cartItem.selectedSize.name);
             if (!isExist) {
                 state.cartItems.push(cartItem);
                 state.totalItem = state.cartItems.length;
             } else {
-                const targetCartItem = state.cartItems.find(item => item.product._id === cartItem.product._id && item.selectedOption === cartItem.selectedOption && item.selectedSize === cartItem.selectedSize);
+                const targetCartItem = state.cartItems.find(item => item.product._id === cartItem.product._id && item.selectedOption.name === cartItem.selectedOption.name && item.selectedSize.name === cartItem.selectedSize.name);
                 targetCartItem!.quantity += cartItem.quantity;
                 state.totalItem = state.cartItems.length;
             }
@@ -54,7 +54,15 @@ const cartSlide = createSlice({
             localStorage.setItem("totalPrice", state.totalPrice.toString());
 
         },
+        removeAllFromCart: (state) => {
+            state.cartItems = [];
+            state.totalItem = 0;
+            state.totalPrice = 0;
+            localStorage.setItem("cartItem", JSON.stringify(state.cartItems));
+            localStorage.setItem("totalItem", state.totalItem.toString());
+            localStorage.setItem("totalPrice", state.totalPrice.toString());
+        }
     }
 });
-export const {addToCart, removeFromCart, updateCartItemQuantity} = cartSlide.actions;
+export const {addToCart, removeFromCart, updateCartItemQuantity, removeAllFromCart} = cartSlide.actions;
 export const cartProducer = cartSlide.reducer;

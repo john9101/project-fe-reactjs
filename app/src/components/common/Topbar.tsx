@@ -1,4 +1,4 @@
-import {Link, useLocation, useNavigate} from "react-router-dom";
+import {Link,NavLink, useLocation, useNavigate} from "react-router-dom";
 import { faFacebookF, faInstagram, faLinkedinIn, faTwitter, faYoutube } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart, faMagnifyingGlass, faShoppingCart } from "@fortawesome/free-solid-svg-icons";
@@ -6,6 +6,7 @@ import Logo from "./Logo";
 import {useSelector} from "react-redux";
 import {RootState} from "../../store/store";
 import React, {FormEvent, useState} from "react";
+import CartItemsMini from "../cart/CartItemsMini";
 
 const Topbar = () => {
     const totalItems = useSelector((state: RootState) => state.cart.totalItem);
@@ -21,6 +22,17 @@ const Topbar = () => {
             navigate(`/search?${decodeURIComponent(params.toString())}`)
         }
     }
+
+
+    const [showCartPreview, setShowCartPreview] = useState(false);
+
+    const handleMouseEnter = () => {
+        setShowCartPreview(true);
+    };
+
+    const handleMouseLeave = () => {
+        setShowCartPreview(false);
+    };
 
     return (
         <div className="container-fluid">
@@ -81,6 +93,28 @@ const Topbar = () => {
                         <FontAwesomeIcon icon={faShoppingCart} className="text-primary" />
                         <span className="badge">{totalItems}</span>
                     </Link>
+                    <NavLink to="#" className="btn border">
+                        <FontAwesomeIcon icon={faHeart} className="text-primary"/>
+                        <span className="badge">0</span>
+                    </NavLink>
+                    <div className="cart-container" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+                        <NavLink to="/cart" className="btn border">
+                            <FontAwesomeIcon icon={faShoppingCart} className="text-primary"/>
+                            <span className="badge">{totalItems}</span>
+                        </NavLink>
+                        <div className="hover-fill-space"></div>
+                        {showCartPreview && (
+                            <div className="cart-preview">
+                                <CartItemsMini/>
+                                <NavLink to={"/cart"}>
+                                    <div className="cart-buttons">
+                                        <FontAwesomeIcon style={{marginRight: ".3em"}} icon={faCartShopping}/>
+                                        Xem giỏ hàng
+                                    </div>
+                                </NavLink>
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
         </div>

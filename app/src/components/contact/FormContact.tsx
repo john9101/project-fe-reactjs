@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 import {Contact} from "../../types/contact";
-import axios from "axios";
 import {Modal} from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import {NavLink} from "react-router-dom";
@@ -25,7 +24,6 @@ function FormContact() {
 
     const onSubmit = async (data: Contact) => {
         try {
-            // const response = await axios.post('http://localhost:4000/api/contact', data);
             const response = await http.post("contacts", data);
             console.log('Đã lưu:', response.data);
             handleShow();

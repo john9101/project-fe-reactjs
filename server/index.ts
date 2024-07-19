@@ -9,8 +9,9 @@ import bodyParser from 'body-parser'
 import cors from "cors"
 // @ts-ignore
 import morgan from 'morgan'
-import requiresRouter from "./src/routes/requires.routes";
 import contactsRouter from "./src/routes/contacts.routes";
+import requiresRouter from "./src/routes/requires.routes";
+import paymentRouter from "./src/routes/payment.routes";
 import axios from 'axios';
 import informationRouter from './src/routes/user.routes';
 import loginRouter from './src/routes/login.router';
@@ -20,6 +21,7 @@ const port = process.env.PORT || 3000;
 import { createServer } from "http";
 import { Server } from "socket.io";
 import registerRouter from './src/routes/register.router';
+import voucherRouter from "./src/routes/vouchers.routes";
 
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(cors());
@@ -32,6 +34,9 @@ app.use('/api/requires', requiresRouter)
 app.use('/api/users', informationRouter);
 app.use('/api/login', loginRouter);
 app.use('/api/register', registerRouter);
+app.use('/api/vouchers', voucherRouter)
+app.use('/api/payment', paymentRouter)
+
 const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.CLUSTER_NAME}.nlnlbxk.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`
 
 mongoose.connect(uri)
