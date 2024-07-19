@@ -1,3 +1,5 @@
+import {PathNamesConstant} from "./pathNames.constant";
+
 interface FeatureProductsDecorateType{
     [key: string]: {
         clientName: string,
@@ -15,7 +17,7 @@ export const FeatureProductsDecorateConstant: FeatureProductsDecorateType = {
         serverName: 'saleOff',
         bgColor: 'orange',
         destBreadcrumb: 'Đồng phục đang giảm giá',
-        path: '/feature/sale-off',
+        path: `${PathNamesConstant.feature}/sale-off`,
         params: new URLSearchParams({"sort": 'asc', "saleOff" : String(true)}),
     },
     newArrive: {
@@ -23,7 +25,7 @@ export const FeatureProductsDecorateConstant: FeatureProductsDecorateType = {
         serverName: 'newArrive',
         bgColor: 'green',
         destBreadcrumb: 'Đồng phục mới ra mắt',
-        path: '/feature/new-arrive',
+        path: `${PathNamesConstant.feature}/new-arrive`,
         params: new URLSearchParams({"sort": 'asc', "newArrive" : String(true)}),
     },
     popular: {
@@ -31,7 +33,7 @@ export const FeatureProductsDecorateConstant: FeatureProductsDecorateType = {
         serverName: 'popular',
         bgColor: 'red',
         destBreadcrumb: 'Đồng phục phổ biến',
-        path: '/feature/popular',
+        path: `${PathNamesConstant.feature}/popular`,
         params: new URLSearchParams({"sort": 'asc', "popular" : String(true)}),
     },
 }

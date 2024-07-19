@@ -2,7 +2,7 @@ import React from 'react'
 import { NavLink } from 'react-router-dom'
 import imageCarousel1 from '../../assets/img/carousel-1.jpg'
 import imageCarousel2 from '../../assets/img/carousel-2.jpg'
-const HomeCarosel = () => {
+const HomeCarousel = () => {
     return (
         <div id="header-carousel" className="carousel slide" data-ride="carousel">
             <div className="carousel-inner">
@@ -46,4 +46,4 @@ const HomeCarosel = () => {
         </div>
     )
 }
-export default HomeCarosel;
+export default HomeCarousel;

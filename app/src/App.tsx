@@ -11,6 +11,7 @@ import FormLayout from './layout/FormLayout';
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import PageNotFound from "./pages/PageNotFound";
+import {PathNamesConstant} from "./constants/pathNames.constant";
 
 const Home = lazy(() => import('./pages/Home'));
 const ContactUs = lazy(() => import('./pages/ContactUs'));
@@ -23,7 +24,12 @@ const ProductDetail = lazy(() => import('./pages/ProductDetail'));
 const Collection = lazy(() => import('./pages/Collection'));
 
 function App() {
-    const collectionPaths = ["/shop", "/feature/:featureName", "/search", '/category/:categoryId'];
+    const collectionPaths = [
+        PathNamesConstant.shop,
+        `${PathNamesConstant.feature}/:featureName`,
+        PathNamesConstant.search,
+        `${PathNamesConstant.category}/:categoryId`
+    ];
 
     return (
         <BrowserRouter>
@@ -33,18 +39,18 @@ function App() {
                     <Routes>
                         <Route path="/" element={<MainLayout />}>
                             <Route index element={<Home />} />
-                            <Route path="cart" element={<CartDetail />} />
-                            <Route path="contact-us" element={<ContactUs />} />
-                            <Route path='about-us' element={<AboutUs/>}/>
-                            <Route path="products/:productId" element={<ProductDetail/>} />
+                            <Route path={PathNamesConstant.cart} element={<CartDetail />} />
+                            <Route path={PathNamesConstant.contactUs} element={<ContactUs />} />
+                            <Route path={PathNamesConstant.aboutUs} element={<AboutUs/>}/>
+                            <Route path={`${PathNamesConstant.uniform}/:uniformId`} element={<ProductDetail/>} />
                             {collectionPaths.map((path, index) => (
                                 <Route key={index} path={path} element={<Collection />} />
                             ))}
                         </Route>
-                        <Route path="account" element={<FormLayout />}>
-                            <Route path="login" element={<Login />} />
-                            <Route path="register" element={<Register />} />
-                            <Route path='forgot-password' element={<ForgotPassword />} />
+                        <Route path={PathNamesConstant.account} element={<FormLayout />}>
+                            <Route path={PathNamesConstant.login} element={<Login />} />
+                            <Route path={PathNamesConstant.register} element={<Register />} />
+                            <Route path={PathNamesConstant.forgotPassword} element={<ForgotPassword />} />
                         </Route>
                         <Route path="*" element={<PageNotFound />} />
                     </Routes>

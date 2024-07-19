@@ -4,17 +4,18 @@ import Footer from "../components/common/Footer";
 import {useEffect, useState} from "react";
 import Navbar from "../components/common/Navbar";
 import BreadcrumbsSection from "../components/common/BreadcrumbsSection";
+import {PathNamesConstant} from "../constants/pathNames.constant";
 
 const MainLayout = () => {
     const [destBreadcrumb, setDestBreadcrumb] = useState<string | null>(null);
     const {pathname} = useLocation()
 
     useEffect(() => {
-        if(pathname.includes("products")){
-            setDestBreadcrumb("Chi tiết sản phẩm")
-        }else if(pathname.includes("about-us")){
+        if(pathname.includes(PathNamesConstant.uniform)){
+            setDestBreadcrumb("Chi tiết đồng phục")
+        }else if(pathname.includes(PathNamesConstant.aboutUs)){
             setDestBreadcrumb("Giới thiệu")
-        }else if(pathname.includes('contact-us')){
+        }else if(pathname.includes(PathNamesConstant.contactUs)){
             setDestBreadcrumb("Liên hệ")
         }
     }, [pathname])
@@ -24,8 +25,9 @@ const MainLayout = () => {
             <Topbar/>
             <Navbar/>
             {
-                pathname !== '/' && !pathname.includes('feature') && !pathname.includes('category') &&
-                !pathname.includes('shop') && !pathname.includes('search') &&
+                pathname !== PathNamesConstant.home && !pathname.includes(PathNamesConstant.feature) &&
+                !pathname.includes(PathNamesConstant.category) && !pathname.includes(PathNamesConstant.shop) &&
+                !pathname.includes(PathNamesConstant.search) &&
                 <BreadcrumbsSection destBreadcrumb={destBreadcrumb!}/>
             }
             <Outlet/>

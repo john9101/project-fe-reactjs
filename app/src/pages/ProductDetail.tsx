@@ -101,7 +101,7 @@ interface ProductDetailProps{
 }
 
 const ProductDetail = ({productId: productIdFromProp}:ProductDetailProps)=> {
-    const {productId: productIdFromParam} = useParams()
+    const {uniformId: productIdFromParam} = useParams()
     const productId = productIdFromProp || productIdFromParam
     const dispatch = useDispatch<AppDispatch>();
     const productDetail = useSelector((state: RootState) => state.products.productDetail!);

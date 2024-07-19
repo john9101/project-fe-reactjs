@@ -1,8 +1,9 @@
 import {NavLink, useLocation} from "react-router-dom";
 import Logo from "./Logo";
-import HomeCarosel from "../carousel/HomeCarousel";
+import HomeCarousel from "../carousel/HomeCarousel";
 import React from "react";
 import CategoriesMenu from "./CategoriesMenu";
+import {PathNamesConstant} from "../../constants/pathNames.constant";
 
 const Navbar = () => {
     const location = useLocation();
@@ -20,18 +21,18 @@ const Navbar = () => {
                         </button>
                         <div className="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                             <div className="navbar-nav mr-auto py-0">
-                                <NavLink to="/" className={({isActive}) => (isActive ? "nav-item nav-link active": "nav-item nav-link")} >Trang chủ</NavLink>
-                                <NavLink to="/shop" state={{resetCollection: true}} className={({isActive}) => (isActive ? "nav-item nav-link active": "nav-item nav-link")} >Cửa hàng</NavLink>
-                                <NavLink to="/about-us" className={({isActive}) => (isActive ? "nav-item nav-link active": "nav-item nav-link")} >Giới thiệu</NavLink>
-                                <NavLink to="/contact-us" className={({isActive}) => (isActive ? "nav-item nav-link active": "nav-item nav-link")} >Liên hệ</NavLink>
+                                <NavLink to={PathNamesConstant.home} className={({isActive}) => (isActive ? "nav-item nav-link active": "nav-item nav-link")} >Trang chủ</NavLink>
+                                <NavLink to={PathNamesConstant.shop} state={{resetCollection: true}} className={({isActive}) => (isActive ? "nav-item nav-link active": "nav-item nav-link")} >Cửa hàng</NavLink>
+                                <NavLink to={PathNamesConstant.aboutUs} className={({isActive}) => (isActive ? "nav-item nav-link active": "nav-item nav-link")} >Giới thiệu</NavLink>
+                                <NavLink to={PathNamesConstant.contactUs} className={({isActive}) => (isActive ? "nav-item nav-link active": "nav-item nav-link")} >Liên hệ</NavLink>
                             </div>
                             <div className="navbar-nav ml-auto py-0">
-                                <NavLink to="/account/login" className={({isActive}) => (isActive ? "nav-item nav-link active": "nav-item nav-link")} >Đăng nhập</NavLink>
-                                <NavLink to="/account/register" className={({isActive}) => (isActive ? "nav-item nav-link active": "nav-item nav-link")} >Đăng ký</NavLink>
+                                <NavLink to={`/${PathNamesConstant.account}/${PathNamesConstant.login}`} className={({isActive}) => (isActive ? "nav-item nav-link active": "nav-item nav-link")} >Đăng nhập</NavLink>
+                                <NavLink to={`/${PathNamesConstant.account}/${PathNamesConstant.register}`} className={({isActive}) => (isActive ? "nav-item nav-link active": "nav-item nav-link")} >Đăng ký</NavLink>
                             </div>
                         </div>
                     </nav>
-                    {location.pathname === '/' && <HomeCarosel/>}
+                    {location.pathname === PathNamesConstant.home && <HomeCarousel/>}
                 </div>
             </div>
         </div>

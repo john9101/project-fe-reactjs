@@ -12,10 +12,11 @@ import FiberNewIcon from '@mui/icons-material/FiberNew';
 import PercentIcon from '@mui/icons-material/Percent';
 import {NavLink} from "react-router-dom";
 import {useState} from "react";
-import {Button, Modal} from "react-bootstrap";
+import {Modal} from "react-bootstrap";
 import ProductDetail from "../../pages/ProductDetail";
 import '../../assets/css/styleShop.scss'
 import {subDays} from 'date-fns'
+import {PathNamesConstant} from "../../constants/pathNames.constant";
 
 interface ProductCardProps {
     product: Product
@@ -180,7 +181,7 @@ const ProductCard = ({product, colGridClass}: ProductCardProps) => {
                         </div>
                     </div>
                     <div className="card-footer d-flex justify-content-between bg-light border">
-                        <NavLink to={`/products/${product._id}`} className="btn btn-sm text-dark p-0"><FontAwesomeIcon
+                        <NavLink to={`${PathNamesConstant.uniform}/${product._id}`} className="btn btn-sm text-dark p-0"><FontAwesomeIcon
                             icon={faEyeSolid} className='text-primary mr-1'/>Xem chi tiết</NavLink>
                         <span className="btn btn-sm text-dark p-0" onClick={handleShowQuickSeeModal}>
                             <FontAwesomeIcon icon={faCartShopping} className='text-primary mr-1'/> Thêm vào giỏ hàng

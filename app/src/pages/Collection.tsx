@@ -20,6 +20,7 @@ import BreadcrumbsSection from "../components/common/BreadcrumbsSection";
 import filterAttributesObject from "../util/filterAttributesObject";
 import * as _ from "lodash";
 import {fetchCategoriesList} from "../store/category.slice";
+import {PathNamesConstant} from "../constants/pathNames.constant";
 
 interface QueryProduct{
     checkedCategories: string[]
@@ -46,10 +47,11 @@ const Collection = () => {
 
     const inputSearchRef = useRef<HTMLInputElement>(null);
     const typedRef = useRef<Typed | null>(null)
-    const isSearchPath = pathname.includes('search');
-    const isCategoryPath = pathname.includes('category');
-    const isShopPath = pathname.includes('shop');
-    const isFeaturePath = pathname.includes('feature');
+    console.log(pathname)
+    const isSearchPath = pathname.includes(PathNamesConstant.search);
+    const isCategoryPath = pathname.includes(PathNamesConstant.category);
+    const isShopPath = pathname.includes(PathNamesConstant.shop);
+    const isFeaturePath = pathname.includes(PathNamesConstant.feature);
     const sortTypeConstant = isSearchPath ? SortTypeConstant : filterAttributesObject(SortTypeConstant, ([key, Value]) => key !== 'relevant')
 
     const initialQueryProduct: QueryProduct = {
