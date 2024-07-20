@@ -4,12 +4,13 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import './assets/css/style.module.scss';
 import './assets/css/styleLogin.scss'
-import {BrowserRouter, Route, Routes} from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import MainLayout from "./layout/MainLayout";
 import { CircularProgress } from "@mui/material";
 import FormLayout from './layout/FormLayout';
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import CheckOut from "./pages/CheckOut";
 import PageNotFound from "./pages/PageNotFound";
 import {PathNamesConstant} from "./constants/pathNames.constant";
 import { AuthProvider } from './context/UserContext'; // Import AuthProvider

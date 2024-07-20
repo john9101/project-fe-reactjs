@@ -4,7 +4,18 @@ import {AppDispatch, RootState} from "../store/store";
 import React, {useEffect, useRef, useState} from "react";
 import {fetchProductDetail, setSelectedOption, setSelectedSize} from "../store/product.slice";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faPlus,faMinus, faCircleChevronLeft, faCircleChevronRight, faCircleUser, faTape, faRulerHorizontal, faCartShopping, faHeart, faClipboard} from "@fortawesome/free-solid-svg-icons";
+import {
+    faPlus,
+    faMinus,
+    faCircleChevronLeft,
+    faCircleChevronRight,
+    faCircleUser,
+    faTape,
+    faRulerHorizontal,
+    faCartShopping,
+    faHeart,
+    faClipboard
+} from "@fortawesome/free-solid-svg-icons";
 import {faFacebookF, faXTwitter, faLinkedinIn, faPinterest} from "@fortawesome/free-brands-svg-icons"
 import {Box, Rating, Tab, Tabs} from "@mui/material";
 import StyleIcon from '@mui/icons-material/Style';
@@ -23,6 +34,10 @@ import {Require} from "../types/require.type";
 import http from "../util/http";
 import {formatKilogram, formatMeter} from "../util/formatUnitMeasure";
 import {computeUniformSpecMeasure, computeBodyMetricsRange} from "../util/formularSizeChart";
+import {toast} from "react-toastify";
+import {addToCart} from "../store/cart.slice";
+import {nanoid} from "@reduxjs/toolkit";
+import ButtonQuantity from "../components/common/ButtonQuantity";
 
 const reviewFormSchema = Yup.object().shape({
     rating: Yup.number()
@@ -39,18 +54,18 @@ const requireFormSchema = Yup.object().shape({
     email: Yup.string()
         .required("Địa chỉ email không được bỏ trống")
         .test('emailValidation', 'Địa chỉ email không hợp lệ', async (email: string) => {
-            if(email){
+            if (email) {
                 return await isValidEmail(email);
-            }else{
+            } else {
                 return true
             }
         }),
     phone: Yup.string()
         .required("Số điện thoại không được bỏ trống")
         .test("phoneValidation", 'Số điện thoại không hợp lệ', async (phone: string) => {
-            if(phone){
+            if (phone) {
                 return await isValidPhone(phone);
-            }else{
+            } else {
                 return true
             }
         }),
@@ -125,7 +140,8 @@ const ProductDetail = ({productId: productIdFromProp}:ProductDetailProps)=> {
         transition: 'transform 0.5s ease'
     });
     const [tabDisplayIndex, setTabDisplayIndex] = useState<number>(0);
-    const [,setSlideIndex] = useState<number>(0);
+    const [, setSlideIndex] = useState<number>(0);
+    const [quantity, setQuantity] = useState<number>(1);
 
     const [showRequireFormModal, setShowRequireFormModal] = useState<boolean>(false);
     const [showSendRequireSuccessModal, setShowSendRequireSuccessModal] = useState<boolean>(false);
@@ -293,7 +309,35 @@ const ProductDetail = ({productId: productIdFromProp}:ProductDetailProps)=> {
             console.log('Error: ', error);
         }
     }
-
+    const handleAddToCart = () => {
+        const selectedOption = productDetail.selectedOption;
+        const selectedSize = productDetail.selectedSize;
+        if (quantityInStock === 0) {
+            toast.error("Sản phẩm đã hết hàng", {
+                position: "bottom-left",
+                autoClose: 2000
+            });
+            return;
+        }
+        if (selectedOption === null || selectedSize === null) {
+            toast.error("Vui lòng chọn kích cỡ và mẫu", {
+                position: "bottom-left",
+                autoClose: 1000
+            });
+            return;
+        }
+        (product && selectedOption && selectedSize && dispatch(addToCart({
+            id: nanoid(),
+            product,
+            quantity,
+            selectedSize,
+            selectedOption
+        })));
+        toast.success("Đã thêm vào giỏ hàng", {
+            position: "bottom-left",
+            autoClose: 1000
+        });
+    }
     return (
         <div className="container-fluid py-5">
             <div className="row px-xl-5">
@@ -380,19 +424,10 @@ const ProductDetail = ({productId: productIdFromProp}:ProductDetailProps)=> {
                     <p className="text-dark font-weight-medium mb-3">Số lượng mẫu trong kho: <span className={'text-primary'}>{quantityInStock}</span></p>
                     <div className="d-flex flex-wrap align-items-center mb-4 pt-2" style={{gap: '0.8rem'}}>
                         <div className="input-group quantity" style={{width: "130px"}}>
-                            <div className="input-group-btn">
-                                <button className="btn btn-primary btn-minus">
-                                    <FontAwesomeIcon icon={faMinus}/>
-                                </button>
-                            </div>
-                            <input type="text" className="form-control bg-secondary text-center" value="1"/>
-                            <div className="input-group-btn">
-                                <button className="btn btn-primary btn-plus">
-                                    <FontAwesomeIcon icon={faPlus}/>
-                                </button>
-                            </div>
+                            <ButtonQuantity quantity={quantity} setQuantity={setQuantity}/>
                         </div>
-                        <button className="btn btn-primary px-3"><FontAwesomeIcon className={'mr-1'} icon={faCartShopping}/>Thêm
+                        <button className="btn btn-primary px-3" onClick={handleAddToCart}><FontAwesomeIcon
+                            className={'mr-1'} icon={faCartShopping}/>Thêm
                             vào giỏ hàng
                         </button>
                         <button className="btn btn-primary px-3"><FontAwesomeIcon className={'mr-1'} icon={faHeart}/> Thêm
