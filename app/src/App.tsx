@@ -15,6 +15,7 @@ import {PathNamesConstant} from "./constants/pathNames.constant";
 import {AuthProvider} from './context/UserContext';
 import CartDetail from "./pages/CartDetail";
 import Wishlist from "./pages/Wishlist";
+import CheckOut from "./pages/CheckOut";
 
 
 const Home = lazy(() => import('./pages/Home'));
@@ -52,6 +53,7 @@ function App() {
                                 {collectionPaths.map((path, index) => (
                                     <Route key={index} path={path} element={<Collection />} />
                                 ))}
+                                <Route path={PathNamesConstant.checkout} element={<CheckOut />} />
                                 <Route path='personal/:userId' element={<Personal />} />
                             </Route>
                             <Route path={PathNamesConstant.account} element={<FormLayout />}>

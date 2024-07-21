@@ -399,8 +399,7 @@ const ProductDetail = ({productId: productIdFromProp}:ProductDetailProps)=> {
                             product?.discountPercent !== 0 &&
                             <>
                                 <Badge style={{color: 'white'}} className={'mr-2 order-first align-self-center rounded'}>
-                                    {-(product?.discountPercent as number * 100)}%
-                                This commit was created on GitHub.com and signed with GitHub's verified signature</Badge>
+                                    {-(product?.discountPercent as number * 100)}%</Badge>
                                 <s className={"font-weight-medium ml-2"} style={{fontSize: "1rem", color: "var(--gray)"}}>
                                     {formatCurrency(product?.originalPrice!)}
                                 </s>

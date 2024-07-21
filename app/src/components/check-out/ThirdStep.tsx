@@ -51,7 +51,7 @@ function ThirdStep({checkoutFormData, totalPrice, voucherCode, totalDiscount}: T
                     <div className=" h-100">
                         <div className="row d-flex justify-content-center align-items-center h-100">
                             <div className="col-12">
-                                <div className="card" style={{borderRadius: "10px"}}>
+                                <div className="card">
                                     <div className="card-header py-4">
                                         <h5 className="text-muted mb-0">
                                             Cảm ơn bạn <span

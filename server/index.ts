@@ -1,3 +1,4 @@
+// @ts-ignore
 import express, { Request, Response } from 'express';
 import productsRouter from './src/routes/products.routes';
 import categoryRouter from './src/routes/categories.routes';

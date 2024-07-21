@@ -376,68 +376,6 @@ const voucherSchema: Schema = new Schema({
 });
 
 
-const voucherSchema: Schema = new Schema({
-    code: {
-        type: String,
-        require: true
-    },
-    voucherType: {
-        type: String,
-        require: true
-    },
-    description: {
-        type: String,
-        require: true
-    },
-    maxValueDiscount: {
-        type: Number,
-        require: true
-    },
-    discountPercent: {
-        type: Number,
-        require: true
-    },
-    startDate: {
-        type: Date,
-        require: true
-    },
-    endDate: {
-        type: Date,
-        require: true
-    },
-    usageLimit: {
-        type: Number,
-        require: true
-    },
-    minPriceApply: {
-        type: Number,
-        require: true
-    },
-    status: {
-        type: Number,
-        require: true
-    },
-    createdDate: {
-        type: Date,
-        require: true
-    },
-    updatedDate: {
-        type: Date,
-        require: true
-    },
-    userRestrictions: [
-        {
-            type: Number,
-            require: true,
-        }
-    ],
-    usageCount: {
-        type: Number,
-        require: true
-    }
-});
-
-
 export const Category = mongoose.model('Category', categorySchema, 'categories')
 export const Option = mongoose.model('Option', optionSchema, 'options')
 export const Product = mongoose.model<IProduct>('Product', productSchema, 'products')
