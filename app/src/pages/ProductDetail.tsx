@@ -399,8 +399,7 @@ const ProductDetail = ({productId: productIdFromProp}:ProductDetailProps)=> {
                             product?.discountPercent !== 0 &&
                             <>
                                 <Badge style={{color: 'white'}} className={'mr-2 order-first align-self-center rounded'}>
-                                    {-(product?.discountPercent as number * 100)}%
-                                </Badge>
+                                    {-(product?.discountPercent as number * 100)}%</Badge>
                                 <s className={"font-weight-medium ml-2"} style={{fontSize: "1rem", color: "var(--gray)"}}>
                                     {formatCurrency(product?.originalPrice!)}
                                 </s>
@@ -686,34 +685,34 @@ const ProductDetail = ({productId: productIdFromProp}:ProductDetailProps)=> {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>Cân nặng</td>
-                                        {uniqueSizeNames.map((_, index) => (
-                                            <td>
-                                                {formatKilogram(computeBodyMetricsRange(initialWeightRange!, index).min)} -
-                                                {formatKilogram(computeBodyMetricsRange(initialWeightRange!, index).max)}
-                                            </td>
-                                        ))}
-                                    </tr>
-                                    <tr>
-                                        <td>Chiều cao</td>
-                                        {uniqueSizeNames.map((_, index) => (
-                                            <td>
-                                                {formatMeter(computeBodyMetricsRange(initialHeightRange!, index).min)} -
-                                                {formatMeter(computeBodyMetricsRange(initialHeightRange!, index).max)}
-                                            </td>
-                                        ))}
-                                    </tr>
-                                    {sizeChart.initialUniformSpecs.map((initialUniformSpec, index) => (
-                                        <tr>
-                                            <td>{initialUniformSpec.measurement.name}</td>
-                                            {uniqueSizeNames.map((_, index) => (
-                                                <td>
-                                                    {computeUniformSpecMeasure(initialUniformSpec,index)}
-                                                </td>
-                                            ))}
-                                        </tr>
+                                <tr>
+                                    <td>Cân nặng</td>
+                                    {uniqueSizeNames.map((_, index) => (
+                                        <td>
+                                            {formatKilogram(computeBodyMetricsRange(initialWeightRange!, index).min)} -
+                                            {formatKilogram(computeBodyMetricsRange(initialWeightRange!, index).max)}
+                                        </td>
                                     ))}
+                                </tr>
+                                <tr>
+                                    <td>Chiều cao</td>
+                                    {uniqueSizeNames.map((_, index) => (
+                                        <td>
+                                            {formatMeter(computeBodyMetricsRange(initialHeightRange!, index).min)} -
+                                            {formatMeter(computeBodyMetricsRange(initialHeightRange!, index).max)}
+                                        </td>
+                                    ))}
+                                </tr>
+                                {sizeChart.initialUniformSpecs.map((initialUniformSpec, index) => (
+                                    <tr>
+                                        <td>{initialUniformSpec.measurement.name}</td>
+                                        {uniqueSizeNames.map((_, index) => (
+                                            <td>
+                                                {computeUniformSpecMeasure(initialUniformSpec, index)}
+                                            </td>
+                                        ))}
+                                    </tr>
+                                ))}
                                 </tbody>
                             </Table>
                         </div>

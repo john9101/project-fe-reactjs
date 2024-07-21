@@ -7,7 +7,6 @@ export interface IOption{
             quantity: number
         }
     ]
-    price: number
     name: string
     description: string
     productId: string
