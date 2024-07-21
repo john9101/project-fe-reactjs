@@ -1,0 +1,45 @@
+.feature .slick-slide > div {
+  margin: 0 0.6em;
+}
+
+.feature .slick-list {
+  margin: 0 -0.6rem;
+}
+
+.feature .carousel-control-next{
+  right: 0.5rem;
+
+  &:active{
+    right: 1rem;
+  }
+}
+
+.feature .carousel-control-prev{
+  left: 0.5rem;
+
+  &:active{
+    left: 1rem;
+  }
+}
+
+.feature .carousel-control-prev, .feature .carousel-control-next{
+  height: 4rem;
+  width: 4rem;
+  border-radius: 50%;
+  border: 0.1rem solid black;
+  color: black;
+  background: white;
+  opacity: 1;
+  box-shadow: rgba(0, 0, 0, 0.24) 0 3px 8px;
+
+  &:hover{
+    background: black;
+    color: white
+  }
+
+  &:active{
+    height: 3rem;
+    width: 3rem;
+    font-size: 0.8rem;
+  }
+}

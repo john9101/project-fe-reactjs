@@ -1,6 +1,6 @@
 import {CartItem} from "../types/cartItem.type";
 import {Product} from "../types/product.type";
-import Favourite from "../pages/Favourite";
+import WishList from "../pages/WishList";
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
 export interface FovouriteState {

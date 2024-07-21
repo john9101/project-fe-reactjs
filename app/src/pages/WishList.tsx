@@ -5,17 +5,15 @@ import FavouriteEmpty from "../components/FavouriteEmpty";
 import ProductCard from "../components/card/ProductCard";
 
 
-function Favourite() {
+function WishList() {
     const favouriteItems = useSelector((state: RootState) => state.favourite.products);
+    console.log("favourite: " , favouriteItems);
     return (
         <div className="col-12 d-flex flex-column align-items-center justify-content-sm-center">
-            <div className="text-center mb-4">
-                <h2 className="section-title px-5"><span className="px-2">Sản phẩm yêu thích</span></h2>
-            </div>
             <div className={"row col-md-8"}>
                 {favouriteItems.length > 0 ? (
                     favouriteItems.map(item => (
-                        <ProductCard key={item._id} product={item}/>
+                        <ProductCard key={item._id} product={item} colGridClass={'col-lg-4 col-md-6 col-sm-12 pb-1'}/>
                     ))
                 ) : (
                     <FavouriteEmpty/>
@@ -25,4 +23,4 @@ function Favourite() {
     );
 }
 
-export default Favourite;
+export default WishList;
