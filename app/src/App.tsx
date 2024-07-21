@@ -20,6 +20,7 @@ import WishList from "./pages/WishList"; // Import AuthProvider
 
 const Home = lazy(() => import('./pages/Home'));
 const ContactUs = lazy(() => import('./pages/ContactUs'));
+const CartDetail = lazy(() => import('./pages/cart/CartDetail'));
 const Login = lazy(() => import('./pages/Login'));
 const Register = lazy(() => import('./pages/Register'));
 const ForgotPassword = lazy(() => import('./pages/ForgotPassword'));

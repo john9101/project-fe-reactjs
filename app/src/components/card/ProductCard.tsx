@@ -2,7 +2,7 @@ import {Product} from "../../types/product.type";
 import {formatCurrency} from "../../util/formatCurrency";
 import Slider from "react-slick";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCartShopping, faEye as faEyeSolid} from "@fortawesome/free-solid-svg-icons";
+import {faCartShopping,faEye as faEyeSolid} from "@fortawesome/free-solid-svg-icons";
 import {faEye as faEyeRegular} from '@fortawesome/free-regular-svg-icons'
 import Tooltip from '@mui/material/Tooltip';
 import Chip from '@mui/material/Chip';
@@ -61,7 +61,7 @@ const ProductCard = ({product, colGridClass}: ProductCardProps) => {
     const hasSaleOffTag = product.discountPercent >= 0;
     const hasNewArriveTag = new Date(product.createdAt) >= subDays(new Date(), 30);
     const hasPopularTag = product.views >= 300
-    console.log(product)
+
     return (
         <>
             <div className={colGridClass!}>
