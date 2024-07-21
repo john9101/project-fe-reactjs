@@ -20,5 +20,5 @@ export default function CartEmpty(){
                 </div>
             </div>
         </div>
-    )
+    );
 }

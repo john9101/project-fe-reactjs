@@ -11,7 +11,6 @@ const initialState: CartState = {
     cartItems: localStorage.getItem("cartItem") ? JSON.parse(localStorage.getItem("cartItem")!) : [],
     totalPrice: localStorage.getItem("totalPrice") ? Number(localStorage.getItem("totalPrice")) : 0,
     totalItem: localStorage.getItem("totalItem") ? Number(localStorage.getItem("totalItem")) : 0
-
 };
 
 const cartSlide = createSlice({

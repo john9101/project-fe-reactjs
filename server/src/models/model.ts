@@ -13,7 +13,36 @@ export interface IOption{
     image: string
 }
 
-export interface IRequire{
+export interface IProduct{
+    name: string;
+    rating: number;
+    shortDescription: string;
+    longDescription: string;
+    options: Array<mongoose.Types.ObjectId>;
+    category: mongoose.Types.ObjectId;
+    originalPrice: number;
+    discountPercent: number;
+    uniformGender: string;
+    initialHeightRange: {
+        min: string,
+        max: string
+    };
+    initialWeightRange: {
+        min: string,
+        max: string
+    };
+    sizeCharts: mongoose.Types.ObjectId;
+    views: number;
+    createdAt: Schema.Types.Date
+}
+export interface IAddress {
+    province: string;
+    district: string;
+    ward: string;
+    specific: string;
+}
+
+export interface IRequire {
     fullName: string
     email: string
     phone: string
@@ -22,7 +51,7 @@ export interface IRequire{
     sendDate?: string
 }
 
-export interface IUser{
+export interface IUser {
     username: string,
     password: string,
     fullName: string,
@@ -64,6 +93,7 @@ const optionSchema: Schema = new Schema({
     },
     productId: {
         type: Schema.Types.ObjectId,
+        ref: "Product",
         required: true
     },
     description: {
@@ -82,6 +112,9 @@ const productSchema: Schema = new Schema({
     name: {
         type: String,
         require: true
+    },
+    rating: {
+        type: Number
     },
     category: {
         type: Schema.Types.ObjectId,
@@ -137,7 +170,15 @@ const productSchema: Schema = new Schema({
             type: Schema.Types.ObjectId,
             ref: 'SizeChart',
         }
-    ]
+    ],
+    views: {
+        type: Number,
+        require: true
+    },
+    createdAt: {
+        type: Schema.Types.Date,
+        require: true
+    }
 })
 
 const measurementSchema: Schema = new Schema({
@@ -146,6 +187,21 @@ const measurementSchema: Schema = new Schema({
         require: true
     }
 })
+const addressSchema: Schema = new Schema({
+    province: {
+        type: String,
+
+    },
+    district: {
+        type: String,
+    },
+    ward: {
+        type: String,
+    },
+    specific: {
+        type: String,
+    }
+});
 
 const sizeChartSchema: Schema = new Schema({
     name: {
@@ -177,37 +233,41 @@ const sizeChartSchema: Schema = new Schema({
 const userSchema: Schema = new Schema({
     username: {
         type: String,
-        require: true
+        required: true
     },
     password: {
         type: String,
-        require: true
+        required: true
     },
     fullName: {
         type: String,
-        require: true
+        required: true
+    },
+    dob: {
+        type: String,
     },
     gender: {
         type: String,
+
     },
     phone: {
         type: String,
+        required: true
     },
     email: {
         type: String,
-        require: true
+        required: true
     },
     address: {
-        type: String,
-        require: true
+        type: addressSchema,
     },
     companyName: {
-        type: String
+        type: String,
     },
     avatar: {
-        type: String
+        type: String,
     }
-})
+});
 
 const requireSchema: Schema = new Schema({
     fullName: {
@@ -236,11 +296,11 @@ const requireSchema: Schema = new Schema({
     versionKey: false
 })
 const contactSchema: Schema = new Schema({
-    username:{
+    username: {
         type: String,
         require: true
     },
-    email:{
+    email: {
         type: String,
         require: true
     },
@@ -248,11 +308,73 @@ const contactSchema: Schema = new Schema({
         type: String,
         require: true
     },
-    message:{
+    message: {
         type: String,
         require: true
     }
-},  { versionKey: false })
+}, { versionKey: false })
+
+const voucherSchema: Schema = new Schema({
+    code: {
+        type: String,
+        require: true
+    },
+    voucherType: {
+        type: String,
+        require: true
+    },
+    description: {
+        type: String,
+        require: true
+    },
+    maxValueDiscount: {
+        type: Number,
+        require: true
+    },
+    discountPercent: {
+        type: Number,
+        require: true
+    },
+    startDate: {
+        type: Date,
+        require: true
+    },
+    endDate: {
+        type: Date,
+        require: true
+    },
+    usageLimit: {
+        type: Number,
+        require: true
+    },
+    minPriceApply: {
+        type: Number,
+        require: true
+    },
+    status: {
+        type: Number,
+        require: true
+    },
+    createdDate: {
+        type: Date,
+        require: true
+    },
+    updatedDate: {
+        type: Date,
+        require: true
+    },
+    userRestrictions: [
+        {
+            type: Number,
+            require: true,
+        }
+    ],
+    usageCount: {
+        type: Number,
+        require: true
+    }
+});
+
 
 const voucherSchema: Schema = new Schema({
     code: {
@@ -318,9 +440,9 @@ const voucherSchema: Schema = new Schema({
 
 export const Category = mongoose.model('Category', categorySchema, 'categories')
 export const Option = mongoose.model('Option', optionSchema, 'options')
-export const Product = mongoose.model('Product', productSchema, 'products')
+export const Product = mongoose.model<IProduct>('Product', productSchema, 'products')
 export const User = mongoose.model('User', userSchema, 'users')
-export const Require =mongoose.model<IRequire>("Require", requireSchema, 'requires')
+export const Require = mongoose.model<IRequire>("Require", requireSchema, 'requires')
 export const Contact = mongoose.model("Contact", contactSchema, 'contacts')
 export const Measurement = mongoose.model('Measurement', measurementSchema, 'measurements')
 export const SizeChart = mongoose.model("SizeChart", sizeChartSchema, 'size_charts')

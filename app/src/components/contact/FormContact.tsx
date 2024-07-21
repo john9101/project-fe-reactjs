@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 import {Contact} from "../../types/contact";
-import axios from "axios";
 import {Modal} from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import {NavLink} from "react-router-dom";

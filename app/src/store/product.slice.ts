@@ -1,10 +1,21 @@
-import {createAsyncThunk, createSlice, current, PayloadAction} from "@reduxjs/toolkit";
+import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {Product} from "../types/product.type";
 import http from "../util/http";
 import {Option} from "../types/option.type";
+import {SortTypeConstant} from "../constants/sortType.constant";
+export interface ProductList{
+    products: Product[]
+    currentPage: number
+    totalPages: number
+    isDisabledEvent?: boolean
+}
+
+export interface NotFoundUniform{
+    message: string
+}
 
 interface ProductSliceState {
-    productsList: Product[];
+    productsList: ProductList;
     productDetail: {
         product: Product | null,
         quantityInStock: number,
@@ -19,10 +30,16 @@ interface ProductSliceState {
     };
     status: 'idle' | 'loading' | 'succeeded' | 'failed';
     error: string | null;
+    notFoundUniform: NotFoundUniform | null;
 }
 
 const initialState: ProductSliceState = {
-    productsList: [],
+    productsList: {
+        products: [],
+        currentPage: 1,
+        totalPages: 0,
+        isDisabledEvent: false
+    },
     productDetail: {
         product: null,
         quantityInStock: 0,
@@ -31,6 +48,7 @@ const initialState: ProductSliceState = {
     },
     status: 'idle',
     error: null,
+    notFoundUniform: null
 }
 
 export const fetchProductDetail = createAsyncThunk(
@@ -40,6 +58,26 @@ export const fetchProductDetail = createAsyncThunk(
             signal: thunkAPI.signal
         })
         return response.data
+    }
+)
+
+export const fetchProductsListWithNoQueryString = createAsyncThunk(
+    "products/fetchProductsListWithNoQueryString",
+    async (_,thunkAPI)=> {
+        const response = await http.get<ProductList>(`products?sort=${SortTypeConstant.asc}`, {
+            signal: thunkAPI.signal
+        })
+        return response.data;
+    }
+)
+
+export const fetchProductsListWithQueryString = createAsyncThunk(
+    "products/fetchProductsListWithQueryString",
+    async (queryString: string, thunkAPI)=>{
+        const response = await http.get<ProductList | NotFoundUniform>(`products${queryString}`,{
+            signal: thunkAPI.signal
+        })
+        return response.data;
     }
 )
 
@@ -90,6 +128,22 @@ const productSlice = createSlice({
                 state.productDetail!.product = product
                 if(!state.productDetail.selectedOption || !state.productDetail.selectedSize){
                     state.productDetail!.quantityInStock = totalQuantityInStock(product.options)
+                }
+            })
+            .addCase(fetchProductsListWithNoQueryString.fulfilled, (state, action)=>{
+                state.notFoundUniform = null
+                state.status = "succeeded"
+                state.productsList = action.payload
+            })
+            .addCase(fetchProductsListWithQueryString.fulfilled, (state, action)=>{
+                state.status = 'succeeded'
+                if(action.payload.hasOwnProperty("message")){
+                    state.notFoundUniform = action.payload as NotFoundUniform
+                    state.productsList.isDisabledEvent = true
+                }else{
+                    state.productsList.isDisabledEvent = false
+                    state.notFoundUniform = null
+                    state.productsList = action.payload as ProductList
                 }
             })
     }

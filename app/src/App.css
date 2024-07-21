@@ -200,51 +200,6 @@
     right: 15px;
 }
 
-input[type='radio']:after {
-    content: "";
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    display: inline-block;
-    border: 5px white solid;
+.process-1{
+    width: 3rem;
 }
-
-input[type='radio']:checked:after {
-    background: #D19C97;
-}
-
-.voucher {
-    --padding: 50px;
-    position: relative;
-    padding-left: var(--padding);
-    margin-right: calc(var(--padding) / 2);
-}
-
-.voucher:before,
-.voucher:after {
-    content: "";
-    display: block;
-    position: absolute;
-    --size: 50px;
-}
-
-.voucher:before {
-    background: white;
-    width: var(--size);
-    height: var(--size);
-    border-radius: 50%;
-    top: 50%;
-    left: calc(var(--size) / 2 - var(--padding));
-    transform: translateY(-50%);
-}
-
-.voucher:after {
-    height: 100%;
-    background: #D19C97;
-    width: 1px;
-    top: 0;
-    left: calc(var(--size) / 2 + 2%);
-    border: 1px dashed white;
-}
-
-
