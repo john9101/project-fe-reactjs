@@ -38,6 +38,7 @@ import {toast} from "react-toastify";
 import {addToCart} from "../store/cart.slice";
 import {nanoid} from "@reduxjs/toolkit";
 import ButtonQuantity from "../components/common/ButtonQuantity";
+import {addToWishlist, removeFromWishlist} from "../store/wishlist.slice";
 
 const reviewFormSchema = Yup.object().shape({
     rating: Yup.number()
@@ -54,18 +55,18 @@ const requireFormSchema = Yup.object().shape({
     email: Yup.string()
         .required("Địa chỉ email không được bỏ trống")
         .test('emailValidation', 'Địa chỉ email không hợp lệ', async (email: string) => {
-            if (email) {
+            if(email){
                 return await isValidEmail(email);
-            } else {
+            }else{
                 return true
             }
         }),
     phone: Yup.string()
         .required("Số điện thoại không được bỏ trống")
         .test("phoneValidation", 'Số điện thoại không hợp lệ', async (phone: string) => {
-            if (phone) {
+            if(phone){
                 return await isValidPhone(phone);
-            } else {
+            }else{
                 return true
             }
         }),
@@ -115,7 +116,7 @@ interface ProductDetailProps{
 }
 
 const ProductDetail = ({productId: productIdFromProp}:ProductDetailProps)=> {
-    const {uniformId: productIdFromParam} = useParams()
+    const {productId: productIdFromParam} = useParams()
     const productId = productIdFromProp || productIdFromParam
     const dispatch = useDispatch<AppDispatch>();
     const productDetail = useSelector((state: RootState) => state.products.productDetail!);
@@ -139,7 +140,7 @@ const ProductDetail = ({productId: productIdFromProp}:ProductDetailProps)=> {
         transition: 'transform 0.5s ease'
     });
     const [tabDisplayIndex, setTabDisplayIndex] = useState<number>(0);
-    const [, setSlideIndex] = useState<number>(0);
+    const [,setSlideIndex] = useState<number>(0);
     const [quantity, setQuantity] = useState<number>(1);
 
     const [showRequireFormModal, setShowRequireFormModal] = useState<boolean>(false);
@@ -337,6 +338,21 @@ const ProductDetail = ({productId: productIdFromProp}:ProductDetailProps)=> {
             autoClose: 1000
         });
     }
+    const favouriteProducts = useSelector((state: RootState) => state.wishlist.products);
+    const [isFavourite, setIsFavourite] = useState<boolean>(false);
+
+    useEffect(() => {
+        const exists = favouriteProducts.some(favProduct => favProduct._id === productId);
+        setIsFavourite(exists);
+    }, [favouriteProducts, product]);
+
+    const handleAddToFavourite = () => {
+        if (isFavourite) {
+            dispatch(removeFromWishlist(product!._id));
+        } else {
+            dispatch(addToWishlist(product!));
+        }
+    };
     return (
         <div className="container-fluid py-5">
             <div className="row px-xl-5">
@@ -429,8 +445,8 @@ const ProductDetail = ({productId: productIdFromProp}:ProductDetailProps)=> {
                             className={'mr-1'} icon={faCartShopping}/>Thêm
                             vào giỏ hàng
                         </button>
-                        <button className="btn btn-primary px-3"><FontAwesomeIcon className={'mr-1'} icon={faHeart}/> Thêm
-                            vào mục yêu thích
+                        <button className="btn btn-primary px-3" onClick={handleAddToFavourite}><FontAwesomeIcon className={'mr-1'}
+                                                                                  icon={faHeart}/> {isFavourite ? "Đã thêm vào yêu thích" : "Thêm vào yêu thích"}
                         </button>
                         <button className="btn btn-primary px-3" onClick={handleShowRequireFormModal}><FontAwesomeIcon className={'mr-1'} icon={faClipboard}/> Yêu cầu thiết kế & kích cỡ khác
                         </button>

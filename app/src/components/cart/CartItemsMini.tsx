@@ -4,6 +4,7 @@ import {useSelector} from "react-redux";
 import {RootState} from "../../store/store";
 import {NavLink} from "react-router-dom";
 import styled from "styled-components";
+import {PathNamesConstant} from "../../constants/pathNames.constant";
 
 const StyledNavLink = styled(NavLink)`
     text-decoration: none;
@@ -23,7 +24,7 @@ function CartItemsMini() {
                     const selectedOption = item.product.options.find(option => option.name === item.selectedOption.name);
                     const image = selectedOption ? selectedOption.image : '';
                     return (
-                        <StyledNavLink to={`/products/${item.product._id}`} key={item.id}>
+                        <StyledNavLink to={`${PathNamesConstant.uniform}/${item.product._id}`}  key={item.id}>
                             <div className="cart-item">
                                 <img src={image} alt={item.product.name} style={{width: '60px', height: '65px'}}/>
                                 <div className="cart-item-details text-left">
