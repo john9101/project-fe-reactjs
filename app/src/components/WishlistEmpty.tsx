@@ -4,7 +4,7 @@ import {NavLink} from "react-router-dom";
 import noResults from "../assets/img/no-results.png";
 import {Box} from "@mui/material";
 
-function FavouriteEmpty() {
+function WishlistEmpty() {
     return (
         <div className="container-fluid mt-100">
             <div className="row">
@@ -34,4 +34,4 @@ function FavouriteEmpty() {
     );
 }
 
-export default FavouriteEmpty;
+export default WishlistEmpty;

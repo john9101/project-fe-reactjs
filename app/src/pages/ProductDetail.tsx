@@ -38,7 +38,7 @@ import {toast} from "react-toastify";
 import {addToCart} from "../store/cart.slice";
 import {nanoid} from "@reduxjs/toolkit";
 import ButtonQuantity from "../components/common/ButtonQuantity";
-import {addToFavourite, removeFromFavourite} from "../store/favourite.slice";
+import {addToWishlist, removeFromWishlist} from "../store/wishlist.slice";
 
 const reviewFormSchema = Yup.object().shape({
     rating: Yup.number()
@@ -338,7 +338,7 @@ const ProductDetail = ({productId: productIdFromProp}:ProductDetailProps)=> {
             autoClose: 1000
         });
     }
-    const favouriteProducts = useSelector((state: RootState) => state.favourite.products);
+    const favouriteProducts = useSelector((state: RootState) => state.wishlist.products);
     const [isFavourite, setIsFavourite] = useState<boolean>(false);
 
     useEffect(() => {
@@ -348,9 +348,9 @@ const ProductDetail = ({productId: productIdFromProp}:ProductDetailProps)=> {
 
     const handleAddToFavourite = () => {
         if (isFavourite) {
-            dispatch(removeFromFavourite(product!._id));
+            dispatch(removeFromWishlist(product!._id));
         } else {
-            dispatch(addToFavourite(product!));
+            dispatch(addToWishlist(product!));
         }
     };
     return (

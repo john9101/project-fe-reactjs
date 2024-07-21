@@ -1,12 +1,12 @@
 import React from 'react';
 import {useSelector} from 'react-redux';
 import {RootState} from "../store/store";
-import FavouriteEmpty from "../components/FavouriteEmpty";
+import WishlistEmpty from "../components/WishlistEmpty";
 import ProductCard from "../components/card/ProductCard";
 
 
-function WishList() {
-    const favouriteItems = useSelector((state: RootState) => state.favourite.products);
+function Wishlist() {
+    const favouriteItems = useSelector((state: RootState) => state.wishlist.products);
     console.log("favourite: " , favouriteItems);
     return (
         <div className="col-12 d-flex flex-column align-items-center justify-content-sm-center">
@@ -16,11 +16,11 @@ function WishList() {
                         <ProductCard key={item._id} product={item} colGridClass={'col-lg-4 col-md-6 col-sm-12 pb-1'}/>
                     ))
                 ) : (
-                    <FavouriteEmpty/>
+                    <WishlistEmpty/>
                 )}
             </div>
         </div>
     );
 }
 
-export default WishList;
+export default Wishlist;

@@ -1,26 +1,24 @@
-import React, { lazy, Suspense } from 'react';
+import React, {lazy, Suspense} from 'react';
 import './App.css';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import './assets/css/style.module.scss';
 import './assets/css/styleLogin.scss'
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import {BrowserRouter, Route, Routes} from "react-router-dom";
 import MainLayout from "./layout/MainLayout";
-import { CircularProgress } from "@mui/material";
+import {CircularProgress} from "@mui/material";
 import FormLayout from './layout/FormLayout';
-import { ToastContainer } from "react-toastify";
+import {ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
-import CheckOut from "./pages/CheckOut";
 import PageNotFound from "./pages/PageNotFound";
 import {PathNamesConstant} from "./constants/pathNames.constant";
-import { AuthProvider } from './context/UserContext';
+import {AuthProvider} from './context/UserContext';
 import CartDetail from "./pages/CartDetail";
-import WishList from "./pages/WishList"; // Import AuthProvider
+import Wishlist from "./pages/Wishlist";
 
 
 const Home = lazy(() => import('./pages/Home'));
 const ContactUs = lazy(() => import('./pages/ContactUs'));
-const CartDetail = lazy(() => import('./pages/cart/CartDetail'));
 const Login = lazy(() => import('./pages/Login'));
 const Register = lazy(() => import('./pages/Register'));
 const ForgotPassword = lazy(() => import('./pages/ForgotPassword'));
@@ -50,7 +48,7 @@ function App() {
                                 <Route path={PathNamesConstant.contactUs} element={<ContactUs />} />
                                 <Route path={PathNamesConstant.aboutUs} element={<AboutUs/>}/>
                                 <Route path={`${PathNamesConstant.uniform}/:uniformId`} element={<ProductDetail/>} />
-                                <Route path={PathNamesConstant.wishlist} element={<WishList />} />
+                                <Route path={PathNamesConstant.wishlist} element={<Wishlist />} />
                                 {collectionPaths.map((path, index) => (
                                     <Route key={index} path={path} element={<Collection />} />
                                 ))}

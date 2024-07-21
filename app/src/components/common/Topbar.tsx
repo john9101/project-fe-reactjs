@@ -11,7 +11,7 @@ import {PathNamesConstant} from "../../constants/pathNames.constant";
 
 const Topbar = () => {
     const totalItems = useSelector((state: RootState) => state.cart.totalItem);
-    const totalFavourite: number = useSelector((state :RootState) => state.favourite.totalItem);
+    const totalFavourite: number = useSelector((state :RootState) => state.wishlist.totalItem);
     const {search} = useLocation()
     const params = new URLSearchParams(search);
     const [keyword, setKeyword] = useState<string | null>(params.get('keyword'));

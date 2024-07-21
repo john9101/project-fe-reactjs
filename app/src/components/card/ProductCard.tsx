@@ -21,7 +21,7 @@ import {subDays} from 'date-fns'
 import {PathNamesConstant} from "../../constants/pathNames.constant";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../store/store";
-import {addToFavourite, removeFromFavourite} from "../../store/favourite.slice";
+import {addToWishlist, removeFromWishlist} from "../../store/wishlist.slice";
 
 interface ProductCardProps {
     product: Product
@@ -30,12 +30,12 @@ interface ProductCardProps {
 
 const ProductCard = ({product, colGridClass}: ProductCardProps) => {
     const dispatch = useDispatch();
-    const isFavourite = useSelector((state: RootState) => state.favourite.products.some(favouriteProduct => favouriteProduct?._id === product?._id));
+    const isFavourite = useSelector((state: RootState) => state.wishlist.products.some(favouriteProduct => favouriteProduct?._id === product?._id));
     const handleAddToFavourite = () => {
         if (isFavourite) {
-            dispatch(removeFromFavourite(product._id));
+            dispatch(removeFromWishlist(product._id));
         } else {
-            dispatch(addToFavourite(product));
+            dispatch(addToWishlist(product));
         }
     };
     const images = product?.options!.map(option => option.image)
