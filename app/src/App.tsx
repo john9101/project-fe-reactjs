@@ -11,13 +11,14 @@ import { CircularProgress } from "@mui/material";
 import FormLayout from './layout/FormLayout';
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
-
 import CheckOut from "./pages/CheckOut";
 import PageNotFound from "./pages/PageNotFound";
 import {PathNamesConstant} from "./constants/pathNames.constant";
-import { AuthProvider } from './context/UserContext';
+import {AuthProvider} from './context/UserContext';
+import CartDetail from "./pages/CartDetail";
+import Wishlist from "./pages/Wishlist";
+import CheckOut from "./pages/CheckOut";
 import AccountLayout from "./layout/AccountLayout";
-
 
 const Home = lazy(() => import('./pages/Home'));
 const ContactUs = lazy(() => import('./pages/ContactUs'));
@@ -51,9 +52,11 @@ function App() {
                                 <Route path={PathNamesConstant.contactUs} element={<ContactUs />} />
                                 <Route path={PathNamesConstant.aboutUs} element={<AboutUs/>}/>
                                 <Route path={`${PathNamesConstant.uniform}/:uniformId`} element={<ProductDetail/>} />
+                                <Route path={PathNamesConstant.wishlist} element={<Wishlist />} />
                                 {collectionPaths.map((path, index) => (
                                     <Route key={index} path={path} element={<Collection />} />
                                 ))}
+                                <Route path={PathNamesConstant.checkout} element={<CheckOut />} />
                                 {/*<Route path='personal/:userId' element={<Personal />} />*/}
                             </Route>
                             <Route path="/" element={<FormLayout />}>

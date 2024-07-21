@@ -1,15 +1,17 @@
 import {Link,NavLink, useLocation, useNavigate} from "react-router-dom";
 import { faFacebookF, faInstagram, faLinkedinIn, faTwitter, faYoutube } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart, faMagnifyingGlass, faShoppingCart, faCartShopping } from "@fortawesome/free-solid-svg-icons";
+import {faCartShopping, faHeart, faMagnifyingGlass, faShoppingCart} from "@fortawesome/free-solid-svg-icons";
 import Logo from "./Logo";
 import {useSelector} from "react-redux";
 import {RootState} from "../../store/store";
 import React, {FormEvent, useState} from "react";
 import CartItemsMini from "../cart/CartItemsMini";
+import {PathNamesConstant} from "../../constants/pathNames.constant";
 
 const Topbar = () => {
     const totalItems = useSelector((state: RootState) => state.cart.totalItem);
+    const totalFavourite: number = useSelector((state :RootState) => state.wishlist.totalItem);
     const {search} = useLocation()
     const params = new URLSearchParams(search);
     const [keyword, setKeyword] = useState<string | null>(params.get('keyword'));
@@ -85,12 +87,12 @@ const Topbar = () => {
                     </form>
                 </div>
                 <div className="col-lg-3 col-6 text-right">
-                    <Link to="#" className="btn border">
+                    <NavLink to={PathNamesConstant.wishlist} className="btn border">
                         <FontAwesomeIcon icon={faHeart} className="text-primary" />
-                        <span className="badge">0</span>
-                    </Link>
+                        <span className="badge">{totalFavourite}</span>
+                    </NavLink>
                     <div className="cart-container" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-                        <NavLink to="/cart" className="btn border">
+                        <NavLink to={PathNamesConstant.cart} className="btn border">
                             <FontAwesomeIcon icon={faShoppingCart} className="text-primary"/>
                             <span className="badge">{totalItems}</span>
                         </NavLink>

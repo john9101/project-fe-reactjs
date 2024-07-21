@@ -22,6 +22,8 @@ const MainLayout = () => {
             setDestBreadcrumb("Giỏ hàng")
         }else if(pathname.includes(PathNamesConstant.wishlist)){
             setDestBreadcrumb("Đồng phục yêu thích")
+        } else if(pathname.includes(PathNamesConstant.checkout)){
+            setDestBreadcrumb("Thanh toán")
         }
     }, [pathname])
 
@@ -32,7 +34,7 @@ const MainLayout = () => {
             {
                 pathname !== PathNamesConstant.home && !pathname.includes(PathNamesConstant.feature) &&
                 !pathname.includes(PathNamesConstant.category) && !pathname.includes(PathNamesConstant.shop) &&
-                !pathname.includes(PathNamesConstant.search) && !pathname.includes(PathNamesConstant.checkout) &&
+                !pathname.includes(PathNamesConstant.search) &&
                 <BreadcrumbsSection destBreadcrumb={destBreadcrumb!}/>
             }
             <Outlet/>

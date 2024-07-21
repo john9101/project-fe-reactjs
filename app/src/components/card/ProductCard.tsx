@@ -10,6 +10,8 @@ import StarIcon from '@mui/icons-material/Star';
 import WhatshotIcon from '@mui/icons-material/Whatshot';
 import FiberNewIcon from '@mui/icons-material/FiberNew';
 import PercentIcon from '@mui/icons-material/Percent';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 import {NavLink} from "react-router-dom";
 import {useState} from "react";
 import {Modal} from "react-bootstrap";
@@ -17,6 +19,9 @@ import ProductDetail from "../../pages/ProductDetail";
 import '../../assets/css/styleShop.scss'
 import {subDays} from 'date-fns'
 import {PathNamesConstant} from "../../constants/pathNames.constant";
+import {useDispatch, useSelector} from "react-redux";
+import {RootState} from "../../store/store";
+import {addToWishlist, removeFromWishlist} from "../../store/wishlist.slice";
 
 interface ProductCardProps {
     product: Product
@@ -24,6 +29,15 @@ interface ProductCardProps {
 }
 
 const ProductCard = ({product, colGridClass}: ProductCardProps) => {
+    const dispatch = useDispatch();
+    const isFavourite = useSelector((state: RootState) => state.wishlist.products.some(favouriteProduct => favouriteProduct?._id === product?._id));
+    const handleAddToFavourite = () => {
+        if (isFavourite) {
+            dispatch(removeFromWishlist(product._id));
+        } else {
+            dispatch(addToWishlist(product));
+        }
+    };
     const images = product?.options!.map(option => option.image)
     const settings = {
         slidesToShow: 1,
@@ -98,8 +112,31 @@ const ProductCard = ({product, colGridClass}: ProductCardProps) => {
                                 }
                             }}
                         />
-                        <div className="d-flex flex-column align-items-start position-absolute mt-3 ml-3 font-weight-semi-bold"
-                             style={{gap: '0.4rem', top: 0, left: 0}}
+                        <Tooltip title={isFavourite ? "Bỏ yêu thích" : "Thêm vào yêu thích"} placement="top"
+                                 className={"bg-light"}>
+                            {isFavourite ? (
+                                <FavoriteIcon
+                                    style={{cursor: 'pointer', color: '#C07973', fontSize: '2rem'}}
+                                    onClick={handleAddToFavourite}
+                                    className='position-absolute rounded-circle p-1' sx={{
+                                    bottom: 10,
+                                    right: 10,
+                                }}
+                                />
+                            ) : (
+                                <FavoriteBorderIcon
+                                    style={{cursor: 'pointer', fontSize: '2rem'}}
+                                    onClick={handleAddToFavourite}
+                                    className='position-absolute rounded-circle p-1' sx={{
+                                    bottom: 10,
+                                    right: 10,
+                                }}
+                                />
+                            )}
+                        </Tooltip>
+                        <div
+                            className="d-flex flex-column align-items-start position-absolute mt-3 ml-3 font-weight-semi-bold"
+                            style={{gap: '0.4rem', top: 0, left: 0}}
                         >
                             {
                                 hasSaleOffTag &&
@@ -181,7 +218,8 @@ const ProductCard = ({product, colGridClass}: ProductCardProps) => {
                         </div>
                     </div>
                     <div className="card-footer d-flex justify-content-between bg-light border">
-                        <NavLink to={`${PathNamesConstant.uniform}/${product._id}`} className="btn btn-sm text-dark p-0"><FontAwesomeIcon
+                        <NavLink to={`${PathNamesConstant.uniform}/${product._id}`}
+                                 className="btn btn-sm text-dark p-0"><FontAwesomeIcon
                             icon={faEyeSolid} className='text-primary mr-1'/>Xem chi tiết</NavLink>
                         <span className="btn btn-sm text-dark p-0" onClick={handleShowQuickSeeModal}>
                             <FontAwesomeIcon icon={faCartShopping} className='text-primary mr-1'/> Thêm vào giỏ hàng
