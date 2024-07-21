@@ -1,0 +1,18 @@
+export enum PathNamesConstant {
+    home = '/',
+    shop = '/shop',
+    category ='/category',
+    feature = '/feature',
+    search = '/search',
+    uniform = '/uniform',
+    checkout = '/checkout',
+    cart = '/cart',
+    contactUs = '/contact-us',
+    aboutUs = '/about-us',
+    account = 'account',
+    login = 'login',
+    register = 'register',
+    logout = 'logout',
+    forgotPassword = 'forgot-password',
+    wishlist = '/wishlist',
+}

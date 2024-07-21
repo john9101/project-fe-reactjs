@@ -10,43 +10,60 @@ import { CircularProgress } from "@mui/material";
 import FormLayout from './layout/FormLayout';
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
-import Favourite from "./pages/Favourite";
-import Shop from "./pages/Shop";
-import CartDetail from "./pages/CartDetail";
+import CheckOut from "./pages/CheckOut";
+import PageNotFound from "./pages/PageNotFound";
+import {PathNamesConstant} from "./constants/pathNames.constant";
+import { AuthProvider } from './context/UserContext'; // Import AuthProvider
+
 
 const Home = lazy(() => import('./pages/Home'));
 const ContactUs = lazy(() => import('./pages/ContactUs'));
+const CartDetail = lazy(() => import('./pages/cart/CartDetail'));
 const Login = lazy(() => import('./pages/Login'));
 const Register = lazy(() => import('./pages/Register'));
 const ForgotPassword = lazy(() => import('./pages/ForgotPassword'));
 const AboutUs = lazy(() => import('./pages/AboutUs'));
 const ProductDetail = lazy(() => import('./pages/ProductDetail'));
+const Collection = lazy(() => import('./pages/Collection'));
+const Personal = lazy(() => import('./pages/Personal'));
 
 function App() {
+    const collectionPaths = [
+        PathNamesConstant.shop,
+        `${PathNamesConstant.feature}/:featureName`,
+        PathNamesConstant.search,
+        `${PathNamesConstant.category}/:categoryId`
+    ];
+
     return (
-        <BrowserRouter>
-            <ToastContainer/>
-            <div className="App">
-                <Suspense fallback={<CircularProgress color="success" />}>
-                    <Routes>
-                        <Route path="/" element={<MainLayout />}>
-                            <Route index element={<Home />} />
-                            <Route path="cart" element={<CartDetail />} />
-                            <Route path="contact-us" element={<ContactUs />} />
-                            <Route path="products/:productId" element={<ProductDetail/>} />
-                            <Route path="about-us" element={<AboutUs />} />
-                            <Route path="shop" element={<Shop/>}/>
-                            <Route path="favourite" element={<Favourite />} />
-                        </Route>
-                        <Route path="account" element={<FormLayout />}>
-                            <Route path="login" element={<Login />} />
-                            <Route path="register" element={<Register />} />
-                            <Route path='forgot-password' element={<ForgotPassword />} />
-                        </Route>
-                    </Routes>
-                </Suspense>
-            </div>
-        </BrowserRouter>
+        <AuthProvider>
+            <BrowserRouter>
+                <ToastContainer/>
+                <div className="App">
+                    <Suspense fallback={<CircularProgress color="success" />}>
+                        <Routes>
+                            <Route path="/" element={<MainLayout />}>
+                                <Route index element={<Home />} />
+                                <Route path={PathNamesConstant.cart} element={<CartDetail />} />
+                                <Route path={PathNamesConstant.contactUs} element={<ContactUs />} />
+                                <Route path={PathNamesConstant.aboutUs} element={<AboutUs/>}/>
+                                <Route path={`${PathNamesConstant.uniform}/:uniformId`} element={<ProductDetail/>} />
+                                {collectionPaths.map((path, index) => (
+                                    <Route key={index} path={path} element={<Collection />} />
+                                ))}
+                                <Route path='personal/:userId' element={<Personal />} />
+                            </Route>
+                            <Route path={PathNamesConstant.account} element={<FormLayout />}>
+                                <Route path={PathNamesConstant.login} element={<Login />} />
+                                <Route path={PathNamesConstant.register} element={<Register />} />
+                                <Route path={PathNamesConstant.forgotPassword} element={<ForgotPassword />} />
+                            </Route>
+                            <Route path="*" element={<PageNotFound />} />
+                        </Routes>
+                    </Suspense>
+                </div>
+            </BrowserRouter>
+        </AuthProvider>
     );
 }
 

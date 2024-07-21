@@ -17,4 +17,6 @@ export interface Product {
     initialHeightRange: BodyMetricRange
     initialWeightRange: BodyMetricRange
     sizeCharts: SizeChart[]
+    views: number
+    createdAt: Date
 }
