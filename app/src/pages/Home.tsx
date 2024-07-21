@@ -13,7 +13,7 @@ const Home = () => {
                         <div className="d-flex align-items-center border mb-4" style={{padding: "30px"}}>
                             <FontAwesomeIcon icon={faCheck} className="text-primary m-0 mr-3"
                                              style={{fontSize: '3rem'}}/>
-                            <h5 className="font-weight-semi-bold m-0" style={{fontSize: '1.5rem'}}>Đồng phục chất
+                            <h5 className="font-weight-semi-bold m-0 " style={{fontSize: '1.5rem'}}>Đồng phục chất
                                 lượng</h5>
                         </div>
                     </div>

@@ -1,5 +1,7 @@
 import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
 import { User } from '../types/user.type';
+import {useDispatch} from "react-redux";
+import {loginAccount} from "../store/user.slice";
 
 interface AuthState {
     isAuthenticated: boolean;
@@ -8,7 +10,7 @@ interface AuthState {
 
 interface AuthContextType {
     authState: AuthState;
-    login: (user: User) => void;
+    login: (loginData: Pick<User, 'username' | 'password'>) => void;
     logout: () => void;
 }
 
@@ -22,16 +24,16 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [authState, setAuthState] = useState<AuthState>(initialAuthState);
 
-    useEffect(() => {
-        const storedUser = localStorage.getItem('user');
-        if (storedUser) {
-            setAuthState({ isAuthenticated: true, user: JSON.parse(storedUser) });
-        }
-    }, []);
+    // useEffect(() => {
+    //     const storedUser = localStorage.getItem('user');
+    //     if (storedUser) {
+    //         setAuthState({ isAuthenticated: true, user: JSON.parse(storedUser) });
+    //     }
+    // }, []);
 
-    const login = (user: User) => {
-        localStorage.setItem('user', JSON.stringify(user));
-        setAuthState({ isAuthenticated: true, user });
+    const login = (loginData: Pick<User, 'username' | 'password'>) => {
+        // localStorage.setItem('user', JSON.stringify(user));
+        // setAuthState({ isAuthenticated: true, user });
     };
 
     const logout = () => {

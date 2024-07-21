@@ -1,7 +1,7 @@
 import {Link,NavLink, useLocation, useNavigate} from "react-router-dom";
 import { faFacebookF, faInstagram, faLinkedinIn, faTwitter, faYoutube } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart, faMagnifyingGlass, faShoppingCart } from "@fortawesome/free-solid-svg-icons";
+import { faHeart, faMagnifyingGlass, faShoppingCart, faCartShopping } from "@fortawesome/free-solid-svg-icons";
 import Logo from "./Logo";
 import {useSelector} from "react-redux";
 import {RootState} from "../../store/store";
@@ -89,14 +89,6 @@ const Topbar = () => {
                         <FontAwesomeIcon icon={faHeart} className="text-primary" />
                         <span className="badge">0</span>
                     </Link>
-                    <Link to={"/cart"} className="btn border">
-                        <FontAwesomeIcon icon={faShoppingCart} className="text-primary" />
-                        <span className="badge">{totalItems}</span>
-                    </Link>
-                    <NavLink to="#" className="btn border">
-                        <FontAwesomeIcon icon={faHeart} className="text-primary"/>
-                        <span className="badge">0</span>
-                    </NavLink>
                     <div className="cart-container" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
                         <NavLink to="/cart" className="btn border">
                             <FontAwesomeIcon icon={faShoppingCart} className="text-primary"/>

@@ -1,13 +1,18 @@
 export interface User {
-    _id: string;
+    _id?: string;
     username: string;
     password: string;
     fullName: string;
-    gender: string;
+    gender?: number;
     phone: string;
     email: string;
-    companyName: string;
-    avatar: string;
-    dob: String;
-    address: string;
+    companyName?: string;
+    avatar?: string;
+    birthDate?: Date;
+    address: {
+        province: string,
+        district: string,
+        ward: string,
+        specific: string
+    };
 }

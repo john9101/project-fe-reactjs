@@ -4,16 +4,19 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import './assets/css/style.module.scss';
 import './assets/css/styleLogin.scss'
+import './assets/css/styleAccount.scss'
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import MainLayout from "./layout/MainLayout";
 import { CircularProgress } from "@mui/material";
 import FormLayout from './layout/FormLayout';
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+
 import CheckOut from "./pages/CheckOut";
 import PageNotFound from "./pages/PageNotFound";
 import {PathNamesConstant} from "./constants/pathNames.constant";
-import { AuthProvider } from './context/UserContext'; // Import AuthProvider
+import { AuthProvider } from './context/UserContext';
+import AccountLayout from "./layout/AccountLayout";
 
 
 const Home = lazy(() => import('./pages/Home'));
@@ -51,14 +54,18 @@ function App() {
                                 {collectionPaths.map((path, index) => (
                                     <Route key={index} path={path} element={<Collection />} />
                                 ))}
-                                <Route path='personal/:userId' element={<Personal />} />
+                                {/*<Route path='personal/:userId' element={<Personal />} />*/}
                             </Route>
-                            <Route path={PathNamesConstant.account} element={<FormLayout />}>
+                            <Route path="/" element={<FormLayout />}>
                                 <Route path={PathNamesConstant.login} element={<Login />} />
                                 <Route path={PathNamesConstant.register} element={<Register />} />
                                 <Route path={PathNamesConstant.forgotPassword} element={<ForgotPassword />} />
                             </Route>
                             <Route path="*" element={<PageNotFound />} />
+                            <Route path={PathNamesConstant.account.parent} element={<AccountLayout/>}>
+                                <Route path={PathNamesConstant.account.children.profile}/>
+                                <Route path={PathNamesConstant.account.children.order}/>
+                            </Route>
                         </Routes>
                     </Suspense>
                 </div>
