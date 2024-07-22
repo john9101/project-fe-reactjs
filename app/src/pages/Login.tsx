@@ -17,6 +17,7 @@ import {yupResolver} from "@hookform/resolvers/yup";
 import {useDispatch, useSelector} from "react-redux";
 import {AppDispatch, RootState} from "../store/store";
 import {loginAccount} from "../store/user.slice";
+import {toast} from "react-toastify";
 // import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 // import {faChevronLeft} from '@fortawesome/free-solid-svg-icons'
 // import {method} from "lodash";
@@ -31,12 +32,15 @@ const loginFormSchema = Yup.object().shape({
         .required('Tên người dùng không được bỏ trống'),
     password: Yup.string()
         .required("Mật khẩu không được bỏ trống")
+        .min(6, "Mật khẩu phải tối thiểu 6 ký tự")
+        .matches(/[A-Z]/, 'Mật khẩu phải chứa ít nhất 1 ký tự in hoa')
+        .matches(/[!@#$%^&*(),.?":{}|<>]/, 'Mật khẩu phải chứa ít nhất 1 ký tự đặc biệt')
 })
 
 const Login = () => {
 
     const dispatch = useDispatch<AppDispatch>();
-    const {user} = useSelector((state: RootState) => state.users)
+    const {user, error} = useSelector((state: RootState) => state.users)
     const navigate = useNavigate()
 
     const {
@@ -53,9 +57,34 @@ const Login = () => {
 
     useEffect(() => {
         if(user){
-            navigate(PathNamesConstant.home)
+            toast.success("Đăng nhập thành công", {
+                position: 'top-center',
+                autoClose: 1000,
+                style: {
+                    fontFamily: 'Manrope'
+                }
+            })
+            setTimeout(() => {
+                navigate(PathNamesConstant.home)
+            }, 1600)
+        }else {
+            if(error){
+                let errorContent = null;
+                if(error?.password){
+                    errorContent = error?.password
+                }else if (error?.username){
+                    errorContent = error?.username
+                }
+                toast.error(errorContent, {
+                    position: 'top-center',
+                    autoClose: 2000,
+                    style: {
+                        fontFamily: 'Manrope'
+                    }
+                })
+            }
         }
-    }, [user])
+    }, [user, error])
 
     // const [username, setUsername] = useState('');
     // const [password, setPassword] = useState('');

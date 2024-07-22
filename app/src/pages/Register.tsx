@@ -12,6 +12,8 @@ import {Gender} from "../constants/gender.constant";
 import {useDispatch, useSelector} from "react-redux";
 import {AppDispatch, RootState} from "../store/store";
 import {registerAccount} from "../store/user.slice";
+import {fetchDistricts, fetchProvinces, fetchWards} from "../util/apiAddress";
+import {toast} from "react-toastify";
 // import Link from '@mui/material/Link';
 // import { Alert, Button, Checkbox, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControlLabel, IconButton, InputAdornment, OutlinedInput, Radio, RadioGroup, TextField } from '@mui/material';
 // import Address from '../components/common/Address';
@@ -59,7 +61,9 @@ const registerFormSchema = Yup.object().shape({
         .required('Tên người dùng không được bỏ trống'),
     password: Yup.string()
         .required('Mật khẩu không được bỏ trống')
-        .min(6, 'Password must be at least 6 characters'),
+        .min(6, "Mật khẩu phải tối thiểu 6 ký tự")
+        .matches(/[A-Z]/, 'Mật khẩu phải chứa ít nhất 1 ký tự in hoa')
+        .matches(/[!@#$%^&*(),.?":{}|<>]/, 'Mật khẩu phải chứa ít nhất 1 ký tự đặc biệt'),
     confirmPassword: Yup.string()
         .oneOf([Yup.ref('password')], 'Mẫu khẩu nhập lại không khớp')
         .required('Mật khẩu lặp lại không được bỏ trống'),
@@ -71,7 +75,7 @@ const registerFormSchema = Yup.object().shape({
     fullName: Yup.string()
         .required('Họ và tên không được bỏ trống'),
     province: Yup.string()
-        .required('Tỉnh / Thành phố không được bỏ trống'),
+        .required("Tỉnh / Thành phố không được bỏ trống"),
     district: Yup.string()
         .required('Quận / Huyện không được bỏ trống'),
     ward: Yup.string()
@@ -445,16 +449,88 @@ const Register = () => {
 
     const dispatch = useDispatch<AppDispatch>();
     const { error, user} = useSelector((state: RootState) => state.users)
+    const [registerFormProvinces, setRegisterFormProvinces] = useState<Province[]>([]);
+    const [registerFormDistricts, setRegisterFormDistricts] = useState<District[]>([]);
+    const [registerFormWards, setRegisterFormWards] = useState<Ward[]>([]);
+    const [registerFormSelectedProvince, setRegisterFormSelectedProvince] = useState<string | null>(null);
+    const [registerFormSelectedDistrict, setRegisterFormSelectedDistrict] = useState<string | null>(null);
+    const [registerFormSelectedWard, setRegisterFormSelectedWard] = useState<string | null>(null);
     const navigate = useNavigate()
+
+    useEffect(() => {
+        const fetchRegisterFormProvinces = async () => {
+            const data = await fetchProvinces();
+            setRegisterFormProvinces(data);
+        };
+        fetchRegisterFormProvinces();
+    }, []);
+
+    useEffect(() => {
+        if (registerFormSelectedProvince) {
+            const fetchRegisterFormDistricts = async () => {
+                const province = registerFormProvinces.find(province => province.ProvinceName === registerFormSelectedProvince);
+                if (province) {
+                    const districtsData = await fetchDistricts(province.ProvinceID);
+                    setRegisterFormDistricts(districtsData);
+                    setRegisterFormWards([]);
+                    setRegisterFormSelectedDistrict(null);
+                    setRegisterFormSelectedWard(null);
+                }
+            };
+            fetchRegisterFormDistricts();
+        }
+    }, [registerFormSelectedProvince, registerFormProvinces]);
+
+    useEffect(() => {
+        if (registerFormSelectedDistrict) {
+            const fetchRegisterFormWards = async () => {
+                const district = registerFormDistricts.find(district => district.DistrictName === registerFormSelectedDistrict);
+                if (district) {
+                    const wardsData = await fetchWards(district.DistrictID);
+                    setRegisterFormWards(wardsData);
+                    setRegisterFormSelectedWard(null);
+                }
+            };
+            fetchRegisterFormWards();
+        }
+    }, [registerFormSelectedDistrict, registerFormDistricts]);
 
     const {
         register: registerFormRegister,
         handleSubmit: handleSubmitRegisterForm,
         formState: {errors: registerFormErrors},
         clearErrors: clearErrorsRegisterForm,
+        setValue: setValueRegisterForm,
     } = useForm<RegisterFormType>({
         resolver: yupResolver(registerFormSchema)
     })
+
+    const handleSelectProvinceChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        if(event.target.value !== ''){
+            clearErrorsRegisterForm('province')
+            setRegisterFormSelectedProvince(event.target.value)
+        }else {
+            setValueRegisterForm('province', event.target.value, { shouldValidate: true })
+        }
+    };
+
+    const handleSelectDistrictChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        if(event.target.value !== ''){
+            clearErrorsRegisterForm('district')
+            setRegisterFormSelectedDistrict(event.target.value)
+        }else {
+            setValueRegisterForm('district', event.target.value, { shouldValidate: true })
+        }
+    };
+
+    const handleSelectWardChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        if(event.target.value !== ''){
+            clearErrorsRegisterForm('ward')
+            setRegisterFormSelectedWard(event.target.value)
+        }else {
+            setValueRegisterForm('ward', event.target.value, { shouldValidate: true })
+        }
+    };
 
     const onSubmitRegisterForm = (data: RegisterFormType) => {
         const registerData: User = {
@@ -477,18 +553,36 @@ const Register = () => {
         dispatch(registerAccount(registerData))
     }
 
-    // useEffect(() => {
-    //     if(user && !error){
-    //         navigate(PathNamesConstant.login)
-    //     }
-    // }, [user, user])
-
-    const handleClearErrorExistUsername = (event: React.ChangeEvent<HTMLInputElement>) => {
-        console.log(error?.username)
-        if (error?.username) {
-            clearErrorsRegisterForm('username')
+    useEffect(() => {
+        if(user){
+            toast.success("Đăng nhập thành công", {
+                position: 'top-center',
+                autoClose: 1000,
+                style: {
+                    fontFamily: 'Manrope'
+                }
+            })
+            setTimeout(() => {
+                navigate(PathNamesConstant.login)
+            }, 1600)
+        }else {
+            if(error){
+                let errorContent = null;
+                if(error?.password){
+                    errorContent = error?.password
+                }else if (error?.username){
+                    errorContent = error?.username
+                }
+                toast.error(errorContent, {
+                    position: 'top-center',
+                    autoClose: 2000,
+                    style: {
+                        fontFamily: 'Manrope'
+                    }
+                })
+            }
         }
-    }
+    }, [user, error])
 
     return (
         <>
@@ -500,8 +594,7 @@ const Register = () => {
                         placeholder='Nhập tên người dùng'
                         autoFocus
                         {...registerFormRegister('username')}
-                        isInvalid={!!registerFormErrors.username || !!error?.username}
-                        onChange={handleClearErrorExistUsername}
+                        isInvalid={!!registerFormErrors.username}
                     />
                     <Form.Control.Feedback type="invalid">
                         {error?.username && error?.username}
@@ -538,12 +631,12 @@ const Register = () => {
                     </Form.Control.Feedback>
                 </FormGroup>
                 <FormGroup className="mb-3">
-                    <Form.Label className='font-weight-semi-bold'>Địa chỉ email <span
+                    <Form.Label className='font-weight-semi-bold'>Địa chỉ email cá nhân hoặc công ty<span
                         className='text-danger'>*</span></Form.Label>
                     <Form.Control
                         type='text'
                         className='form-control'
-                        placeholder='Nhập lại mật khẩu'
+                        placeholder='Nhập địa chỉ email'
                         autoFocus
                         {...registerFormRegister('email')}
                         isInvalid={!!registerFormErrors.email}
@@ -553,12 +646,12 @@ const Register = () => {
                     </Form.Control.Feedback>
                 </FormGroup>
                 <FormGroup className="mb-3">
-                    <Form.Label className='font-weight-semi-bold'>Số điện thoại <span
+                    <Form.Label className='font-weight-semi-bold'>Số điện thoại cá nhân hoặc công ty<span
                         className='text-danger'>*</span></Form.Label>
                     <Form.Control
                         type='text'
                         className='form-control'
-                        placeholder='Nhập lại mật khẩu'
+                        placeholder='Nhập số điện thoại'
                         autoFocus
                         {...registerFormRegister('phone')}
                         isInvalid={!!registerFormErrors.phone}
@@ -568,12 +661,12 @@ const Register = () => {
                     </Form.Control.Feedback>
                 </FormGroup>
                 <FormGroup className="mb-3">
-                    <Form.Label className='font-weight-semi-bold'>Họ và tên <span
+                    <Form.Label className='font-weight-semi-bold'>Họ và tên người đại diện<span
                         className='text-danger'>*</span></Form.Label>
                     <Form.Control
                         type='text'
                         className='form-control'
-                        placeholder='Nhập lại mật khẩu'
+                        placeholder='Nhập và tên người đại diện'
                         autoFocus
                         {...registerFormRegister('fullName')}
                         isInvalid={!!registerFormErrors.fullName}
@@ -625,11 +718,18 @@ const Register = () => {
                         {...registerFormRegister('province')}
                         isInvalid={!!registerFormErrors.province}
                         style={{backgroundImage: 'unset'}}
+                        onChange={handleSelectProvinceChange}
                     >
-                        <option>1</option>
+                        <option value=''>Chọn tỉnh / thành phố</option>
+                        {
+                            registerFormProvinces.map(province => (
+                                <option key={province.ProvinceID}
+                                        value={province.ProvinceName}>{province.ProvinceName}</option>
+                            ))
+                        }
                     </Form.Select>
                     <Form.Control.Feedback type="invalid">
-                        {registerFormErrors.district && registerFormErrors.district.message}
+                        {registerFormErrors.province && registerFormErrors.province.message}
                     </Form.Control.Feedback>
                 </FormGroup>
                 <FormGroup className="mb-3">
@@ -641,15 +741,22 @@ const Register = () => {
                         {...registerFormRegister('district')}
                         isInvalid={!!registerFormErrors.district}
                         style={{backgroundImage: 'unset'}}
+                        onChange={handleSelectDistrictChange}
                     >
-                        <option>1</option>
+                        <option value=''>Chọn quận / huyện</option>
+                        {
+                            registerFormDistricts.map(district => (
+                                <option key={district.DistrictID}
+                                        value={district.DistrictName}>{district.DistrictName}</option>
+                            ))
+                        }
                     </Form.Select>
                     <Form.Control.Feedback type="invalid">
                         {registerFormErrors.district && registerFormErrors.district.message}
                     </Form.Control.Feedback>
                 </FormGroup>
                 <FormGroup className="mb-3">
-                    <Form.Label className='font-weight-semi-bold'>Xã / Phường <span
+                    <Form.Label className='font-weight-semi-bold'>Phường / Xã<span
                         className='text-danger'>*</span></Form.Label>
                     <Form.Select
                         className='form-control'
@@ -657,8 +764,15 @@ const Register = () => {
                         {...registerFormRegister('ward')}
                         isInvalid={!!registerFormErrors.ward}
                         style={{backgroundImage: 'unset'}}
+                        onChange={handleSelectWardChange}
                     >
-                        <option>1</option>
+                        <option value=''>Chọn phường / xã</option>
+                        {
+                            registerFormWards.map(ward => (
+                                <option key={ward.WardCode}
+                                        value={ward.WardName}>{ward.WardName}</option>
+                            ))
+                        }
                     </Form.Select>
                     <Form.Control.Feedback type="invalid">
                         {registerFormErrors.ward && registerFormErrors.ward.message}

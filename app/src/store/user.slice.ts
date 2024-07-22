@@ -61,7 +61,6 @@ const userSlice = createSlice({
             .addCase(registerAccount.fulfilled, (state, action) => {
                 state.user = action.payload
                 state.error = null
-                localStorage.setItem('user', JSON.stringify(state.user))
                 state.status = 'succeeded'
             })
             .addCase(registerAccount.pending, (state, action) => {

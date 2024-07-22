@@ -58,7 +58,7 @@ const ProductCard = ({product, colGridClass}: ProductCardProps) => {
     const handleShowQuickSeeModal = () => setShowQuickSeeModal(true)
     const handleCloseQuickSeeModal = () => setShowQuickSeeModal(false)
 
-    const hasSaleOffTag = product.discountPercent >= 0;
+    const hasSaleOffTag = product.discountPercent > 0;
     const hasNewArriveTag = new Date(product.createdAt) >= subDays(new Date(), 30);
     const hasPopularTag = product.views >= 300
 
